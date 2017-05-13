@@ -68,6 +68,7 @@
         <div class="flex-center position-ref full-height">
             <div class="top-right links">
                 <a href="{{ url('/usuario/login') }}">Login</a>
+                <a href="{{ url('/usuario/register') }}">Cadastrar</a>
             </div>
 
             <div class="content">

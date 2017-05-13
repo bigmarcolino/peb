@@ -99,6 +99,3 @@ Toda vez que precisar testar o sistema, abra o prompt de comando,
 digite cd ../../xampp/htdocs/projeto-escoliose-brasil e tecle Enter, 
 digite git pull e tecle Enter (este comando atualizará o sistema para a versão mais atual).
 Abra o XAMPP Control Panel, depois abra o navegador e digite http://laravel.dev
-
-
-
