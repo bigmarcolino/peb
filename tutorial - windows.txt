@@ -1,0 +1,104 @@
+Sempre instalar a versão mais recente dos programas
+
+01- instale o Xampp -> https://www.apachefriends.org/download.html
+
+02- instale o Sublime Text -> https://www.sublimetext.com/3
+
+03- instale o Composer -> https://getcomposer.org/Composer-Setup.exe
+
+04- instale o Git -> https://git-scm.com/downloads
+
+05- instale o Node -> https://nodejs.org/en/
+
+06- instale o Windows Credentials Manager (arquivo .exe) -> https://github.com/Microsoft/Git-Credential-Manager-for-Windows/releases/tag/v1.10.0
+
+07- crie uma conta no GitLab -> https://gitlab.com/users/sign_in
+
+08- com o Sublime Text, abra o arquivo httpd-vhosts.conf, que está na pasta C:\xampp\apache\conf\extra
+
+09- no final do arquivo, adicione o código a seguir:
+
+	# VirtualHost for LARAVEL.DEV
+
+	<VirtualHost laravel.dev:80>
+		DocumentRoot "C:\xampp\htdocs\projeto-escoliose-brasil\public"
+  		ServerAdmin laravel.dev
+  		<Directory "C:\xampp\htdocs\projeto-escoliose-brasil">
+        		Options Indexes FollowSymLinks
+        		AllowOverride All
+        		Require all granted
+  		</Directory>
+	</VirtualHost>
+		
+10- copie o arquivo hosts, que está na pasta C:\Windows\System32\drivers\etc, e cole na área de trabalho
+
+11- com o Sublime Text, abra o arquivo hosts da área de trabalho
+
+12- no final do arquivo, adicione o código a seguir:
+
+	127.0.0.1	laravel.dev
+
+13- copie arquivo hosts da área de trabalho para a pasta C:\Windows\System32\drivers\etc e confirme a substituição do arquivo
+
+14- abra o XAMPP Control Panel, clique no botão config com um ícone de uma ferramenta, marque Apache e MySQL e clique em Save
+
+15- na linha do Apache e na linha do MySQL, clique em Start
+
+16- clique em Admin, na linha do MySQL. O navegador será aberto
+
+17- no navegador, do lado esquerdo, clique em New.
+
+18- no campo Create database, digite projeto-escoliose-brasil. No campo Collation, escolha utf8mb4_unicode_ci (é a penúltima opção) e clique em Create
+
+19- feche o navegador
+
+20- abra o prompt de comando
+
+21- digite cd ../../xampp/htdocs e tecle Enter
+
+22- digite git clone https://mvinicius@gitlab.com/mvinicius/projeto-escoliose-brasil.git e tecle Enter
+
+23- se seu email e senha do GitLab for requisitado, basta digitá-los
+
+24- digite cd projeto-escoliose-brasil e tecle Enter
+
+25- digite composer install, tecle Enter e aguarde a instalação terminar
+
+26- digite npm install, tecle Enter e aguarde a instalação terminar
+
+27- minimize o prompt de comando
+
+28- vá na pasta C:\xampp\htdocs\projeto-escoliose-brasil
+
+29- copie o arquivo .env.example e cole nessa mesma pasta. Isso criará o arquivo .env - Copia.example
+
+30- com o Sublime Text, clique em File -> Open Folder..., escolha a pasta projeto-escoliose-brasil e clique em Selecionar Pasta
+
+31- ainda no Sublime Text, clique com o botão direito em .env - Copia.example e clique em Rename
+
+32- mude o nome de .env - Copia.example para .env e pressione Enter
+
+33- no Sublime, clique no .env e mude as seguintes configurações:
+
+	DB_DATABASE=homestead -> DB_DATABASE=projeto-escoliose-brasil
+	DB_USERNAME=homestead -> DB_USERNAME=root
+	DB_PASSWORD=secret    -> DB_PASSWORD=
+
+34- volte para o prompt de comando
+
+35- digite php artisan key:generate e tecle Enter
+
+36- digite php artisan migrate e tecle Enter
+
+37- feche o prompt de comando
+
+38- abra http://laravel.dev no navegador para visualizar o sistema
+
+
+Toda vez que precisar testar o sistema, abra o prompt de comando, 
+digite cd ../../xampp/htdocs/projeto-escoliose-brasil e tecle Enter, 
+digite git pull e tecle Enter (este comando atualizará o sistema para a versão mais atual).
+Abra o XAMPP Control Panel, depois abra o navegador e digite http://laravel.dev
+
+
+
