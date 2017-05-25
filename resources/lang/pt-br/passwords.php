@@ -13,10 +13,10 @@ return [
     |
     */
 
-    'password' => 'As senhas devem ter pelo menos seis caracteres e corresponder à confirmação.',
-    'reset' => 'Sua senha foi reiniciada!',
-    'sent' => 'Nós enviamos por email seu link de reinício de senha!',
-    'token' => 'Esse token de reinício de senha é inválido.',
-    'user' => "Nós não encontramos um usuário com esse endereço de email.",
+    'password' => 'As senhas devem ter pelo menos seis caracteres e corresponder à confirmação',
+    'reset' => 'Sua senha foi reiniciada',
+    'sent' => 'Nós enviamos por email seu link de redefinição de senha',
+    'token' => 'Esse token de redefinição de senha é inválido',
+    'user' => "Nós não encontramos um usuário com esse endereço de email",
 
 ];

@@ -1,6 +1,6 @@
 Sempre instalar a versão mais recente dos programas
 
-01- instale o Xampp -> https://www.apachefriends.org/download.html
+01- instale o XAMPP (não altere o diretório padrão de instalação) -> https://www.apachefriends.org/download.html
 
 02- instale o Sublime Text -> https://www.sublimetext.com/3
 
@@ -13,10 +13,12 @@ Sempre instalar a versão mais recente dos programas
 06- instale o Windows Credentials Manager (arquivo .exe) -> https://github.com/Microsoft/Git-Credential-Manager-for-Windows/releases/tag/v1.10.0
 
 07- crie uma conta no GitLab -> https://gitlab.com/users/sign_in
+	
+08- passe para mim (Marcus) o email da conta criada no GitLab, para que eu possa autorizar o download do projeto
 
-08- com o Sublime Text, abra o arquivo httpd-vhosts.conf, que está na pasta C:\xampp\apache\conf\extra
+09- com o Sublime Text, abra o arquivo httpd-vhosts.conf, que está na pasta C:\xampp\apache\conf\extra
 
-09- no final do arquivo, adicione o código a seguir:
+10- no final do arquivo, adicione o código a seguir:
 
 	# VirtualHost for LARAVEL.DEV
 
@@ -24,78 +26,80 @@ Sempre instalar a versão mais recente dos programas
 		DocumentRoot "C:\xampp\htdocs\projeto-escoliose-brasil\public"
   		ServerAdmin laravel.dev
   		<Directory "C:\xampp\htdocs\projeto-escoliose-brasil">
-        		Options Indexes FollowSymLinks
-        		AllowOverride All
-        		Require all granted
+    		Options Indexes FollowSymLinks
+    		AllowOverride All
+    		Require all granted
   		</Directory>
 	</VirtualHost>
 		
-10- copie o arquivo hosts, que está na pasta C:\Windows\System32\drivers\etc, e cole na área de trabalho
+11- copie o arquivo hosts, que está na pasta C:\Windows\System32\drivers\etc, e cole na área de trabalho
 
-11- com o Sublime Text, abra o arquivo hosts da área de trabalho
+12- com o Sublime Text, abra o arquivo hosts da área de trabalho
 
-12- no final do arquivo, adicione o código a seguir:
+13- no final do arquivo, adicione o código a seguir:
 
 	127.0.0.1	laravel.dev
 
-13- copie arquivo hosts da área de trabalho para a pasta C:\Windows\System32\drivers\etc e confirme a substituição do arquivo
+14- copie arquivo hosts da área de trabalho para a pasta C:\Windows\System32\drivers\etc e confirme a substituição do arquivo
 
-14- abra o XAMPP Control Panel, clique no botão config com um ícone de uma ferramenta, marque Apache e MySQL e clique em Save
+15- abra o XAMPP Control Panel, clique no botão config com um ícone de uma ferramenta, marque Apache e MySQL e clique em Save
 
-15- na linha do Apache e na linha do MySQL, clique em Start
+16- na linha do Apache e na linha do MySQL, clique em Start
 
-16- clique em Admin, na linha do MySQL. O navegador será aberto
+17- clique em Admin, na linha do MySQL. O navegador será aberto
 
-17- no navegador, do lado esquerdo, clique em New.
+18- no navegador, do lado esquerdo, clique em New.
 
-18- no campo Create database, digite projeto-escoliose-brasil. No campo Collation, escolha utf8mb4_unicode_ci (é a penúltima opção) e clique em Create
+19- no campo Create database, digite projeto-escoliose-brasil. No campo Collation, escolha utf8mb4_unicode_ci (é a penúltima opção) e clique em Create
 
-19- feche o navegador
+20- feche o navegador
 
-20- abra o prompt de comando
+21- abra o prompt de comando
 
-21- digite cd ../../xampp/htdocs e tecle Enter
+22- digite cd\ e tecle Enter, depois digite cd xampp/htdocs e tecle Enter
 
-22- digite git clone https://mvinicius@gitlab.com/mvinicius/projeto-escoliose-brasil.git e tecle Enter
+23- digite git clone https://mvinicius@gitlab.com/mvinicius/projeto-escoliose-brasil.git e tecle Enter
 
-23- se seu email e senha do GitLab for requisitado, basta digitá-los
+24- se seu email e senha do GitLab for requisitado, basta digitá-los. Aguarde o término do download do projeto
 
-24- digite cd projeto-escoliose-brasil e tecle Enter
+25- digite cd projeto-escoliose-brasil e tecle Enter
 
-25- digite composer install, tecle Enter e aguarde a instalação terminar
+26- digite composer install, tecle Enter e aguarde a instalação terminar
 
-26- digite npm install, tecle Enter e aguarde a instalação terminar
+27- digite npm install, tecle Enter e aguarde a instalação terminar
 
-27- minimize o prompt de comando
+28- digite npm run dev e tecle Enter
 
-28- vá na pasta C:\xampp\htdocs\projeto-escoliose-brasil
+29- minimize o prompt de comando
 
-29- copie o arquivo .env.example e cole nessa mesma pasta. Isso criará o arquivo .env - Copia.example
+30- vá na pasta C:\xampp\htdocs\projeto-escoliose-brasil
 
-30- com o Sublime Text, clique em File -> Open Folder..., escolha a pasta projeto-escoliose-brasil e clique em Selecionar Pasta
+31- copie o arquivo .env.example e cole nessa mesma pasta. Isso criará o arquivo .env - Copia.example
 
-31- ainda no Sublime Text, clique com o botão direito em .env - Copia.example e clique em Rename
+32- com o Sublime Text, clique em File -> Open Folder..., vá em C:\xampp\htdocs, escolha a pasta projeto-escoliose-brasil e clique em Selecionar Pasta
 
-32- mude o nome de .env - Copia.example para .env e pressione Enter
+33- ainda no Sublime Text, clique com o botão direito em .env - Copia.example e clique em Rename
 
-33- no Sublime, clique no .env e mude as seguintes configurações:
+34- no rodapé do Sublime aparecerá o local da edição de nome. Mude o nome de .env - Copia.example para .env e pressione Enter
+
+35- no Sublime, clique no .env e mude as seguintes configurações:
 
 	DB_DATABASE=homestead -> DB_DATABASE=projeto-escoliose-brasil
 	DB_USERNAME=homestead -> DB_USERNAME=root
 	DB_PASSWORD=secret    -> DB_PASSWORD=
 
-34- volte para o prompt de comando
+36- volte para o prompt de comando
 
-35- digite php artisan key:generate e tecle Enter
+37- digite php artisan key:generate e tecle Enter
 
-36- digite php artisan migrate e tecle Enter
+38- digite php artisan migrate e tecle Enter
 
-37- feche o prompt de comando
+39- feche o prompt de comando
 
-38- abra http://laravel.dev no navegador para visualizar o sistema
+40- abra http://laravel.dev no navegador para visualizar o sistema
 
 
-Toda vez que precisar testar o sistema, abra o prompt de comando, 
-digite cd ../../xampp/htdocs/projeto-escoliose-brasil e tecle Enter, 
+Toda vez que precisar testar o sistema, abra o prompt de comando,
+digite cd\ e tecle Enter, depois digite cd xampp/htdocs/projeto-escoliose-brasil e tecle Enter, 
 digite git pull e tecle Enter (este comando atualizará o sistema para a versão mais atual).
 Abra o XAMPP Control Panel, depois abra o navegador e digite http://laravel.dev

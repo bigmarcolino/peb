@@ -44,8 +44,10 @@ class UsuarioResetPassword extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line('You are receiving this email because we received a password reset request for your account.')
-            ->action('Reset Password', url('usuario/password/reset', $this->token))
-            ->line('If you did not request a password reset, no further action is required.');
+            ->subject('Redefinição de Senha - Projeto Escoliose Brasil')
+            ->greeting('Olá!')
+            ->line('Você está recebendo este email porque recebemos um pedido de redefinição de senha para sua conta.')
+            ->action('Redefinir Senha', url('usuario/password/reset', $this->token))
+            ->line('Se não solicitou uma redefinição de senha, nenhuma ação adicional é necessária.');
     }
 }

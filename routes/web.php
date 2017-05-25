@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('usuario.auth.login');
 });
 
 Route::group(['prefix' => 'usuario'], function () {
