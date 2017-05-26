@@ -1,3 +1,3 @@
-<div class="container main-container">
+<div class="container-fluid main-container">
     Admin
 </div>

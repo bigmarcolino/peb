@@ -6,6 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" type="image/png" href="/img/favicon.png"/>
+        <meta name="theme-color" content="#1a6f9d"/>
 
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -26,8 +27,8 @@
 
     <body>
         @if (Auth::check())
-            <nav class="navbar navbar-default navbar-fixed-top no-margin-bottom">
-                <div class="container">
+            <nav class="navbar navbar-default navbar-fixed-top nav-style">
+                <div class="container-fluid">
                     <div class="navbar-header">
 
                         <!-- Collapsed Hamburger -->
@@ -54,7 +55,8 @@
                         <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                    <span class="account-name">{{ strtoupper( explode(" ", Auth::user()->name)[0] ) }}</span>
+                                    <span class="caret"></span>
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
@@ -62,6 +64,8 @@
                                         <a href="{{ url('/usuario/logout') }}"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
+
+                                            <span class="fa fa-sign-out" aria-hidden="true"></span>
                                             Sair
                                         </a>
 
