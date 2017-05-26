@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="pt-br">
+<html lang="{{ config('app.locale') }}">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -26,7 +26,7 @@
 
     <body>
         @if (Auth::check())
-            <nav class="navbar navbar-default navbar-static-top">
+            <nav class="navbar navbar-default navbar-fixed-top no-margin-bottom">
                 <div class="container">
                     <div class="navbar-header">
 

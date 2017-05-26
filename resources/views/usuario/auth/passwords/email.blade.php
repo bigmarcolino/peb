@@ -41,6 +41,12 @@
                             Voltar
                         </a>
                     </div>
+
+                    <script type="text/javascript" src="{!! asset('js/jquery-3.2.1.min.js') !!}"></script>
+
+                    <script>
+                        $('div.alert').delay(3000).slideUp(300);
+                    </script>
                 </form>
             </div>
         </div>

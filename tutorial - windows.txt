@@ -56,7 +56,7 @@ Sempre instalar a versão mais recente dos programas
 
 21- abra o prompt de comando
 
-22- digite cd\ e tecle Enter, depois digite cd xampp/htdocs e tecle Enter
+22- digite cd\ && cd xampp/htdocs/projeto-escoliose-brasil e tecle Enter
 
 23- digite git clone https://mvinicius@gitlab.com/mvinicius/projeto-escoliose-brasil.git e tecle Enter
 
@@ -100,6 +100,6 @@ Sempre instalar a versão mais recente dos programas
 
 
 Toda vez que precisar testar o sistema, abra o prompt de comando,
-digite cd\ e tecle Enter, depois digite cd xampp/htdocs/projeto-escoliose-brasil e tecle Enter, 
+digite cd\ && cd xampp/htdocs/projeto-escoliose-brasil e tecle Enter, 
 digite git pull e tecle Enter (este comando atualizará o sistema para a versão mais atual).
 Abra o XAMPP Control Panel, depois abra o navegador e digite http://laravel.dev
