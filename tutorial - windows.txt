@@ -48,7 +48,7 @@ Sempre instalar a versão mais recente dos programas
 
 17- clique em Admin, na linha do MySQL. O navegador será aberto
 
-18- no navegador, do lado esquerdo, clique em New.
+18- no navegador, do lado esquerdo, clique em New
 
 19- no campo Create database, digite projeto-escoliose-brasil. No campo Collation, escolha utf8mb4_unicode_ci (é a penúltima opção) e clique em Create
 
@@ -56,47 +56,13 @@ Sempre instalar a versão mais recente dos programas
 
 21- abra o prompt de comando
 
-22- digite cd\ && cd xampp/htdocs/projeto-escoliose-brasil e tecle Enter
+22- copie e cole no prompt de comando: cd\ && cd xampp/htdocs && git clone https://mvinicius@gitlab.com/mvinicius/projeto-escoliose-brasil.git && cd projeto-escoliose-brasil && composer install && npm install && npm install -g bower && bower install && npm run dev && php artisan key:generate && php artisan migrate, tecle Enter e aguarde o processo terminar
 
-23- digite git clone https://mvinicius@gitlab.com/mvinicius/projeto-escoliose-brasil.git e tecle Enter
+23- se seu email e senha do GitLab forem requisitados, basta digitá-los
 
-24- se seu email e senha do GitLab for requisitado, basta digitá-los. Aguarde o término do download do projeto
+24- feche o prompt de comando
 
-25- digite cd projeto-escoliose-brasil e tecle Enter
-
-26- digite composer install, tecle Enter e aguarde a instalação terminar
-
-27- digite npm install, tecle Enter e aguarde a instalação terminar
-
-28- digite npm run dev e tecle Enter
-
-29- minimize o prompt de comando
-
-30- vá na pasta C:\xampp\htdocs\projeto-escoliose-brasil
-
-31- copie o arquivo .env.example e cole nessa mesma pasta. Isso criará o arquivo .env - Copia.example
-
-32- com o Sublime Text, clique em File -> Open Folder..., vá em C:\xampp\htdocs, escolha a pasta projeto-escoliose-brasil e clique em Selecionar Pasta
-
-33- ainda no Sublime Text, clique com o botão direito em .env - Copia.example e clique em Rename
-
-34- no rodapé do Sublime aparecerá o local da edição de nome. Mude o nome de .env - Copia.example para .env e pressione Enter
-
-35- no Sublime, clique no .env e mude as seguintes configurações:
-
-	DB_DATABASE=homestead -> DB_DATABASE=projeto-escoliose-brasil
-	DB_USERNAME=homestead -> DB_USERNAME=root
-	DB_PASSWORD=secret    -> DB_PASSWORD=
-
-36- volte para o prompt de comando
-
-37- digite php artisan key:generate e tecle Enter
-
-38- digite php artisan migrate e tecle Enter
-
-39- feche o prompt de comando
-
-40- abra http://laravel.dev no navegador para visualizar o sistema
+25- abra http://laravel.dev no navegador para visualizar o sistema
 
 
 Toda vez que precisar testar o sistema, abra o prompt de comando,

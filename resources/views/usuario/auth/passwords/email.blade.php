@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col col-sm-6 col-sm-offset-3 centered-form">
                 <div>
-                    <img src="/img/logo.png" alt="Projeto Escoliose" class="centered-logo">
+                    <img src="/img/logo.png" alt="Projeto Escoliose Brasil" class="centered-logo">
                 </div>
 
                 <h1 class="text-large">Será enviado um link de redefinição de senha para seu email</h1>

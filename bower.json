@@ -1,0 +1,20 @@
+{
+  "name": "projeto-escoliose-brasil",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Marcus Vinícius <big_marcolino@hotmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jasny-bootstrap": "^3.1.3"
+  }
+}
