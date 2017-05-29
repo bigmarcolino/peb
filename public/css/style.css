@@ -161,8 +161,10 @@ body {
     background-color: #2980b9;
 }
 
-.logo-white {
-    margin-top: 12.5px;
+@media (min-width: 1024px) {
+    .logo-white {
+        margin-top: 12.5px;
+    }
 }
 
 .ic-header .nav-tools .account-dropdown .account-image {
