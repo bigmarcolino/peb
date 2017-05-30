@@ -1,0 +1,100 @@
+body {
+    background: #4695d1;
+    color: #FFF;
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.clouds {
+    background: url(https://d1ydp7gtfj5fb9.cloudfront.net/static/img/common/nuvens.png);
+    height: 101px;
+    width: 100%;
+}
+
+.base {
+    height: calc(100% - 101px);
+    background: #FFF;
+    width: 100%;
+}
+
+.line {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    margin: 50px auto 10px;
+}
+
+h1, h2, .text {
+    display: block;
+    font-weight: 700;
+    text-align: center;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 96px;
+    line-height: 77px;
+    padding: 0;
+    margin: 0;
+}
+
+h2 {
+    font-size: 24px;
+    margin: 25px auto;
+}
+
+.text {
+    max-width: 510px;
+    font-weight: 300;
+}
+
+.logo {
+    display: block;
+    max-width: 350px;
+    margin: 0 auto;
+}
+
+.buttons {
+    box-sizing: border-box;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 40px;
+}
+
+.btn {
+    box-sizing: border-box;
+    padding: 8px 28px;
+    cursor: pointer;
+    width: 100%;
+    text-decoration: none;
+    color: #FFF;
+    font-weight: 100;
+    border-radius: 5px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.btn-empty {
+    border: 1px solid #FFF;
+    background: transparent;
+}
+
+.cloud-group {
+    margin-top: 50px;
+    height: calc(100vh - 765px + 101px);
+    width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+    .btn {
+        display: inline-block;
+        width: auto;
+    }
+
+    .buttons {
+        padding: 0px 0px 40px;
+    }
+}

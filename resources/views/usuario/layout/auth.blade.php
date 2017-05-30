@@ -19,7 +19,7 @@
         <link href="/css/base.min.css" rel="stylesheet" type="text/css">
         <link href="/css/app.css" rel="stylesheet" type="text/css">
         <link href="/bower_components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" rel="stylesheet" type="text/css">
-        <link href="/css/style.css" rel="stylesheet" type="text/css">
+        <link href="/css/peb.css" rel="stylesheet" type="text/css">
 
         <!-- Scripts -->
         <script>

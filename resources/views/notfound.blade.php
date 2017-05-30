@@ -8,87 +8,35 @@
         <link rel="shortcut icon" type="image/png" href="/img/favicon.png"/>
         <meta name="theme-color" content="#1a6f9d"/>
 
-        <title>{{ config('app.name', 'Laravel Multi Auth Guard') }}</title>
+        <title>Página não encontrada - {{ config('app.name', 'Laravel Multi Auth Guard') }}</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300italic,300,400italic,600,600italic,700,700italic,800,800italic" rel="stylesheet" type="text/css">
 
         <!-- Styles -->
-        <link href="/css/app.css" rel="stylesheet">
-
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Raleway', sans-serif;
-                font-weight: 100;
-                height: 100vh;
-                margin: 0;
-            }
-
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-
-            .link-gray {
-                color: #888888;
-                text-decoration: underline;
-                display: inline-block;
-                margin-bottom: 0;
-                font-weight: 400;
-                text-align: center;
-                vertical-align: middle;
-                -ms-touch-action: manipulation;
-                touch-action: manipulation;
-                cursor: pointer;
-                background-image: none;
-                border: 1px solid transparent;
-                white-space: nowrap;
-                padding: 6px 12px;
-                font-size: 14px;
-                line-height: 1.6;
-                border-radius: 4px;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-            }
-        </style>
+        <link href="/css/notfound.css" rel="stylesheet" type="text/css">
     </head>
     
     <body>
-        <div class="flex-center position-ref full-height">
-            <div class="content">
-                <div class="title m-b-md">
-                    Página Inexistente
-                </div>
+        <div class="container">
+            <img class="line" src="/img/linha-404.gif" alt="">
+            <h1>404</h1>
+            <h2>A página que você está procurando não existe</h2>
+            <p class="text">
+                Você pode ter digitado algo errado ou talvez este conteúdo tenha sido movido para outro endereço
+            </p>
 
-                <a class="link-gray btn-blo" href="{{ url('/usuario/home') }}">
-                    Home
-                </a>
+            <div class="buttons">
+                <a href="{{ url('/usuario/login') }}" class="btn btn-empty">Página Inicial</a>
             </div>
+        </div>
+        
+        <img class="logo" src="/img/logo-named.png">
+        
+        <div class="cloud-group">
+            <div class="clouds"></div>
+            <div class="base"></div>
         </div>
     </body>
 </html>
