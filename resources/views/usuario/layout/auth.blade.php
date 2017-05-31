@@ -64,17 +64,19 @@
                     </ul>
 
                     <ul class="list-table pull-right no-selection nav-tools">
-                        <li class="nav-notifications" id="changelog-notifications">
-                            <div class="notifications">
-                                <span class="di status-icon">
-                                    <span class="s-notification-active"></span>
-                                </span>
-                            </div>
-                        </li>
+                        @if (Auth::user()->funcao == "admin")
+                            <li class="nav-notifications" id="changelog-notifications">
+                                <div class="notifications">
+                                    <span class="di status-icon">
+                                        <span class="s-notification-active"></span>
+                                    </span>
+                                </div>
+                            </li>
 
-                        <li>
-                            <span class="s-separator-blue"></span>
-                        </li>
+                            <li>
+                                <span class="s-separator-blue"></span>
+                            </li>
+                        @endif
 
                         <li class="li-funcao">
                             @if (Auth::user()->funcao == "admin")
