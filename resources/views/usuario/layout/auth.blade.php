@@ -152,6 +152,9 @@
                         <li><a href="">Agenda</a></li>
                         <li><a href="">Pacientes</a></li>
                         <li><a href="">Finanças</a></li>
+                        @if (Auth::user()->funcao == "admin")
+                            <li><a href="">Pendências</a></li>
+                        @endif
                         <li>
                             <a href="{{ url('/usuario/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="logout">
                                 <span class="fa fa-sign-out" aria-hidden="true"></span>
