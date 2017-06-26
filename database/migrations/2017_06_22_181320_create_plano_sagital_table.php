@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsuariosTable extends Migration
+class CreatePlanoSagitalTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +13,8 @@ class CreateUsuariosTable extends Migration
      */
     public function up()
     {
-        Schema::create('usuarios', function (Blueprint $table) {
+        Schema::create('plano_sagital', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->string('funcao');
-            $table->integer('ativo');
-            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -31,6 +26,6 @@ class CreateUsuariosTable extends Migration
      */
     public function down()
     {
-        Schema::drop('usuarios');
+        Schema::dropIfExists('plano_sagital');
     }
 }

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="{{ config('app.locale') }}">
+<html lang="{{ config('app.locale') }}" ng-app="peb">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,6 +19,7 @@
         <link href="/css/base.min.css" rel="stylesheet" type="text/css">
         <link href="/css/app.css" rel="stylesheet" type="text/css">
         <link href="/bower_components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css">
         <link href="/css/peb.css" rel="stylesheet" type="text/css">
 
         <!-- Scripts -->
@@ -27,9 +28,13 @@
                 'csrfToken' => csrf_token(),
             ]); ?>
         </script>
+
+        <script src="/node_modules/jquery/dist/jquery.min.js" type="text/javascript"></script>
+        <script src="/node_modules/angular/angular.min.js" type="text/javascript"></script>
+        <script src="/js/peb.js" type="text/javascript"></script>
     </head>
 
-    <body>
+    <body ng-controller="pebController">
         @if (Auth::check())
             <div class="clearfix ic-header">
                 
@@ -40,12 +45,19 @@
                         </a>
                     </div>
                     
-                    <ul class="pull-left nav nav-pills main-nav">
-                        <li><a href="">Painel</a></li>
-                        <li><a href="">Agenda</a></li>
-                        <li><a href="">Pacientes</a></li>
-                        <li><a href="">Finanças</a></li>
-                        <li><a href="">Relatórios</a></li>
+                    <ul class="pull-left nav nav-pills main-nav" role="tablist">
+                        <li role="presentation" ng-click="togglePaginas('pacientes')" ng-class="{'open': showPacientes}">
+                            <a href="">Pacientes</a>
+                        </li>
+
+                        @if (Auth::user()->funcao == "admin")
+                            <li role="presentation" ng-click="togglePaginas('usuarios')" ng-class="{'open': showUsers}">
+                                <a href="#">
+                                    Usuários
+                                    <span class="badge">[[ countUsuariosInativos ]]</span>
+                                </a>
+                            </li>
+                        @endif
     
                         <!--
                         <li class="dropdown nav-more-dropdown">
@@ -64,20 +76,6 @@
                     </ul>
 
                     <ul class="list-table pull-right no-selection nav-tools">
-                        @if (Auth::user()->funcao == "admin")
-                            <li class="nav-notifications" id="changelog-notifications">
-                                <div class="notifications">
-                                    <span class="di status-icon">
-                                        <span class="s-notification-active"></span>
-                                    </span>
-                                </div>
-                            </li>
-
-                            <li>
-                                <span class="s-separator-blue"></span>
-                            </li>
-                        @endif
-
                         <li class="li-funcao">
                             @if (Auth::user()->funcao == "admin")
                                 <img src="/img/admin-logo.png" alt="Admin">
@@ -93,18 +91,16 @@
                                 <span class="ib account-image empty">
                                     <span class="name-abbr">
                                         {{ explode(" ", Auth::user()->name)[0] }}
-                                    </span>                                    
+                                    </span>
+                                    <span id="logged" style="display: none">
+                                        {{ Auth::user()->cpf }}
+                                    </span>                                     
                                 </span>
                                 
                                 <span class="m-l-es s-arrow-dow-white account-arrow"></span>
                             </span>
 
                             <ul class="dropdown-menu" role="menu">                                
-                                <!--
-                                <li>
-                                    <a href=""><span class="icon"><span class="s-edit"></span></span>Editar conta</a>
-                                </li>
-                                -->
                                 <li>
                                     <a href="{{ url('/usuario/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         <span class="fa fa-sign-out" aria-hidden="true"></span>
@@ -148,13 +144,12 @@
 
                 <nav class="nav-mobile">
                     <ul>
-                        <li><a href="">Painel</a></li>
-                        <li><a href="">Agenda</a></li>
-                        <li><a href="">Pacientes</a></li>
-                        <li><a href="">Finanças</a></li>
+                        <li ng-click="togglePaginas('pacientes')"><a href="">Pacientes</a></li>
+
                         @if (Auth::user()->funcao == "admin")
-                            <li><a href="">Pendências</a></li>
+                            <li ng-click="togglePaginas('usuarios')"><a href="">Usuários</a></li>
                         @endif
+
                         <li>
                             <a href="{{ url('/usuario/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="logout">
                                 <span class="fa fa-sign-out" aria-hidden="true"></span>
@@ -175,6 +170,9 @@
         <!-- Scripts -->
         <script src="/js/app.js" type="text/javascript"></script>
         <script src="/bower_components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js" type="text/javascript"></script>
+        <script src="/node_modules/moment/min/moment.min.js" type="text/javascript"></script>
+        <script src="/node_modules/moment/locale/pt-br.js" type="text/javascript"></script>
+        <script src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
 
         <script type="text/javascript">
             $("#myNavmenu").offcanvas({ toggle: false, disableScrolling: false, canvas: "body" })

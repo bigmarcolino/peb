@@ -1,3 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+@font-face {
+    font-family: 'OpenSansSemiBold';
+    src: url('../fonts/OpenSans-SemiBold.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body, html {
 	background-color: #2596d3;
 	margin: 0;
@@ -152,8 +161,8 @@ body {
 }
 
 .main-container {
-    background-color: #fff;
-    padding-top: 5em;
+    background-color: #efefef;
+    padding: 3.6em 20px 0 20px;
     height: 100%;
 }
 
@@ -181,4 +190,85 @@ body {
 
 .ic-header .nav-tools>.li-funcao {
     padding: 0;
+}
+
+.centered-container select {
+    padding-left: 8px;
+}
+
+.sexo-default-color {
+    color: #999;
+}
+
+.sexo-default-color option {
+    color: #555555;
+}
+
+.title-lg {
+    padding: 0;
+}
+
+#users-container .content-height-2, #pacientes-container .content-height-2 {
+    min-height: calc(100vh - 210px);
+}
+
+.form-search-input .form-group {
+    margin-bottom: 0; 
+}
+
+.table-default thead tr th {
+    border-bottom: 1px solid #ddd !important;
+    font-family: 'OpenSansSemiBold';
+}
+
+.form-patients .table thead th {
+    cursor: pointer;
+}
+
+.table > thead > tr > th {
+    line-height: 1.42857143;
+}
+
+.pull-right .btn-green {
+    margin-bottom: 15px;
+}
+
+.modal-content {
+    box-shadow: none;
+}
+
+@media (min-width: 768px) {
+    .modal-content {
+        box-shadow: none;
+    }
+}
+
+.badge {
+    color: #1a6f9d;
+    background-color: #fff;
+}
+
+.btn-red:hover{
+    color: #fff;
+}
+
+.form-patients .total-count {
+    position: absolute;
+    left: 40px;
+    bottom: 40px;
+}
+
+.btn-white-blue {
+    border-color: #2c97d1;
+}
+
+.btn-white-blue:hover {
+    background-color: #fff;
+    color: #2c97d1;
+}
+
+.btn-white-blue:active {
+    border-color: #2c97d1 !important;
+    background-color: #fff !important;
+    color: #2c97d1 !important;
 }

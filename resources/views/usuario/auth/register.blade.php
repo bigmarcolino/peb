@@ -34,6 +34,40 @@
                         @endif
                     </div>
 
+                    <div class="form-group{{ $errors->has('cpf') ? ' has-error' : '' }}">
+                        <input id="cpf" type="text" class="form-control" name="cpf" value="{{ old('cpf') }}" placeholder="CPF:" ng-model="registerCpf" numbers-only>
+
+                        @if ($errors->has('cpf'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('cpf') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+
+                    <div class="form-group{{ $errors->has('sexo') ? ' has-error' : '' }}">
+                        <select class="form-control" id="sexo" name="sexo" value="{{ old('sexo') }}" ng-model="selectSexo" ng-change="changeDefaultSelectColor()" ng-class="{'sexo-default-color': defaultSelectColor}">
+                            <option hidden value="">Sexo:</option>
+                            <option>Masculino</option>
+                            <option>Feminino</option>
+                        </select>
+
+                        @if ($errors->has('sexo'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('sexo') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+
+                    <div class="form-group{{ $errors->has('data_nasc') ? ' has-error' : '' }}">
+                        <input id="data_nasc" type="text" class="form-control" name="data_nasc" value="{{ old('data_nasc') }}" placeholder="Data de Nascimento:" readonly>
+
+                        @if ($errors->has('data_nasc'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('data_nasc') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+
                     <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                         <input id="password" type="password" class="form-control" name="password" placeholder="Senha:">
 
@@ -68,10 +102,20 @@
                         <div class="alert alert-success"> {{ Session::get('registrado') }} </div>
                     @endif
 
-                    <script type="text/javascript" src="{!! asset('js/jquery-3.2.1.min.js') !!}"></script>
-
                     <script>
                         $('div.alert').delay(3000).slideUp(300);
+
+                        $(function () {
+                            $('#data_nasc').datetimepicker({
+                                format: 'DD-MM-YYYY',
+                                maxDate: moment().subtract(18, 'years'),
+                                widgetPositioning: {vertical: 'top', horizontal: 'auto'},
+                                ignoreReadonly: true,
+                                useCurrent: false
+                            }).on('dp.show', function() {
+                                return $(this).data('DateTimePicker').defaultDate(moment().subtract(18, 'years').format("DD-MM-YYYY"));
+                            });
+                        });
                     </script>
                 </form>
             </div>

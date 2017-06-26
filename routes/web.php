@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('usuario.auth.login');
+  return view('usuario.auth.login');
 });
 
 Route::group(['prefix' => 'usuario'], function () {
@@ -27,4 +27,8 @@ Route::group(['prefix' => 'usuario'], function () {
   Route::post('/password/reset', 'UsuarioAuth\ResetPasswordController@reset');
   Route::get('/password/reset', 'UsuarioAuth\ForgotPasswordController@showLinkRequestForm');
   Route::get('/password/reset/{token}', 'UsuarioAuth\ResetPasswordController@showResetForm');
+
+  Route::get('/listarUsuarios', 'Api\ApiController@listarUsuarios');
+  Route::get('/qtdUsuariosInativos', 'Api\ApiController@qtdUsuariosInativos');
+  Route::delete('/excluirUsuario/{cpf}', 'Api\ApiController@excluirUsuario');
 });
