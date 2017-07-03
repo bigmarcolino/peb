@@ -243,9 +243,11 @@ body {
     }
 }
 
-.badge {
-    color: #1a6f9d;
-    background-color: #fff;
+@media (min-width: 1024px) {
+    .badge {
+        color: #1a6f9d;
+        background-color: #fff;
+    }
 }
 
 .btn-red:hover{
@@ -267,8 +269,21 @@ body {
     color: #2c97d1;
 }
 
-.btn-white-blue:active {
-    border-color: #2c97d1 !important;
-    background-color: #fff !important;
-    color: #2c97d1 !important;
+.form-patients .pagination {
+    position: absolute;
+    right: 40px;
+    bottom: 20px;
+}
+
+.pagination a {
+    cursor: pointer;
+}
+
+#modalEditarUsuarios .form-horizontal {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+form #data_nasc {
+    cursor: pointer;
 }

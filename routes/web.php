@@ -30,5 +30,6 @@ Route::group(['prefix' => 'usuario'], function () {
 
   Route::get('/listarUsuarios', 'Api\ApiController@listarUsuarios');
   Route::get('/qtdUsuariosInativos', 'Api\ApiController@qtdUsuariosInativos');
-  Route::delete('/excluirUsuario/{cpf}', 'Api\ApiController@excluirUsuario');
+  Route::post('/excluirUsuarios', 'Api\ApiController@excluirUsuarios');
+  Route::put('/editarUsuario/{cpf}', 'Api\ApiController@editarUsuario');
 });

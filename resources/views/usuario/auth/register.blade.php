@@ -45,7 +45,7 @@
                     </div>
 
                     <div class="form-group{{ $errors->has('sexo') ? ' has-error' : '' }}">
-                        <select class="form-control" id="sexo" name="sexo" value="{{ old('sexo') }}" ng-model="selectSexo" ng-change="changeDefaultSelectColor()" ng-class="{'sexo-default-color': defaultSelectColor}">
+                        <select id="sexo" class="form-control" name="sexo" value="{{ old('sexo') }}" ng-model="selectSexo" ng-change="changeDefaultSelectColor()" ng-class="{'sexo-default-color': defaultSelectColor}">
                             <option hidden value="">Sexo:</option>
                             <option>Masculino</option>
                             <option>Feminino</option>

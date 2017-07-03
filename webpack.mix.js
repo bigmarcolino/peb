@@ -15,4 +15,6 @@ mix.js('resources/assets/js/app.js', 'public/js')
    .sass('resources/assets/sass/app.scss', 'public/css')
    .copy('node_modules/jquery', 'public/node_modules/jquery')
    .copy('node_modules/angular', 'public/node_modules/angular')
-   .copy('node_modules/moment', 'public/node_modules/moment');
+   .copy('node_modules/moment', 'public/node_modules/moment')
+   .copy('node_modules/angular-spinner', 'public/node_modules/angular-spinner')
+   .copy('node_modules/angular-tooltips', 'public/node_modules/angular-tooltips');

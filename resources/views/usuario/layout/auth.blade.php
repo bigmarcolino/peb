@@ -20,6 +20,7 @@
         <link href="/css/app.css" rel="stylesheet" type="text/css">
         <link href="/bower_components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css">
+        <link href="/node_modules/angular-tooltips/dist/angular-tooltips.min.css" rel="stylesheet" type="text/css" />
         <link href="/css/peb.css" rel="stylesheet" type="text/css">
 
         <!-- Scripts -->
@@ -50,7 +51,7 @@
                             <a href="">Pacientes</a>
                         </li>
 
-                        @if (Auth::user()->funcao == "admin")
+                        @if (Auth::user()->funcao == "Admin")
                             <li role="presentation" ng-click="togglePaginas('usuarios')" ng-class="{'open': showUsers}">
                                 <a href="#">
                                     Usuários
@@ -58,30 +59,15 @@
                                 </a>
                             </li>
                         @endif
-    
-                        <!--
-                        <li class="dropdown nav-more-dropdown">
-                            <a href="#" class="dropdown-toggle" role="button" aria-expanded="false">
-                                Mais <span class="caret"></span>
-                            </a>
-
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href=""><span class="icon"><span class="s-capsule"></span></span> Bulas</a></li>
-                                <li><a href=""><span class="icon"><span class="s-phone"></span></span> Contatos</a></li>
-                                <li><a href=""><span class="icon"><span class="s-book"></span></span> CID 10</a></li>
-                                <li><a href=""><span class="icon"><span class="s-folder"></span></span> Logs</a></li>
-                                <li><a href=""><span class="icon"><span class="s-wheel"></span></span> TISS</a></li>
-                            </ul>
-                        </li> -->
                     </ul>
 
                     <ul class="list-table pull-right no-selection nav-tools">
                         <li class="li-funcao">
-                            @if (Auth::user()->funcao == "admin")
+                            @if (Auth::user()->funcao == "Admin")
                                 <img src="/img/admin-logo.png" alt="Admin">
-                            @elseif (Auth::user()->funcao == "examinador")
+                            @elseif (Auth::user()->funcao == "Examinador")
                                 <img src="/img/examinador-logo.png" alt="Examinador">
-                            @elseif (Auth::user()->funcao == "analista")
+                            @elseif (Auth::user()->funcao == "Analista")
                                 <img src="/img/analista-logo.png" alt="Analista">
                             @endif
                         </li>
@@ -146,8 +132,13 @@
                     <ul>
                         <li ng-click="togglePaginas('pacientes')"><a href="">Pacientes</a></li>
 
-                        @if (Auth::user()->funcao == "admin")
-                            <li ng-click="togglePaginas('usuarios')"><a href="">Usuários</a></li>
+                        @if (Auth::user()->funcao == "Admin")
+                            <li ng-click="togglePaginas('usuarios')">
+                                <a href="">
+                                    Usuários
+                                    <span class="badge" style="margin-left: 4px">[[ countUsuariosInativos ]]</span>
+                                </a>
+                            </li>
                         @endif
 
                         <li>
@@ -173,6 +164,8 @@
         <script src="/node_modules/moment/min/moment.min.js" type="text/javascript"></script>
         <script src="/node_modules/moment/locale/pt-br.js" type="text/javascript"></script>
         <script src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+        <script src="/node_modules/angular-spinner/dist/angular-spinner.min.js" type="text/javascript"></script>
+        <script src="/node_modules/angular-tooltips/dist/angular-tooltips.min.js" type="text/javascript"></script>
 
         <script type="text/javascript">
             $("#myNavmenu").offcanvas({ toggle: false, disableScrolling: false, canvas: "body" })
