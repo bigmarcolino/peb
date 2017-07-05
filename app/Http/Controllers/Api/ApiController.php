@@ -54,4 +54,9 @@ class ApiController extends Controller
  
         return $cpf;
     }
+
+    public function usuarioLogado($cpf)
+    { 
+        return ["nome" => DB::table('usuario')->select('name')->where('cpf', $cpf)->first()];
+    }
 }

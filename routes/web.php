@@ -32,4 +32,5 @@ Route::group(['prefix' => 'usuario'], function () {
   Route::get('/qtdUsuariosInativos', 'Api\ApiController@qtdUsuariosInativos');
   Route::post('/excluirUsuarios', 'Api\ApiController@excluirUsuarios');
   Route::put('/editarUsuario/{cpf}', 'Api\ApiController@editarUsuario');
+  Route::get('/usuarioLogado/{cpf}', 'Api\ApiController@usuarioLogado');
 });

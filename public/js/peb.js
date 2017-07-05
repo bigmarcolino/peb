@@ -1,46 +1,49 @@
 'use strict';
-var app = angular.module('peb', ['angularSpinner', '720kb.tooltips'], function($interpolateProvider, $qProvider) {
+var app = angular.module('peb', ['angularSpinner', '720kb.tooltips', 'ae-datetimepicker'], function($interpolateProvider, $qProvider) {
   $interpolateProvider.startSymbol('[[');
   $interpolateProvider.endSymbol(']]');
   $qProvider.errorOnUnhandledRejections(false);
 });
 
 app.directive('numbersOnly', function () {
-  return {
-    require: 'ngModel',
-    link: function (scope, element, attr, ngModelCtrl) {
-      function fromUser(text) {
-        if (text) {
-          var transformedInput = text.replace(/[^0-9]/g, '');
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attr, ngModelCtrl) {
+            function fromUser(text) {
+                if (text) {
+                    var transformedInput = text.replace(/[^0-9]/g, '');
 
-          if (transformedInput !== text) {
-            ngModelCtrl.$setViewValue(transformedInput);
-            ngModelCtrl.$render();
-          }
-          return transformedInput;
+                    if (transformedInput !== text) {
+                        ngModelCtrl.$setViewValue(transformedInput);
+                        ngModelCtrl.$render();
+                    }
+                
+                    return transformedInput;
+                }
+
+                return undefined;
+            }            
+
+            ngModelCtrl.$parsers.push(fromUser);
         }
-        return undefined;
-      }            
-      ngModelCtrl.$parsers.push(fromUser);
-    }
-  };
+    };
 });
 
 app.filter('tracos', function() {
-  return function(input) {
-    if(input == "") {
-        return "---";
+    return function(input) {
+        if(input == "") {
+            return "---";
+        }
+        else {
+            return input;
+        }
     }
-    else {
-        return input;
-    }
-  }
 });
 
 app.filter('dateBr', function() {
-  return function(input) {
-    return input.split('-')[2] + '-' + input.split('-')[1] + '-' + input.split('-')[0];
-  }
+    return function(input) {
+        return input.split('-')[2] + '-' + input.split('-')[1] + '-' + input.split('-')[0];
+    }
 });
 
 app.factory('apiService', function($http) {
@@ -63,13 +66,17 @@ app.factory('apiService', function($http) {
             return $http.put('/usuario/editarUsuario/' + cpf, usuario);
         },
 
+        usuarioLogado: function(cpf){
+            return $http.get('/usuario/usuarioLogado/' + cpf);
+        },
+
 		cadastra: function(data){
 			return $http.post('/api/pessoas', data);
 		}
 	}
 });
  
-app.controller('pebController', function($scope, apiService, $filter) {
+app.controller('pebController', function($scope, apiService, $filter, $timeout) {
 	$scope.registerCpf;
 
 	$scope.defaultSelectColor = true;
@@ -79,18 +86,20 @@ app.controller('pebController', function($scope, apiService, $filter) {
 	}
 
 	$scope.listarUsuarios = function() {
-        $scope.showSpinner = true;
+        $scope.showSpinnerUsuarios = true;
 
-		apiService.listarUsuarios().then(function(response) {
-            $scope.showSpinner = false;
-			$scope.usuarios = response.data;
-            $scope.filtrarUsuarios();
-            $scope.ordenarUsuarios($scope.sortTypeUser);
-        })
-        .catch(function(response) {
-            $scope.showSpinner = false;
-            $('#modalErroUsuarios').modal('show');
-        })
+        $timeout( function(){
+            apiService.listarUsuarios().then(function(response) {
+                $scope.showSpinnerUsuarios = false;
+                $scope.usuarios = response.data;
+                $scope.filtrarUsuarios();
+                $scope.ordenarUsuarios($scope.sortTypeUser);
+            })
+            .catch(function(response) {
+                $scope.showSpinnerUsuarios = false;
+                $('#modalErroUsuarios').modal('show');
+            })
+        }, 1000 );
 	}
 
     $scope.qtdUsuariosInativos = function() {
@@ -116,15 +125,25 @@ app.controller('pebController', function($scope, apiService, $filter) {
           return acc;
         }, {});
 
-        apiService.excluirUsuarios(objCpfs).then(function(response) {
-            $scope.showSpinnerExcluir = false;
-            $('#modalErroExcluir').modal('hide');
-            $scope.listarUsuarios();
-            $scope.qtdUsuariosInativos();
-        })
-        .catch(function(response) {
-            $scope.showSpinnerExcluir = false;
-        })    
+        $timeout( function(){
+            apiService.excluirUsuarios(objCpfs).then(function(response) {
+                $('#modalErroExcluir').modal('hide');
+
+                $scope.qtdUsuariosInativos();
+                $scope.checkboxSelecionarTodos = false;
+                
+                cpfs.forEach(function(cpf) {
+                    var index = _.findIndex($scope.usuariosFiltrados, function(o) { return o.cpf == cpf; });
+                    $scope.usuariosFiltrados.splice(index, 1);
+                });
+
+                $scope.atualizarPagerUsuarios(1);
+                $scope.showSpinnerExcluir = false;
+            })
+            .catch(function(response) {
+                $scope.showSpinnerExcluir = false;
+            })
+        }, 1000 );    
     }
 
 	$scope.sortTypeUser = 'funcao';
@@ -237,31 +256,94 @@ app.controller('pebController', function($scope, apiService, $filter) {
 
     $scope.setUsuarioEdit = function(usuario) {
         $scope.usuarioEdit = angular.copy(usuario);
-        var split = $scope.usuarioEdit.data_nasc.split("-");
-        $scope.usuarioEdit.data_nasc = split[2] + "-" + split[1] + "-" + split[0];
     }
 
     $scope.salvarEdicaoUsuario = function () {
-        var split = $scope.usuarioEdit.data_nasc.split("-");
-        $scope.usuarioEdit.data_nasc = split[2] + "-" + split[1] + "-" + split[0];
+        $scope.showSpinnerEditarUsuario = true;
+        $('#modalErroEditarUsuario').modal('show');
 
-        console.log($scope.usuarioEdit);
+        $scope.usuarioEdit.data_nasc = $scope.usuarioEdit.data_nasc.format("YYYY-MM-DD").toString();
+
+        if($scope.cpfLogged() == $scope.usuarioEdit.cpf) {
+            $scope.usuarioLogado = $scope.usuarioEdit.name;
+        }
 
         apiService.editarUsuario($scope.usuarioEdit).then(function(res) {
-            var index = _.findIndex($scope.usuariosFiltrados, function(o) { return o.cpf ==  res.data; });
+            $timeout( function() {
+                $('#modalErroEditarUsuario').modal('hide');
 
-            console.log($scope.usuarioEdit);            
+                var index = _.findIndex($scope.usuariosFiltrados, function(o) { return o.cpf == res.data; });           
 
-            $scope.usuariosFiltrados[index].name = $scope.usuarioEdit.name;
-            $scope.usuariosFiltrados[index].email = $scope.usuarioEdit.email;
-            $scope.usuariosFiltrados[index].data_nasc = $scope.usuarioEdit.data_nasc;
-            $scope.usuariosFiltrados[index].funcao = $scope.usuarioEdit.funcao;
-            $scope.usuariosFiltrados[index].sexo = $scope.usuarioEdit.sexo;
+                $scope.usuariosFiltrados[index].name = $scope.usuarioEdit.name;
+                $scope.usuariosFiltrados[index].email = $scope.usuarioEdit.email;
+                $scope.usuariosFiltrados[index].data_nasc = $scope.usuarioEdit.data_nasc.format("YYYY-MM-DD").toString();
+                $scope.usuariosFiltrados[index].funcao = $scope.usuarioEdit.funcao;
+                $scope.usuariosFiltrados[index].sexo = $scope.usuarioEdit.sexo;
 
-            $scope.qtdUsuariosInativos();
-            $scope.filtrarUsuarios();
-            $scope.sortReverseUser = !$scope.sortReverseUser;
-            $scope.ordenarUsuarios($scope.sortTypeUser);
+                $scope.qtdUsuariosInativos();
+                $scope.filtrarUsuarios();
+                $scope.sortReverseUser = !$scope.sortReverseUser;
+                $scope.ordenarUsuarios($scope.sortTypeUser);
+
+                $scope.showSpinnerEditarUsuario = false;
+            }, 1000 );
+        })
+        .catch(function(res) {
+            $timeout( function() {
+                $scope.showSpinnerEditarUsuario = false;
+            }, 1000 );
+        })
+    }
+
+    $scope.dpEditarUsuarioOptions = {
+        format: 'DD-MM-YYYY',
+        maxDate: moment().subtract(18, 'years'),
+        widgetPositioning: {vertical: 'bottom', horizontal: 'auto'},
+        ignoreReadonly: true
+    }
+
+    $scope.dpRegistrarsUsuarioOptions = {
+        format: 'DD-MM-YYYY',
+        maxDate: moment().subtract(18, 'years'),
+        widgetPositioning: {vertical: 'top', horizontal: 'auto'},
+        ignoreReadonly: true,
+        useCurrent: false
+    }
+
+    $scope.getUsuarioLogado = function () {
+        var cpf = angular.element( document.querySelector( '#logged' ) )[0].innerText.trim();
+
+        apiService.usuarioLogado(cpf).then(function(response) {
+            $scope.usuarioLogado = response.data.nome.name.split(" ")[0];
         });
+    }
+
+    $scope.checkEmailEditarUsuario = function() {
+        if($scope.usuarioEdit.email == '') {
+            $scope.emailVazioEditarUsuario = true;
+        }
+        else {
+            $scope.emailVazioEditarUsuario = false;
+        }
+    }
+
+    $scope.checkNomeEditarUsuario = function() {
+        if($scope.usuarioEdit.name == '') {
+            $scope.nomeVazioEditarUsuario = true;
+        }
+        else {
+            $scope.nomeVazioEditarUsuario = false;
+        }
+    }
+
+    $scope.checkEmailExistenciaEditarUsuario = function() {
+        var index = _.findIndex($scope.usuariosFiltrados, function(o) { return o.email == $scope.usuarioEdit.email; });
+
+        if(index == -1) {
+            $scope.emailExisteEditarUsuario = false;
+        }
+        else {
+            $scope.emailExisteEditarUsuario = true;
+        }
     }
 });

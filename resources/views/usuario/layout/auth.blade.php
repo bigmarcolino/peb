@@ -32,6 +32,10 @@
 
         <script src="/node_modules/jquery/dist/jquery.min.js" type="text/javascript"></script>
         <script src="/node_modules/angular/angular.min.js" type="text/javascript"></script>
+        <script src="/node_modules/moment/min/moment.min.js" type="text/javascript"></script>
+        <script src="/node_modules/moment/locale/pt-br.js" type="text/javascript"></script>
+        <script src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+        <script src="/node_modules/angular-eonasdan-datetimepicker/dist/angular-eonasdan-datetimepicker.min.js" type="text/javascript"></script>
         <script src="/js/peb.js" type="text/javascript"></script>
     </head>
 
@@ -76,14 +80,14 @@
                             <span class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 <span class="ib account-image empty">
                                     <span class="name-abbr">
-                                        {{ explode(" ", Auth::user()->name)[0] }}
+                                        [[ usuarioLogado ]]
                                     </span>
                                     <span id="logged" style="display: none">
                                         {{ Auth::user()->cpf }}
                                     </span>                                     
                                 </span>
                                 
-                                <span class="m-l-es s-arrow-dow-white account-arrow"></span>
+                                <span class="m-l-es s-arrow-dow-white account-arrow" ng-init="getUsuarioLogado()"></span>
                             </span>
 
                             <ul class="dropdown-menu" role="menu">                                
@@ -124,7 +128,7 @@
             <div class="ic-menu-mobile offcanvas" id="myNavmenu" role="navigation">
                 <div class="menu-customer">
                     <div class="name-customer ib">
-                        <p>{{ explode(" ", Auth::user()->name)[0] }}</p>
+                        <p>[[ usuarioLogado ]]</p>
                     </div>
                 </div> <!-- /.menu-customer -->
 
@@ -161,11 +165,11 @@
         <!-- Scripts -->
         <script src="/js/app.js" type="text/javascript"></script>
         <script src="/bower_components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js" type="text/javascript"></script>
-        <script src="/node_modules/moment/min/moment.min.js" type="text/javascript"></script>
-        <script src="/node_modules/moment/locale/pt-br.js" type="text/javascript"></script>
-        <script src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+        
+        
         <script src="/node_modules/angular-spinner/dist/angular-spinner.min.js" type="text/javascript"></script>
         <script src="/node_modules/angular-tooltips/dist/angular-tooltips.min.js" type="text/javascript"></script>
+        
 
         <script type="text/javascript">
             $("#myNavmenu").offcanvas({ toggle: false, disableScrolling: false, canvas: "body" })

@@ -15,7 +15,7 @@
 		</form>
 
 		<div class="form-patients p-s bg-white bd bd-gray bd-radius content-height-2">	
-			<div class="pull-left form-group">
+			<div class="pull-left form-group" ng-if="!showSpinnerUsuarios">
 				<div class="dropdown btn-group btn-group-sm">
 					<button id="dropdown-delete" data-toggle="dropdown" role="button" class="dropdown-toggle btn btn-sm btn-default" aria-haspopup="true" aria-expanded="false" type="button">
 						<span class="glyphicon glyphicon-check"></span>
@@ -33,12 +33,12 @@
 				</div>
 			</div>
 
-			<table class="table table-default table-list table-list-patients">
+			<table class="table table-default table-list table-list-patients" ng-if="!showSpinnerUsuarios">
 			    <thead ng-if="usuariosFiltrados.length > 0">
 			      	<tr>
 			      		<th class="col-checkbox">
 				            <label class="checkbox-default">
-				            	<input type="checkbox" ng-click="selecionarTodosUsuarios()">
+				            	<input type="checkbox" ng-checked="checkboxSelecionarTodos" ng-click="selecionarTodosUsuarios()">
 				            	<span></span>
 				            </label> 
 				        </th>
@@ -113,9 +113,9 @@
 
 			<div class="m-t-es alert alert-warning" ng-if="usuariosFiltrados.length == 0">Nenhum registro encontrado</div>
 
-			<span us-spinner="{radius:30, width:8, length: 16, color: '#2c97d1'}" spinner-on="showSpinner"></span>
+			<span us-spinner="{radius:30, width:8, length: 16, color: '#2c97d1'}" spinner-on="showSpinnerUsuarios"></span>
 
-			<div class="total-count text-small">
+			<div class="total-count text-small" ng-if="!showSpinnerUsuarios">
 				<span>[[ usuariosFiltrados.length ]]</span>
 				<span> resultado</span><span ng-if="usuariosFiltrados.length != 1">s</span>
 			</div>
@@ -297,12 +297,24 @@
 
 		      	<div class="modal-body">
 		      		<form class="form-horizontal">
-	                    <div class="form-group">
-	                        <input id="name" type="text" class="form-control" name="name" placeholder="Nome:" ng-model="usuarioEdit.name" autofocus>
+	                    <div class="form-group" ng-class="{'has-error': nomeVazioEditarUsuario}">
+	                        <input id="name" type="text" class="form-control" name="name" placeholder="Nome:" ng-model="usuarioEdit.name" ng-change="checkNomeEditarUsuario()" autofocus>
+
+	                        <span class="help-block" ng-if="nomeVazioEditarUsuario">
+                                <strong>O campo nome é obrigatório</strong>
+                            </span>
 	                    </div>
 
-	                    <div class="form-group">
-	                        <input id="email" type="email" class="form-control" name="email" placeholder="Email:" ng-model="usuarioEdit.email">
+	                    <div class="form-group" ng-class="{'has-error': emailVazioEditarUsuario || emailExisteEditarUsuario}">
+	                        <input id="email" type="email" class="form-control" name="email" placeholder="Email:" ng-model="usuarioEdit.email" ng-change="checkEmailEditarUsuario(); checkEmailExistenciaEditarUsuario()">
+
+	                        <span class="help-block" ng-if="emailExisteEditarUsuario">
+                                <strong>O email já existe</strong>
+                            </span>
+
+                            <span class="help-block" ng-if="emailVazioEditarUsuario">
+                                <strong>O campo email é obrigatório</strong>
+                            </span>
 	                    </div>
 
 	                    <div class="form-group">
@@ -313,10 +325,15 @@
 	                    </div>
 
 	                    <div class="form-group">
-	                        <input id="data_nasc_edit" type="text" class="form-control" name="data_nasc" placeholder="Data de Nascimento:" ng-model="usuarioEdit.data_nasc" readonly>
+	                    	<div class="input-group">
+		                    	<input class="form-control" type="text" name="data_nasc" placeholder="Data de Nascimento:" ng-model="usuarioEdit.data_nasc" options="dpEditarUsuarioOptions" datetimepicker readonly>
+							    <span class="input-group-addon" id="data_nasc">
+							        <span class="glyphicon glyphicon-calendar"></span>
+							    </span>
+							</div>
 	                    </div>
 
-	                    <div class="form-group">
+	                    <div class="form-group" ng-if="cpfLogged() != usuarioEdit.cpf">
 	                        <select id="funcao" class="form-control" name="funcao" ng-model="usuarioEdit.funcao">
 	                        	<option ng-selected="usuarioEdit.funcao == ''"></option>
 	                            <option ng-selected="usuarioEdit.funcao == 'Admin'">Admin</option>
@@ -324,23 +341,37 @@
 	                            <option ng-selected="usuarioEdit.funcao == 'Examinador'">Examinador</option>
 	                        </select>
 	                    </div>
-
-	                    <script>
-	                        $(function () {
-	                            $('#data_nasc_edit').datetimepicker({
-	                                format: 'DD-MM-YYYY',
-	                                maxDate: moment().subtract(18, 'years'),
-	                                widgetPositioning: {vertical: 'bottom', horizontal: 'auto'},
-	                                ignoreReadonly: true
-	                            })
-	                        });
-	                    </script>
 	                </form>
 		    	</div>
 	    
 			    <div class="modal-footer">
 			        <button type="button" class="btn btn-link link-gray" data-dismiss="modal">Fechar</button>
-			        <button type="button" class="btn btn-red upper btn-loading confirm-remove-btn btn-loading" data-dismiss="modal" ng-click="salvarEdicaoUsuario()">Salvar</button>
+			        <button type="button" class="btn btn-red upper btn-loading confirm-remove-btn btn-loading" data-dismiss="modal" ng-click="salvarEdicaoUsuario()" ng-disabled="emailExisteEditarUsuario || emailVazioEditarUsuario || nomeVazioEditarUsuario">Salvar</button>
+			    </div>
+	    	</div>
+	  	</div>
+	</div>
+
+	<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="modalErroEditarUsuario">
+	  	<div class="modal-dialog modal-sm" role="document">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        		<h4 class="modal-title" id="gridSystemModalLabel">Salvando edição...</h4>
+	      		</div>
+
+		      	<div class="modal-body">
+		      		<span ng-if="!showSpinnerEditarUsuario">
+		      			Erro ao editar o usuário. Verifique sua conexão com a internet e recarregue a página.
+		      		</span>
+
+		      		<div style="height: 25px">
+		      			<span us-spinner="{radius:10, width:4, length: 8, color: '#2c97d1'}" spinner-on="showSpinnerEditarUsuario"></span>
+		      		</div>
+		    	</div>
+	    
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-link link-gray" data-dismiss="modal">Fechar</button>
 			    </div>
 	    	</div>
 	  	</div>

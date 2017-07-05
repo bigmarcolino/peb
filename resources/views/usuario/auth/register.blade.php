@@ -59,7 +59,13 @@
                     </div>
 
                     <div class="form-group{{ $errors->has('data_nasc') ? ' has-error' : '' }}">
-                        <input id="data_nasc" type="text" class="form-control" name="data_nasc" value="{{ old('data_nasc') }}" placeholder="Data de Nascimento:" readonly>
+                        <div class="input-group">
+                            <input id="data_nasc" type="text" class="form-control" name="data_nasc" value="{{ old('data_nasc') }}" placeholder="Data de Nascimento:" ng-model="dataNascRegister" options="dpRegistrarsUsuarioOptions" datetimepicker readonly>
+
+                            <span class="input-group-addon" id="data_nasc">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
 
                         @if ($errors->has('data_nasc'))
                             <span class="help-block">
@@ -104,18 +110,6 @@
 
                     <script>
                         $('div.alert').delay(3000).slideUp(300);
-
-                        $(function () {
-                            $('#data_nasc').datetimepicker({
-                                format: 'DD-MM-YYYY',
-                                maxDate: moment().subtract(18, 'years'),
-                                widgetPositioning: {vertical: 'top', horizontal: 'auto'},
-                                ignoreReadonly: true,
-                                useCurrent: false
-                            }).on('dp.show', function() {
-                                return $(this).data('DateTimePicker').defaultDate(moment().subtract(18, 'years').format("DD-MM-YYYY"));
-                            });
-                        });
                     </script>
                 </form>
             </div>
