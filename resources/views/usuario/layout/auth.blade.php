@@ -17,6 +17,7 @@
         <link href="/css/commons.min.css" rel="stylesheet" type="text/css">
         <link href="/css/main.min.css" rel="stylesheet" type="text/css">
         <link href="/css/base.min.css" rel="stylesheet" type="text/css">
+        <link href="/css/pacientes.min.css" rel="stylesheet" type="text/css">
         <link href="/css/app.css" rel="stylesheet" type="text/css">
         <link href="/bower_components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css">
@@ -56,7 +57,7 @@
                         </li>
 
                         @if (Auth::user()->funcao == "Admin")
-                            <li role="presentation" ng-click="togglePaginas('usuarios')" ng-class="{'open': showUsers}">
+                            <li role="presentation" ng-click="togglePaginas('usuarios')" ng-class="{'open': showUsuarios}">
                                 <a href="#">
                                     Usuários
                                     <span class="badge">[[ countUsuariosInativos ]]</span>
@@ -68,11 +69,11 @@
                     <ul class="list-table pull-right no-selection nav-tools">
                         <li class="li-funcao">
                             @if (Auth::user()->funcao == "Admin")
-                                <img src="/img/admin-logo.png" alt="Admin">
+                                <img src="/img/admin-logo.png" alt="Admin" title="Admin">
                             @elseif (Auth::user()->funcao == "Examinador")
-                                <img src="/img/examinador-logo.png" alt="Examinador">
+                                <img src="/img/examinador-logo.png" alt="Examinador" title="Examinador">
                             @elseif (Auth::user()->funcao == "Analista")
-                                <img src="/img/analista-logo.png" alt="Analista">
+                                <img src="/img/analista-logo.png" alt="Analista" title="Analista">
                             @endif
                         </li>
 
@@ -165,8 +166,6 @@
         <!-- Scripts -->
         <script src="/js/app.js" type="text/javascript"></script>
         <script src="/bower_components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js" type="text/javascript"></script>
-        
-        
         <script src="/node_modules/angular-spinner/dist/angular-spinner.min.js" type="text/javascript"></script>
         <script src="/node_modules/angular-tooltips/dist/angular-tooltips.min.js" type="text/javascript"></script>
         

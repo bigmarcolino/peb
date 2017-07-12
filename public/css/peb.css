@@ -97,12 +97,26 @@ body {
 }
 
 @media (min-width: 768px) {
-	.col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
+	.col-sm-1, .col-sm-2, .col-sm-3, 
+    .col-sm-4, .col-sm-5, .col-sm-6, 
+    .col-sm-7, .col-sm-8, .col-sm-9, 
+    .col-sm-10, .col-sm-11, .col-sm-12 {
 	    float: left;
 	}
 }
 
-.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, 
+.col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, 
+.col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, 
+.col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, 
+.col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, 
+.col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, 
+.col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, 
+.col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, 
+.col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, 
+.col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, 
+.col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, 
+.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
     position: relative;
     min-height: 1px;
     padding-left: 10px;
@@ -208,8 +222,12 @@ body {
     padding: 0;
 }
 
-#users-container .content-height-2, #pacientes-container .content-height-2 {
+.tabela-containers .content-height-2 {
     min-height: calc(100vh - 210px);
+}
+
+.peb-containers .container-form {
+    height: calc(100vh - 227px);
 }
 
 .form-search-input .form-group {
@@ -254,12 +272,6 @@ body {
     color: #fff;
 }
 
-.form-patients .total-count {
-    position: absolute;
-    left: 40px;
-    bottom: 40px;
-}
-
 .btn-white-blue {
     border-color: #2c97d1;
 }
@@ -271,8 +283,9 @@ body {
 
 .form-patients .pagination {
     position: absolute;
-    right: 40px;
+    right: 20px;
     bottom: 20px;
+    margin-bottom: 0;
 }
 
 .pagination a {
@@ -284,6 +297,14 @@ body {
     margin-right: 15px;
 }
 
-form #data_nasc {
+.submit-row {
+    padding-bottom: 5px;
+}
+
+.pointer {
     cursor: pointer;
+}
+
+.container-form .p-t-el {
+    padding-top: 30px;
 }

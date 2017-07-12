@@ -62,7 +62,7 @@
                         <div class="input-group">
                             <input id="data_nasc" type="text" class="form-control" name="data_nasc" value="{{ old('data_nasc') }}" placeholder="Data de Nascimento:" ng-model="dataNascRegister" options="dpRegistrarsUsuarioOptions" datetimepicker readonly>
 
-                            <span class="input-group-addon" id="data_nasc">
+                            <span class="input-group-addon pointer">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>

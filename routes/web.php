@@ -28,9 +28,12 @@ Route::group(['prefix' => 'usuario'], function () {
   Route::get('/password/reset', 'UsuarioAuth\ForgotPasswordController@showLinkRequestForm');
   Route::get('/password/reset/{token}', 'UsuarioAuth\ResetPasswordController@showResetForm');
 
-  Route::get('/listarUsuarios', 'Api\ApiController@listarUsuarios');
-  Route::get('/qtdUsuariosInativos', 'Api\ApiController@qtdUsuariosInativos');
-  Route::post('/excluirUsuarios', 'Api\ApiController@excluirUsuarios');
-  Route::put('/editarUsuario/{cpf}', 'Api\ApiController@editarUsuario');
-  Route::get('/usuarioLogado/{cpf}', 'Api\ApiController@usuarioLogado');
+  Route::get('/listarUsuariosPacientes', 'UsuarioApi\UsuarioApiController@listarUsuariosPacientes');
+  Route::get('/qtdUsuariosInativos', 'UsuarioApi\UsuarioApiController@qtdUsuariosInativos');
+  Route::post('/excluirUsuarios', 'UsuarioApi\UsuarioApiController@excluirUsuarios');
+  Route::put('/editarUsuario/{cpf}', 'UsuarioApi\UsuarioApiController@editarUsuario');
+  Route::get('/usuarioLogado/{cpf}', 'UsuarioApi\UsuarioApiController@usuarioLogado');
+
+  Route::post('/addPaciente', 'PacienteApi\PacienteApiController@addPaciente');
+  Route::post('/excluirPacientes', 'PacienteApi\PacienteApiController@excluirPacientes');
 });

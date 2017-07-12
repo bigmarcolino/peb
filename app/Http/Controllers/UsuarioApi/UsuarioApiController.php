@@ -1,16 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\UsuarioApi;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
 
-class ApiController extends Controller
+class UsuarioApiController extends Controller
 {
-    public function listarUsuarios()
+    public function listarUsuariosPacientes()
     {
-        return DB::table('usuario')->select('name', 'cpf', 'data_nasc', 'sexo', 'email', 'funcao', DB::raw('0 as checked'))->get();
+        $usuarios = DB::table('usuario')->select('name', 'cpf', 'data_nasc', 'sexo', 'email', 'funcao', DB::raw('0 as checked'))->get();
+        $pacientes = DB::table('paciente')->select('nome', 'cpf', 'data_nasc', 'celular', 'email', DB::raw('0 as checked'))->get();
+
+        return ['usuarios' => $usuarios, 'pacientes' => $pacientes];
     }
 
     public function qtdUsuariosInativos()
@@ -58,5 +61,11 @@ class ApiController extends Controller
     public function usuarioLogado($cpf)
     { 
         return ["nome" => DB::table('usuario')->select('name')->where('cpf', $cpf)->first()];
+    }
+
+    public function addPaciente(Request $request)
+    { 
+        $paciente = sizeof($_POST) > 0 ? $_POST : json_decode($request->getContent(), true);
+        DB::table('paciente')->insert($paciente);
     }
 }

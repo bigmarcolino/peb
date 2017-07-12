@@ -14,7 +14,20 @@ class CreatePacienteTable extends Migration
     public function up()
     {
         Schema::create('paciente', function (Blueprint $table) {
-            $table->increments('id');
+            $table->string('cpf')->unique();
+            $table->string('nome');
+            $table->string('end_res');
+            $table->date('data_nasc');
+            $table->string('estado');
+            $table->string('cidade');
+            $table->string('cep');
+            $table->string('tel_res');
+            $table->string('tel_trab');
+            $table->string('medico');
+            $table->string('celular');
+            $table->string('indicacao');
+            $table->string('identidade');
+            $table->string('email');
             $table->timestamps();
         });
     }
