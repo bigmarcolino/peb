@@ -31,9 +31,11 @@ Route::group(['prefix' => 'usuario'], function () {
   Route::get('/listarUsuariosPacientes', 'UsuarioApi\UsuarioApiController@listarUsuariosPacientes');
   Route::get('/qtdUsuariosInativos', 'UsuarioApi\UsuarioApiController@qtdUsuariosInativos');
   Route::post('/excluirUsuarios', 'UsuarioApi\UsuarioApiController@excluirUsuarios');
-  Route::put('/editarUsuario/{cpf}', 'UsuarioApi\UsuarioApiController@editarUsuario');
+  Route::put('/editarUsuario', 'UsuarioApi\UsuarioApiController@editarUsuario');
   Route::get('/usuarioLogado/{cpf}', 'UsuarioApi\UsuarioApiController@usuarioLogado');
 
   Route::post('/addPaciente', 'PacienteApi\PacienteApiController@addPaciente');
   Route::post('/excluirPacientes', 'PacienteApi\PacienteApiController@excluirPacientes');
+  Route::get('/getPacienteEdit/{cpf}', 'PacienteApi\PacienteApiController@getPacienteEdit');
+  Route::put('/editarPaciente', 'PacienteApi\PacienteApiController@editarPaciente');
 });

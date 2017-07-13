@@ -18,6 +18,7 @@
         <link href="/css/main.min.css" rel="stylesheet" type="text/css">
         <link href="/css/base.min.css" rel="stylesheet" type="text/css">
         <link href="/css/pacientes.min.css" rel="stylesheet" type="text/css">
+        <link href="/css/records.min.css" rel="stylesheet" type="text/css">
         <link href="/css/app.css" rel="stylesheet" type="text/css">
         <link href="/bower_components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css">

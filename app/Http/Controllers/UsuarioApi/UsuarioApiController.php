@@ -39,12 +39,14 @@ class UsuarioApiController extends Controller
         return ["status" => ($res) ? 'ok' : 'erro'];        
     }
 
-    public function editarUsuario($cpf, Request $request)
+    public function editarUsuario(Request $request)
     {
         $usuario = sizeof($_POST) > 0 ? $_POST : json_decode($request->getContent(), true);
         unset($usuario['checked']);
 
-        $res = DB::table('usuario')->where('cpf', $cpf)->update($usuario);
+        $cpf = $usuario['cpf'];
+
+        DB::table('usuario')->where('cpf', $cpf)->update($usuario);
 
         if($usuario['funcao'] != "")
         {
@@ -54,18 +56,10 @@ class UsuarioApiController extends Controller
         {
             DB::table('usuario')->where('cpf', $cpf)->update(['ativo' => 0]);
         }
- 
-        return $cpf;
     }
 
     public function usuarioLogado($cpf)
     { 
         return ["nome" => DB::table('usuario')->select('name')->where('cpf', $cpf)->first()];
-    }
-
-    public function addPaciente(Request $request)
-    { 
-        $paciente = sizeof($_POST) > 0 ? $_POST : json_decode($request->getContent(), true);
-        DB::table('paciente')->insert($paciente);
     }
 }

@@ -308,3 +308,13 @@ body {
 .container-form .p-t-el {
     padding-top: 30px;
 }
+
+.peb-containers .patient-detail-modal {
+    padding-top: 15px;
+}
+
+.btn-blue:hover {
+    color: #fff;
+    background-color: #2379a7;
+    border-color: #21729e;
+}

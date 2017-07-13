@@ -24,4 +24,16 @@ class PacienteApiController extends Controller
 
         return ["status" => ($res) ? 'ok' : 'erro'];        
     }
+
+    public function getPacienteEdit($cpf)
+    { 
+        return DB::table('paciente')->where('cpf', $cpf)->get();
+    }
+
+    public function editarPaciente(Request $request)
+    {
+        $paciente = sizeof($_POST) > 0 ? $_POST : json_decode($request->getContent(), true);
+        $cpf = $paciente['cpf'];
+        DB::table('usuario')->where('cpf', $cpf)->update($paciente);
+    }
 }
