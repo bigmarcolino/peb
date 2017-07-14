@@ -28,7 +28,7 @@ app.directive('numbersOnly', function () {
 
 app.filter('tracos', function() {
     return function(input) {
-        if(input == "") {
+        if(input == "" || input == undefined || input == null) {
             return "---";
         }
         else {
@@ -39,7 +39,7 @@ app.filter('tracos', function() {
 
 app.filter('dateBr', function() {
     return function(input) {
-        return input.split('-')[2] + '-' + input.split('-')[1] + '-' + input.split('-')[0];
+        return input.toString().split('-')[2] + '-' + input.split('-')[1] + '-' + input.split('-')[0];
     }
 });
 
@@ -478,13 +478,16 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
                 apiService.addPaciente($scope.novoPaciente).then(function(response) {
                     $('#modalAddPaciente').modal('hide');
 
-                    $scope.novoPaciente.checked = false;
+                    var obj = {};
+                    obj.checked = false;
+                    obj.nome = $scope.novoPaciente.nome;
+                    obj.cpf = $scope.novoPaciente.cpf;
+                    obj.data_nasc = $scope.novoPaciente.data_nasc;
+                    obj.email = $scope.novoPaciente.email;
 
-                    $scope.pacientesFiltrados.push(angular.copy($scope.novoPaciente));
-                    $scope.sortTypePaciente = 'nome';
-                    $scope.sortReversePaciente = false;
-                    $scope.searchPaciente = '';
+                    $scope.pacientes.push(obj);
                     $scope.filtrarPacientes();
+                    $scope.sortReversePaciente = !$scope.sortReversePaciente;
                     $scope.ordenarPacientes($scope.sortTypePaciente);
 
                     if(option) {
@@ -686,8 +689,6 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
         delete $scope.pacienteEdit.created_at;
         delete $scope.pacienteEdit.updated_at;
 
-        console.log($scope.pacienteEdit);
-
         $timeout( function() {
             apiService.editarPaciente($scope.pacienteEdit).then(function(response) {
                 $('#modalEditPaciente').modal('hide');
@@ -698,10 +699,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
                 $scope.pacientesFiltrados[index].email = $scope.pacienteEdit.email;
                 $scope.pacientesFiltrados[index].data_nasc = $scope.pacienteEdit.data_nasc.format("YYYY-MM-DD").toString();
 
-                if(option) {
-                    $scope.pacienteEdit = {};
-                }
-                else {
+                if(!option) {
                     $scope.togglePaginas('pacientes');
                     $scope.filtrarPacientes();
                     $scope.sortReversePaciente = !$scope.sortReversePaciente;

@@ -41,7 +41,7 @@
         <script src="/js/peb.js" type="text/javascript"></script>
     </head>
 
-    <body ng-controller="pebController">
+    <body ng-controller="pebController" style="padding-right: 0 !important">
         @if (Auth::check())
             <div class="clearfix ic-header">
                 

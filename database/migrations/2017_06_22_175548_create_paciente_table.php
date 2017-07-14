@@ -16,18 +16,18 @@ class CreatePacienteTable extends Migration
         Schema::create('paciente', function (Blueprint $table) {
             $table->string('cpf')->unique();
             $table->string('nome');
-            $table->string('end_res');
+            $table->string('end_res')->nullable();
             $table->date('data_nasc');
-            $table->string('estado');
-            $table->string('cidade');
-            $table->string('cep');
-            $table->string('tel_res');
-            $table->string('tel_trab');
-            $table->string('medico');
-            $table->string('celular');
-            $table->string('indicacao');
-            $table->string('identidade');
-            $table->string('email');
+            $table->string('estado')->nullable();
+            $table->string('cidade')->nullable();
+            $table->string('cep')->nullable();
+            $table->string('tel_res')->nullable();
+            $table->string('tel_trab')->nullable();
+            $table->string('medico')->nullable();
+            $table->string('celular')->nullable();
+            $table->string('indicacao')->nullable();
+            $table->string('identidade')->nullable();
+            $table->string('email')->nullable();
             $table->timestamps();
         });
     }

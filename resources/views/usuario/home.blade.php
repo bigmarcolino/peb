@@ -18,7 +18,7 @@
 
 		<div class="form-patients p-s bg-white bd bd-gray bd-radius content-height-2">	
 			<div class="pull-left form-group" ng-if="!showSpinnerUsuarios">
-				<div class="dropdown btn-group btn-group-sm">
+				<div class="dropdown btn-group btn-group-sm" ng-if="usuariosFiltrados.length > 1">
 					<button id="dropdown-delete" data-toggle="dropdown" role="button" class="dropdown-toggle btn btn-sm btn-default" aria-haspopup="true" aria-expanded="false" type="button">
 						<span class="glyphicon glyphicon-check"></span>
 						<span>
@@ -38,7 +38,7 @@
 			<table class="table table-default table-list table-list-patients" ng-if="!showSpinnerUsuarios">
 			    <thead ng-if="usuariosFiltrados.length > 0">
 			      	<tr>
-			      		<th class="col-checkbox">
+			      		<th class="col-checkbox" ng-if="usuariosFiltrados.length > 1">
 				            <label class="checkbox-default">
 				            	<input type="checkbox" ng-checked="checkboxSelecionarUsuarios" ng-click="selecionarTodosUsuarios()">
 				            	<span></span>
@@ -87,7 +87,7 @@
 			    
 			    <tbody>
 				    <tr ng-repeat="usuario in usuariosFiltrados | limitTo: pagerObjectUsuarios.currentPage*pageSizeUsuarios | limitTo: pageSizeUsuarios*(-1)">
-				        <td>
+				        <td ng-if="usuariosFiltrados.length > 1">
 				        	<label class="checkbox-default" ng-if="cpfLogged() != usuario.cpf">
 				            	<input type="checkbox" ng-model="usuario.checked">
 				            	<span></span>
@@ -337,7 +337,7 @@
 					<a class="btn btn-green btn-sm">ADICIONAR</a>
 				</div>
 
-				<div class="pull-left form-group" ng-if="!showSpinnerUsuarios">
+				<div class="pull-left form-group" ng-if="pacientesFiltrados.length > 0">
 					<div class="dropdown btn-group btn-group-sm">
 						<button id="dropdown-delete" data-toggle="dropdown" role="button" class="dropdown-toggle btn btn-sm btn-default" aria-haspopup="true" aria-expanded="false" type="button">
 							<span class="glyphicon glyphicon-check"></span>
@@ -414,7 +414,7 @@
 				        		<span>[[ paciente.nome ]]</span>
 				        	</a>
 				        </td>
-				        <td class="hidden-xs">[[ paciente.email ]]</td>
+				        <td class="hidden-xs">[[ paciente.email | tracos ]]</td>
 				        <td class="hidden-sm hidden-xs">[[ paciente.cpf ]]</td>
 				        <td class="hidden-sm hidden-xs">[[ paciente.data_nasc | dateBr]]</td>
 
@@ -513,6 +513,7 @@
 		<h2 class="title-lg">Adicionar Pacientes</h2>
 
 		<div class="form-patients-update m-b-s bg-white bd bd-gray bd-radius content-settings form-horizontal form-label tab-content" id="patient-update-form">
+
 			<div class="tab-pane fade in active tab-main-info" id="main-info">
                 <div class="p-s container-form">
                     <h3 class="title-form text-medium semi-bold p-b-s c-ic-blue upper">Geral</h3>
@@ -521,7 +522,7 @@
                         <div>
                             <label class="col-sm-2 control-label">Nome*</label>
                             <div class="col-sm-3" ng-class="{'has-error': nomeVazioPaciente}">
-                                <input type="text" name="name" class="form-control" ng-model="novoPaciente.nome" ng-change="checkNomePaciente('add')">
+                                <input type="text" name="nome" class="form-control" ng-model="novoPaciente.nome" ng-change="checkNomePaciente('add')">
 
                                 <span class="help-block" ng-if="nomeVazioPaciente">
 	                                <strong>O campo nome é obrigatório</strong>
@@ -531,7 +532,7 @@
                         <div>
                             <label class="col-sm-1 control-label">CPF*</label>
                             <div class="col-sm-2" id="patient-code-gen" ng-class="{'has-error': cpfVazioPaciente || cpfExistePaciente}">
-                                <input id="id_patient_code" type="text" name="patient_code" class="form-control" ng-model="novoPaciente.cpf" numbers-only ng-change="checkCpfPaciente('add'); checkCpfExistenciaPaciente('add')">
+                                <input id="id_patient_code" type="text" name="cpf" class="form-control" ng-model="novoPaciente.cpf" numbers-only ng-change="checkCpfPaciente('add'); checkCpfExistenciaPaciente('add')">
 
                                 <span class="help-block" ng-if="cpfExistePaciente">
 	                                <strong>O CPF já existe</strong>
@@ -545,7 +546,7 @@
                         <div>
                             <label class="col-sm-1 control-label">Identidade</label>
                             <div class="col-sm-1" id="patient-code-gen">
-                                <input id="id_patient_code" type="text" name="patient_code" class="form-control" ng-model="novoPaciente.identidade" numbers-only>
+                                <input id="id_patient_code" type="text" name="identidade" class="form-control" ng-model="novoPaciente.identidade" numbers-only>
                             </div>
                         </div>
                     </div>
@@ -555,7 +556,7 @@
 	                        <label class="col-sm-2 control-label">Data de nascimento*</label>
 	                        <div class="col-sm-3" ng-class="{'has-error': dataVazioPaciente}">
 	                        	<div class="input-group">
-		                            <input class="form-control" id="birth-date-field" name="birth_date" type="text" ng-model="novoPaciente.data_nasc" options="dpNovoPacienteOptions" datetimepicker readonly ng-change="checkDataPaciente('add')">
+		                            <input class="form-control" id="birth-date-field" name="data_nasc" type="text" ng-model="novoPaciente.data_nasc" options="dpNovoPacienteOptions" datetimepicker readonly ng-change="checkDataPaciente('add')">
 
 		                            <span class="input-group-addon pointer">
 		                                <span class="glyphicon glyphicon-calendar"></span>
@@ -571,7 +572,7 @@
 	                    <div>
 	                    	<label class="col-sm-1 control-label">E-mail</label>
 	                        <div class="col-sm-3">
-	                            <input class="form-control" type="text" ng-model="novoPaciente.email">
+	                            <input class="form-control" type="text" name="email" ng-model="novoPaciente.email">
 	                        </div>
 	                    </div>
                     </div>
@@ -580,13 +581,13 @@
                         <div>
                             <label class="col-sm-2 control-label">Médico</label>
                             <div class="col-sm-2">
-                                <input type="text" name="home_phone" class="form-control" ng-model="novoPaciente.medico">
+                                <input type="text" name="medico" class="form-control" ng-model="novoPaciente.medico">
                             </div>
                         </div>
                         <div>
                             <label class="col-sm-1 control-label">Indicação</label>
                             <div class="col-sm-2">
-                                <input class="form-control" id="id_office_phone" name="office_phone" type="text" ng-model="novoPaciente.indicacao">
+                                <input class="form-control" id="id_office_phone" name="indicacao" type="text" ng-model="novoPaciente.indicacao">
                             </div>
                         </div>
                     </div>
@@ -599,19 +600,19 @@
                         <div>
                             <label class="col-sm-2 control-label">Celular</label>
                             <div class="col-sm-2">
-                                <input type="text" name="mobile_phone" class="form-control" ng-model="novoPaciente.celular" numbers-only>
+                                <input type="text" name="celular" class="form-control" ng-model="novoPaciente.celular" numbers-only>
                             </div>
                         </div>
                         <div>
                             <label class="col-sm-1 control-label">Casa</label>
                             <div class="col-sm-2">
-                                <input type="text" name="home_phone" class="form-control" ng-model="novoPaciente.tel_res" numbers-only>
+                                <input type="text" name="tel_res" class="form-control" ng-model="novoPaciente.tel_res" numbers-only>
                             </div>
                         </div>
                         <div>
                             <label class="col-sm-1 control-label">Trabalho</label>
                             <div class="col-sm-2">
-                                <input class="form-control" id="id_office_phone" name="office_phone" type="text" ng-model="novoPaciente.tel_trab" numbers-only>
+                                <input class="form-control" id="id_office_phone" name="tel_trab" type="text" ng-model="novoPaciente.tel_trab" numbers-only>
                             </div>
                         </div>
                     </div>
@@ -623,14 +624,14 @@
                         	<div>
                                 <label class="col-sm-2 control-label">Endereço</label>
                                 <div class="col-sm-4">
-                                    <input class="form-control" id="id_address" name="address" type="text" ng-model="novoPaciente.end_res">
+                                    <input class="form-control" id="id_address" name="end_res" type="text" ng-model="novoPaciente.end_res">
                                 </div>
                             </div>
 
                             <div>
                                 <label class="col-sm-1 control-label">CEP</label>
                                 <div class="col-sm-2">
-                                    <input class="form-control" id="id_zip_code" name="zip_code" type="text" ng-model="novoPaciente.cep" numbers-only>
+                                    <input class="form-control" id="id_zip_code" name="cep" type="text" ng-model="novoPaciente.cep" numbers-only>
                                 </div>
                             </div>
                         </div>
@@ -639,14 +640,14 @@
                             <div>
                                 <label class="col-sm-2 control-label">Cidade</label>
                                 <div class="col-sm-3">
-                                    <input class="form-control" id="id_city" name="city" type="text" ng-model="novoPaciente.cidade">
+                                    <input class="form-control" id="id_city" name="cidade" type="text" ng-model="novoPaciente.cidade">
                                 </div>
                             </div>
                             <div>
                                 <label class="col-sm-1 control-label">Estado</label>
 
                                 <div class="col-sm-2">
-	                              	<select class="select-picker form-control" id="id_state" name="state" ng-model="novoPaciente.estado">
+	                              	<select class="select-picker form-control" id="id_state" name="estado" ng-model="novoPaciente.estado">
 										<option value="" selected="selected"></option>
 										<option value="AC">Acre</option>
 										<option value="AL">Alagoas</option>
