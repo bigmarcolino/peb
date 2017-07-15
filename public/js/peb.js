@@ -39,7 +39,9 @@ app.filter('tracos', function() {
 
 app.filter('dateBr', function() {
     return function(input) {
-        return input.toString().split('-')[2] + '-' + input.split('-')[1] + '-' + input.split('-')[0];
+        if(input != undefined && input != null) {
+            return input.toString().split('-')[2] + '-' + input.toString().split('-')[1] + '-' + input.toString().split('-')[0];
+        }
     }
 });
 
@@ -81,6 +83,54 @@ app.filter("localeOrderBy", [function () {
         return arrayCopy;
     }
 }]);
+
+app.filter("filterIgnoringAccents", function() {
+    var resolverAcentuacao = function resolverAcentuacao(string) {
+        var regex = /[çÇáàâäãÁÀÂÄÃéèêëÉÈÊËíìîïÍÌÎÏóòôöõÓÒÔÖÕúùûüÚÙÛÜ]/g;
+
+        var translate = {
+            "á": "a", "à": "a", "â": "a", "ä": "a", "ã": "a", "Á": "A", "À": "A", "Â": "A", "Ä": "A", "Ã": "A",
+            "é": "e", "è": "e", "ê": "e", "ë": "e", "É": "E", "È": "E", "Ê": "E", "Ë": "E",
+            "í": "i", "ì": "i", "î": "i", "ï": "i", "Í": "I", "Ì": "I", "Î": "I", "Ï": "I",
+            "ó": "o", "ò": "o", "ô": "o", "ö": "o", "õ": "o", "Ó": "O", "Ò": "O", "Ô": "O", "Ö": "O", "Õ": "Õ",
+            "ú": "u", "ù": "u", "û": "u", "ü": "u", "Ú": "U", "Ù": "U", "Û": "U", "Ü": "U",
+            "ç": "c", "Ç": "C"
+        };
+
+        return (
+            string.replace(regex, function(match) {
+                return translate[match];
+            })
+        );
+    }
+
+    return function(array, input) {
+        var arrayFiltrado = [];
+
+        if (input == undefined) {
+            return array;
+        }
+        else if (input.toString() == "") {
+            return array;
+        }
+        else {
+            for(var i = 0; i < array.length; i++) {
+                _.forOwn(array[i], function(value, key) {
+                    if(value != null && value != undefined && value != "") {
+                        var clearedValue = resolverAcentuacao(value.toString().toLowerCase());
+                        var clearedInput = resolverAcentuacao(input.toLowerCase());
+
+                        if(clearedValue.indexOf(clearedInput) != -1){
+                            arrayFiltrado.push(array[i]);
+                        }
+                    }
+                });
+            }
+        }
+
+        return arrayFiltrado;
+    }
+});
 
 app.factory('apiService', function($http) {
 	return {
@@ -344,7 +394,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
     }
 
     $scope.filtrarUsuarios = function() {
-        $scope.usuariosFiltrados = $filter('filter')($scope.usuarios, this.searchUser);
+        $scope.usuariosFiltrados = $filter('filterIgnoringAccents')($scope.usuarios, this.searchUser);
         $scope.atualizarPagerUsuarios(1);
     }
 
@@ -519,7 +569,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
     }
 
     $scope.filtrarPacientes = function() {
-        $scope.pacientesFiltrados = $filter('filter')($scope.pacientes, this.searchPaciente);
+        $scope.pacientesFiltrados = $filter('filterIgnoringAccents')($scope.pacientes, this.searchPaciente);
         $scope.atualizarPagerPacientes(1);
     }
 
