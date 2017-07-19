@@ -15,6 +15,10 @@ class CreateLocalEscolioseTable extends Migration
     {
         Schema::create('local_escoliose', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('local')->nullable();
+            $table->string('lado')->nullable();
+            $table->integer('diagnostico_prognostico_id')->unsigned()->nullable();
+            $table->foreign('diagnostico_prognostico_id')->references('id')->on('diagnostico_prognostico')->onDelete('cascade');
             $table->timestamps();
         });
     }

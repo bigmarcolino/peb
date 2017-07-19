@@ -1,30 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\PacienteApi;
+namespace App\Http\Controllers\AtendimentoApi;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Paciente;
-use DB;
 
-class PacienteApiController extends Controller
+class AtendimentoApiController extends Controller
 {
-    public function addPaciente(Request $request)
+    /*public function addPaciente(Request $request)
     { 
         $paciente = sizeof($_POST) > 0 ? $_POST : json_decode($request->getContent(), true);
         $paciente["data_nasc"] = explode("T", $paciente["data_nasc"])[0];
         Paciente::insert($paciente);
-
-        /*return Usuario::create([
-            'cpf' => $data['cpf'],
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'sexo' => $data['sexo'],
-            'data_nasc' => date('Y-m-d', strtotime($data['data_nasc'])),
-            'password' => bcrypt($data['password']),
-            'funcao' => "",
-            'ativo' => 0,
-        ]);*/
     }
 
     public function excluirPacientes(Request $request)
@@ -49,5 +36,5 @@ class PacienteApiController extends Controller
         $cpf = $paciente['cpf'];
         $paciente["data_nasc"] = explode("T", $paciente["data_nasc"])[0];
         Paciente::where('cpf', $cpf)->update($paciente);
-    }
+    }*/
 }

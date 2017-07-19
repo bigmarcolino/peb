@@ -14,7 +14,14 @@ class CreateResponsavelTable extends Migration
     public function up()
     {
         Schema::create('responsavel', function (Blueprint $table) {
-            $table->increments('id');
+            $table->string('cpf')->unique();
+            $table->string('nome')->nullable();
+            $table->string('email')->nullable();
+            $table->string('identidade')->nullable();
+            $table->string('ocupacao')->nullable();
+            $table->string('telefone')->nullable();
+            $table->string('cpf_paciente')->nullable();
+            $table->foreign('cpf_paciente')->references('cpf')->on('paciente')->onDelete('cascade');
             $table->timestamps();
         });
     }

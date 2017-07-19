@@ -15,6 +15,12 @@ class CreatePlanoHorizontalTable extends Migration
     {
         Schema::create('plano_horizontal', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('valor')->nullable();
+            $table->integer('tipo')->nullable();
+            $table->string('calco')->nullable();
+            $table->string('vertebra')->nullable();
+            $table->integer('medidas_id')->unsigned()->nullable();
+            $table->foreign('medidas_id')->references('id')->on('medidas')->onDelete('cascade');
             $table->timestamps();
         });
     }

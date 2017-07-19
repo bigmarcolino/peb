@@ -8,9 +8,6 @@ class MobilidadeArticular extends Model
 {
     protected $table = 'mobilidade_articular';
 
-    protected $primaryKey = 'lado';
-    public $incrementing = false;
-
     /**
      * The attributes that are mass assignable.
      *

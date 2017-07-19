@@ -318,3 +318,8 @@ body {
     background-color: #2379a7;
     border-color: #21729e;
 }
+
+.content-records .input-group .input-group-addon {
+    float: left;
+    padding-right: 24px;
+}

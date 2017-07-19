@@ -15,6 +15,11 @@ class CreatePlanoSagitalTable extends Migration
     {
         Schema::create('plano_sagital', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('valor')->nullable();
+            $table->integer('diferenca')->nullable();
+            $table->string('localizacao')->nullable();
+            $table->integer('medidas_id')->unsigned()->nullable();
+            $table->foreign('medidas_id')->references('id')->on('medidas')->onDelete('cascade');
             $table->timestamps();
         });
     }

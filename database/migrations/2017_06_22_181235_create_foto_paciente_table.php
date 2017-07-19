@@ -15,6 +15,12 @@ class CreateFotoPacienteTable extends Migration
     {
         Schema::create('foto_paciente', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('nome_foto')->nullable();
+            $table->date('data_foto')->nullable();
+            $table->binary('foto');
+            $table->string('descricao')->nullable();
+            $table->string('cpf_paciente')->nullable();
+            $table->foreign('cpf_paciente')->references('cpf')->on('paciente')->onDelete('cascade');
             $table->timestamps();
         });
     }

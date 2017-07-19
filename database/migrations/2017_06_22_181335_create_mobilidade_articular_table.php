@@ -15,6 +15,11 @@ class CreateMobilidadeArticularTable extends Migration
     {
         Schema::create('mobilidade_articular', function (Blueprint $table) {
             $table->increments('id');
+            $table->float('valor')->nullable();
+            $table->string('inclinacao')->nullable();
+            $table->string('lado')->nullable();
+            $table->integer('medidas_id')->unsigned()->nullable();
+            $table->foreign('medidas_id')->references('id')->on('medidas')->onDelete('cascade');
             $table->timestamps();
         });
     }

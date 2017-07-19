@@ -17,13 +17,13 @@ class Atendimento extends Model
         'idade_cronologica', 'idade_ossea', 'menarca', 'num_atendimento', 'data_atendimento', 'altura', 'altura_sentada', 'peso', 'risser', 'data_raio_x'
     ];
 
-    public function paciente()
-    {
-        return $this->hasOne('App\Paciente', 'cpf_paciente_fk');
-    }
-
     public function medidas()
     {
-        return $this->hasOne('App\Medidas', 'id_medidas_fk');
+        return $this->hasOne('App\Medidas');
+    }
+
+    public function diag_prog()
+    {
+        return $this->hasOne('App\DiagnosticoPrognostico');
     }
 }

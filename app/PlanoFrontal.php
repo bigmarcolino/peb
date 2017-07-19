@@ -8,9 +8,6 @@ class PlanoFrontal extends Model
 {
 	protected $table = 'plano_frontal';
 
-    protected $primaryKey = 'calco';
-    public $incrementing = false;
-
     /**
      * The attributes that are mass assignable.
      *

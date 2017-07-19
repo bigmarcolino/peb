@@ -15,6 +15,10 @@ class CreatePlanoFrontalTable extends Migration
     {
         Schema::create('plano_frontal', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('valor')->nullable();
+            $table->string('calco')->nullable();
+            $table->integer('medidas_id')->unsigned()->nullable();
+            $table->foreign('medidas_id')->references('id')->on('medidas')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -26,6 +26,65 @@ app.directive('numbersOnly', function () {
     };
 });
 
+app.directive("floatingNumberOnly", function() {
+    return {
+        require: 'ngModel',
+        link: function(scope, ele, attr, ctrl) {
+
+            ctrl.$parsers.push(function(inputValue) {
+                var pattern = new RegExp("(^[0-9]{1,9})+(\.[0-9]{1,4})?$", "g");
+                
+                if (inputValue == '')
+                    return '';
+        
+                var dotPattern = /^[.]*$/;
+
+                if (dotPattern.test(inputValue)) {
+                    ctrl.$setViewValue('');
+                    ctrl.$render();
+                    return '';
+                }
+
+                var newInput = inputValue.replace(/[^0-9.]/g, '');
+
+                if (newInput != inputValue) {
+                    ctrl.$setViewValue(newInput);
+                    ctrl.$render();
+                }
+
+                var result;
+                var dotCount;
+                var newInputLength = newInput.length;
+                
+                if (result = (pattern.test(newInput))) {
+                    dotCount = newInput.split(".").length - 1;
+                    
+                    if (dotCount == 0 && newInputLength > 9) { 
+                        newInput = newInput.slice(0, newInputLength - 1);
+                        ctrl.$setViewValue(newInput);
+                        ctrl.$render();
+                    }
+                } else {              
+                    dotCount = newInput.split(".").length - 1;
+                  
+                    if (newInputLength > 0 && dotCount > 1) {
+                        newInput = newInput.slice(0, newInputLength - 1);
+                    }
+
+                    if ((newInput.slice(newInput.indexOf(".") + 1).length) > 4) {
+                        newInput = newInput.slice(0, newInputLength - 1);
+                    }
+                    
+                    ctrl.$setViewValue(newInput);
+                    ctrl.$render();
+                }
+
+                return newInput;
+            });
+        }
+    };
+});
+
 app.filter('tracos', function() {
     return function(input) {
         if(input == "" || input == undefined || input == null) {
@@ -262,9 +321,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
 	$scope.sortReverseUser = false;
 	$scope.searchUser = '';
 
-    $scope.showUsuarios = false;
     $scope.showPacientes = true;
-    $scope.showAddPacientes = false;
 
     $scope.togglePaginas = function(pagina) {
         if (pagina == 'usuarios') {
@@ -336,7 +393,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
         }
     }
 
-    var defaultPageSize = 10;
+    var defaultPageSize = 20;
     $scope.pageSizeUsuarios = defaultPageSize;
     $scope.pageSizePacientes = defaultPageSize;
 
@@ -773,5 +830,55 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
         var days = moment().diff(moment(data), 'days');
 
         return years + " anos, " + months + " meses, " + days + " dias";
+    }
+
+    $scope.showIniciarAtendimento = true;
+    $scope.showFinalizarAtendimento = false;
+
+    $scope.viewResumo = true;
+
+    $scope.toggleAtendimento = function(secao) {
+        if(secao == "resumo") {
+            $scope.viewResumo = true;
+            $scope.viewAtendimento = false;
+            $scope.viewMedidas = false;
+            $scope.viewDiagProg = false;
+        }
+        else if(secao == "atendimento") {
+            $scope.viewResumo = false;
+            $scope.viewAtendimento = true;
+            $scope.viewMedidas = false;
+            $scope.viewDiagProg = false;
+        }
+        else if(secao == "medidas") {
+            $scope.viewResumo = false;
+            $scope.viewAtendimento = false;
+            $scope.viewMedidas = true;
+            $scope.viewDiagProg = false;
+        }
+        else if(secao == "diagprog") {
+            $scope.viewResumo = false;
+            $scope.viewAtendimento = false;
+            $scope.viewMedidas = false;
+            $scope.viewDiagProg = true;
+        }
+    }
+
+    $scope.toggleButtonAtendimento = function() {
+        if($scope.showFinalizarAtendimento) {
+            $scope.toggleAtendimento('resumo');
+        }
+
+        $scope.showIniciarAtendimento = !$scope.showIniciarAtendimento;
+        $scope.showFinalizarAtendimento = !$scope.showFinalizarAtendimento;
+    }
+
+    $scope.dpAtendimentoOptions = {
+        format: 'DD-MM-YYYY',
+        maxDate: moment(),
+        widgetPositioning: {vertical: 'top', horizontal: 'auto'},
+        ignoreReadonly: true,
+        useCurrent: false,
+        showClear: true
     }
 });

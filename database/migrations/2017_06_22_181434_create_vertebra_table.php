@@ -15,6 +15,12 @@ class CreateVertebraTable extends Migration
     {
         Schema::create('vertebra', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('tipo')->nullable();
+            $table->string('local')->nullable();
+            $table->string('altura')->nullable();
+            $table->string('vertebra_nome')->nullable();
+            $table->integer('diagnostico_prognostico_id')->unsigned()->nullable();
+            $table->foreign('diagnostico_prognostico_id')->references('id')->on('diagnostico_prognostico')->onDelete('cascade');
             $table->timestamps();
         });
     }
