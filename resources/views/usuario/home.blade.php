@@ -1170,7 +1170,7 @@
 														<label>Menarca:</label>
 
 														<div class="input-group">
-															<input class="form-control" maxlength="254" type="text" ng-model="atendimento.menarca" options="dpAtendimentoOptions" datetimepicker readonly>
+															<input class="form-control" type="text" ng-model="atendimento.menarca" options="dpAtendimentoOptions" datetimepicker readonly>
 
 															<span class="input-group-addon pointer">
 														        <span class="glyphicon glyphicon-calendar"></span>
@@ -1191,7 +1191,7 @@
 														<label>Data de atendimento:</label>
 														
 														<div class="input-group">
-															<input class="form-control" maxlength="254" type="text" ng-model="atendimento.data_atendimento" options="dpAtendimentoOptions" datetimepicker readonly>
+															<input class="form-control" type="text" ng-model="atendimento.data_atendimento" options="dpAtendimentoOptions" datetimepicker readonly>
 
 															<span class="input-group-addon pointer">
 														        <span class="glyphicon glyphicon-calendar"></span>
@@ -1233,7 +1233,7 @@
 														<label>Data do raio X:</label>
 
 														<div class="input-group">														
-															<input class="form-control" maxlength="254" type="text" ng-model="atendimento.data_raio_x" options="dpAtendimentoOptions" datetimepicker readonly>
+															<input class="form-control" type="text" ng-model="atendimento.data_raio_x" options="dpAtendimentoOptions" datetimepicker readonly>
 
 															<span class="input-group-addon pointer">
 														        <span class="glyphicon glyphicon-calendar"></span>
@@ -1602,6 +1602,13 @@
 
 												<li>
 													<div class="form-group form-group-sm size-710">
+														<label>Prescrição fisioterapêutica:</label>
+														<input class="form-control" maxlength="254" type="text" ng-model="diag_prog.prescricao_fisioterapeutica">
+													</div>
+												</li>
+
+												<li>
+													<div class="form-group form-group-sm size-710">
 														<label>Colete:</label>
 														<input class="form-control" maxlength="254" type="text" ng-model="diag_prog.colete">
 													</div>
@@ -1768,16 +1775,41 @@
 	    	<div class="modal-content">
 	      		<div class="modal-header">
 	        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        		<h4 class="modal-title" id="gridSystemModalLabel">Atenção</h4>
+	        		<h4 class="modal-title" id="gridSystemModalLabel">Finalizar atendimento</h4>
 	      		</div>
 
 		      	<div class="modal-body">
-			        Deseja finalizar o atendimento?
+			        Ao finalizar um atendimento, você não poderá alterá-lo novamente. Deseja prosseguir?
 		    	</div>
 	    
 			    <div class="modal-footer">
-			        <button type="button" class="btn btn-link link-gray" data-dismiss="modal">Não</button>
-			        <button type="button" class="btn btn-red upper btn-loading confirm-remove-btn btn-loading" data-dismiss="modal" ng-click="toggleButtonAtendimento()">Sim</button>
+			        <button type="button" class="btn btn-link link-gray" data-dismiss="modal">Fechar</button>
+			        <button type="button" class="btn btn-green btn-loading" data-dismiss="modal" ng-click="addAtendimento()">FINALIZAR</button>
+			    </div>
+	    	</div>
+	  	</div>
+	</div>
+
+	<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="modalErroAddAtendimento">
+	  	<div class="modal-dialog modal-sm" role="document">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        		<h4 class="modal-title" id="gridSystemModalLabel">Adicionando...</h4>
+	      		</div>
+
+		      	<div class="modal-body">
+		      		<span ng-if="!showSpinnerAddAtendimento">
+		      			Erro ao adicionar atendimento. Verifique sua conexão com a internet e tente novamente.
+		      		</span>
+
+		      		<div style="height: 25px">
+		      			<span us-spinner="{radius:10, width:4, length: 8, color: '#2c97d1'}" spinner-on="showSpinnerAddAtendimento"></span>
+		      		</div>
+		    	</div>
+	    
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-link link-gray" data-dismiss="modal">Fechar</button>
 			    </div>
 	    	</div>
 	  	</div>

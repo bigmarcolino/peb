@@ -38,4 +38,6 @@ Route::group(['prefix' => 'usuario'], function () {
   Route::post('/excluirPacientes', 'PacienteApi\PacienteApiController@excluirPacientes');
   Route::get('/getPacienteEdit/{cpf}', 'PacienteApi\PacienteApiController@getPacienteEdit');
   Route::put('/editarPaciente', 'PacienteApi\PacienteApiController@editarPaciente');
+
+  Route::post('/addAtendimento/{cpf}', 'AtendimentoApi\AtendimentoApiController@addAtendimento');
 });
