@@ -11,7 +11,7 @@
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel Multi Auth Guard') }}</title>
+        <title>{{ config('app.name') }}</title>
 
         <!-- Styles -->
         <link href="/css/commons.min.css" rel="stylesheet" type="text/css">
@@ -22,7 +22,7 @@
         <link href="/css/app.css" rel="stylesheet" type="text/css">
         <link href="/bower_components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css">
-        <link href="/node_modules/angular-tooltips/dist/angular-tooltips.min.css" rel="stylesheet" type="text/css" />
+        <link href="/node_modules/angular-tooltips/dist/angular-tooltips.min.css" rel="stylesheet" type="text/css">
         <link href="/css/peb.css" rel="stylesheet" type="text/css">
 
         <!-- Scripts -->
@@ -41,7 +41,7 @@
         <script src="/js/peb.js" type="text/javascript"></script>
     </head>
 
-    <body ng-controller="pebController" style="padding-right: 0 !important">
+    <body ng-controller="pebController" style="padding-right: 0 !important" ng-class="{'auto-height': showViewPacientes && atendimentos.length > 0}">
         @if (Auth::check())
             <div class="clearfix ic-header">
                 

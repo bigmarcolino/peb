@@ -15,4 +15,5 @@ class PlanoHorizontal extends Model
      */
     protected $fillable = [
         'vertebra', 'valor', 'tipo', 'calco'
+    ];
 }

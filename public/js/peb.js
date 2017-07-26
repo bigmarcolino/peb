@@ -231,6 +231,10 @@ app.factory('apiService', function($http) {
 
         addAtendimento: function(cpf, dados) {
             return $http.post('/usuario/addAtendimento/' + cpf, dados);
+        },
+
+        getAtendimentos: function(cpf) {
+            return $http.get('/usuario/getAtendimentos/' + cpf);
         }
 	}
 });
@@ -297,11 +301,13 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
                 $scope.checkboxSelecionarUsuarios = false;
                 
                 cpfs.forEach(function(cpf) {
-                    var index = _.findIndex($scope.usuariosFiltrados, function(o) { return o.cpf == cpf; });
-                    $scope.usuariosFiltrados.splice(index, 1);
+                    var index = _.findIndex($scope.usuarios, function(o) { return o.cpf == cpf; });
+                    $scope.usuarios.splice(index, 1);
                 });
 
-                $scope.atualizarPagerUsuarios(1);
+                $scope.filtrarUsuarios();
+                $scope.sortReverseUser = !$scope.sortReverseUser;
+                $scope.ordenarUsuarios($scope.sortTypeUser);
                 $scope.showSpinnerExcluirUsuarios = false;
             })
             .catch(function(response) {
@@ -360,6 +366,12 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
             $scope.showAddPacientes = false;
             $scope.showEditPacientes = false;
             $scope.showViewPacientes = true;
+
+            $scope.resetAtendimento();
+            $scope.toggleAtendimento('resumo');
+        
+            $scope.showIniciarAtendimento = true;
+            $scope.showFinalizarAtendimento = false;
         }
     }
 
@@ -582,7 +594,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
                     obj.checked = false;
                     obj.nome = $scope.novoPaciente.nome;
                     obj.cpf = $scope.novoPaciente.cpf;
-                    obj.data_nasc = $scope.novoPaciente.data_nasc;
+                    obj.data_nasc = $scope.novoPaciente.data_nasc.format("YYYY-MM-DD").toString();
                     obj.email = $scope.novoPaciente.email;
 
                     $scope.pacientes.push(obj);
@@ -653,11 +665,13 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
                 $scope.checkboxSelecionarPacientes = false;
                 
                 cpfs.forEach(function(cpf) {
-                    var index = _.findIndex($scope.pacientesFiltrados, function(o) { return o.cpf == cpf; });
-                    $scope.pacientesFiltrados.splice(index, 1);
+                    var index = _.findIndex($scope.pacientes, function(o) { return o.cpf == cpf; });
+                    $scope.pacientes.splice(index, 1);
                 });
 
-                $scope.atualizarPagerPacientes(1);
+                $scope.filtrarPacientes();
+                $scope.sortReversePaciente = !$scope.sortReversePaciente;
+                $scope.ordenarPacientes($scope.sortTypePaciente);
                 $scope.showSpinnerExcluirPacientes = false;
             })
             .catch(function(response) {
@@ -812,9 +826,23 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
         }, 1000 );
     }
 
+    $scope.showSpinnerAtendimento = true;
+
     $scope.setViewPaciente = function(paciente) {
+        $scope.showSpinnerGetAtendimento = true;
         $scope.togglePaginas('viewPaciente');
         $scope.viewPaciente = angular.copy(paciente);
+
+        $timeout( function() {
+            apiService.getAtendimentos($scope.viewPaciente.cpf).then(function(response) {
+                $scope.showSpinnerGetAtendimento = false;
+                $scope.atendimentos = response.data;
+            })
+            .catch(function(response) {
+                $scope.showSpinnerGetAtendimento = false;
+                $('#modalErroCarregarAtendimentos').modal('show');
+            })
+        }, 1000 );
     }
 
     $scope.calcIdade = function(data) {
@@ -875,16 +903,32 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
         showClear: true
     }
 
-    $scope.atendimento = {};
-    $scope.medidas = {};
-    $scope.plano_frontal = {};
-    $scope.plano_horizontal = {};
-    $scope.plano_sagital = {};
-    $scope.mobilidade_articular = {};
-    $scope.diag_prog = {};
-    $scope.curva = {};
-    $scope.local_escoliose = {};
-    $scope.vertebra = {};
+    var atendimentoVazio = function(obj) {
+        var result = true
+
+        _.forOwn(obj, function(value, key) {
+            if(!_.isEmpty(value)) {
+                result = false;
+            }
+        });
+
+        return result;
+    }
+
+    $scope.resetAtendimento = function() {
+        $scope.atendimento = {};
+        $scope.medidas = {};
+        $scope.plano_frontal = {};
+        $scope.plano_horizontal = {};
+        $scope.plano_sagital = {};
+        $scope.mobilidade_articular = {};
+        $scope.diag_prog = {};
+        $scope.curva = {};
+        $scope.local_escoliose = {};
+        $scope.vertebra = {};
+    }
+
+    $scope.resetAtendimento();
 
     $scope.addAtendimento = function() {
         $scope.showSpinnerAddAtendimento = true;
@@ -916,26 +960,29 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
         dados.vertebra = $scope.vertebra;
 
         $timeout( function() {
-            apiService.addAtendimento($scope.viewPaciente.cpf, dados).then(function(response) {
+            if(!atendimentoVazio(dados)) {
+                apiService.addAtendimento($scope.viewPaciente.cpf, dados).then(function(response) {
+                    $('#modalErroAddAtendimento').modal('hide');
+
+                    $scope.resetAtendimento();
+
+                    $scope.toggleButtonAtendimento();
+                    $scope.showSpinnerAddAtendimento = false;
+                })
+                .catch(function(response) {
+                    $scope.showSpinnerAddAtendimento = false;
+                })
+            }
+            else {
                 $('#modalErroAddAtendimento').modal('hide');
-
-                $scope.atendimento = {};
-                $scope.medidas = {};
-                $scope.plano_frontal = {};
-                $scope.plano_horizontal = {};
-                $scope.plano_sagital = {};
-                $scope.mobilidade_articular = {};
-                $scope.diag_prog = {};
-                $scope.curva = {};
-                $scope.local_escoliose = {};
-                $scope.vertebra = {};
-
                 $scope.toggleButtonAtendimento();
                 $scope.showSpinnerAddAtendimento = false;
-            })
-            .catch(function(response) {
-                $scope.showSpinnerAddAtendimento = false;
-            })
+            }
         }, 1000 );
+    }
+
+    $scope.cancelarAtendimento = function() {
+        $scope.resetAtendimento();
+        $scope.toggleButtonAtendimento();
     }
 });

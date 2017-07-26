@@ -19,21 +19,21 @@ class Medidas extends Model
 
     public function plano_frontal()
     {
-        return $this->hasMany('App\PlanoFrontal');
+        return $this->hasOne('App\PlanoFrontal');
     }
     
     public function plano_horizontal()
     {
-        return $this->hasMany('App\PlanoHorizontal');
+        return $this->hasOne('App\PlanoHorizontal');
     }
     
     public function plano_sagital()
     {
-        return $this->hasMany('App\PlanoSagital');
+        return $this->hasOne('App\PlanoSagital');
     }
 
     public function mobilidade_articular()
     {
-        return $this->hasMany('App\MobilidadeArticular');
+        return $this->hasOne('App\MobilidadeArticular');
     }
 }

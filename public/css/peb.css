@@ -19,12 +19,30 @@ body {
     font-size: 14px;
     line-height: 1.42857143;
     color: #888;
+    padding-right: 0 !important;
 }
 
 @media (max-width: 1023px) {
-	body, html {
+	body, html, .centered-container .centered-inner>div {
 	    background-color: #fff;
 	}
+
+    .centered-container .centered-form {
+        max-width: 400px;
+        width: 100%;
+        margin: 0 auto;
+        float: none;
+    }
+}
+
+@media (min-width: 1271px) {
+    .atendimentos-page {
+        margin-left: 300px;
+    }
+}
+
+.grey-background {
+    background-color: #efefef; 
 }
 
 .semi-bold {
@@ -59,27 +77,12 @@ body {
     margin: 0 auto;
 }
 
-@media (max-width: 1023px) {
-	.centered-container .centered-inner>div {
-	    background-color: #fff;
-	}
-}
-
 .centered-container .centered-form {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     background-color: #fff;
     padding: 40px !important;
-}
-
-@media (max-width: 1023px) {
-	.centered-container .centered-form {
-	    max-width: 400px;
-	    width: 100%;
-	    margin: 0 auto;
-	    float: none;
-	}
 }
 
 .centered-container .col {
@@ -94,15 +97,17 @@ body {
 	.col-sm-6 {
 		width: 50%;
 	}
-}
 
-@media (min-width: 768px) {
-	.col-sm-1, .col-sm-2, .col-sm-3, 
+    .col-sm-1, .col-sm-2, .col-sm-3, 
     .col-sm-4, .col-sm-5, .col-sm-6, 
     .col-sm-7, .col-sm-8, .col-sm-9, 
     .col-sm-10, .col-sm-11, .col-sm-12 {
-	    float: left;
-	}
+        float: left;
+    }
+
+    .modal-content {
+        box-shadow: none;
+    }
 }
 
 .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, 
@@ -188,6 +193,11 @@ body {
     .logo-white {
         margin-top: 12.5px;
     }
+
+    .badge {
+        color: #1a6f9d;
+        background-color: #fff;
+    }
 }
 
 .ic-header .nav-tools .account-dropdown .account-image {
@@ -202,7 +212,7 @@ body {
     top: 90%;
 }
 
-.ic-header .nav-tools>.li-funcao {
+.ic-header .nav-tools>.li-funcao, .title-lg {
     padding: 0;
 }
 
@@ -216,10 +226,6 @@ body {
 
 .sexo-default-color option {
     color: #555555;
-}
-
-.title-lg {
-    padding: 0;
 }
 
 .tabela-containers .content-height-2 {
@@ -239,7 +245,7 @@ body {
     font-family: 'OpenSansSemiBold';
 }
 
-.form-patients .table thead th {
+.form-patients .table thead th, .pointer, .pagination a {
     cursor: pointer;
 }
 
@@ -253,19 +259,6 @@ body {
 
 .modal-content {
     box-shadow: none;
-}
-
-@media (min-width: 768px) {
-    .modal-content {
-        box-shadow: none;
-    }
-}
-
-@media (min-width: 1024px) {
-    .badge {
-        color: #1a6f9d;
-        background-color: #fff;
-    }
 }
 
 .btn-red:hover{
@@ -288,10 +281,6 @@ body {
     margin-bottom: 0;
 }
 
-.pagination a {
-    cursor: pointer;
-}
-
 #modalEditarUsuarios .form-horizontal {
     margin-left: 15px;
     margin-right: 15px;
@@ -299,10 +288,6 @@ body {
 
 .submit-row {
     padding-bottom: 5px;
-}
-
-.pointer {
-    cursor: pointer;
 }
 
 .container-form .p-t-el {
@@ -322,4 +307,20 @@ body {
 .content-records .input-group .input-group-addon {
     float: left;
     padding-right: 24px;
+}
+
+.auto-height {
+    height: auto;
+}
+
+.content-records-exam .item-title {
+    margin: 0;
+    font-size: 14px;
+    background-color: #f9f9f9;
+}
+
+.spinnerAtendimento {
+    position: fixed;
+    top: 50%;
+    left: 50%;
 }

@@ -15,4 +15,5 @@ class PlanoFrontal extends Model
      */
     protected $fillable = [
         'calco', 'valor'
+    ];
 }

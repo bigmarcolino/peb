@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="ic-sidebar" ng-if="showViewPacientes">
+<div class="ic-sidebar" ng-if="showViewPacientes  && !showSpinnerGetAtendimento">
     <div class="sidebar-records">
     	<div class="ps-container ps-theme-default ps-active-y">
     		<h1 class="module-title bd-b bd-gray">Prontuários</h1>
@@ -28,6 +28,10 @@
     						</span>
     					</span>
     				</span>
+
+    				<span class="link-gray btn-block" data-toggle="modal" data-target="#modalCancelarAtendimento" ng-if="showFinalizarAtendimento">
+                        Cancelar atendimento
+                    </span>
     			</div>
     		</div>
 
@@ -220,8 +224,8 @@
 		    	</div>
 	    
 			    <div class="modal-footer">
-			        <button type="button" class="btn btn-link link-gray" data-dismiss="modal">Não</button>
-			        <button type="button" class="btn btn-red upper btn-loading confirm-remove-btn btn-loading" data-dismiss="modal" ng-click="excluirUsuarios()">Sim</button>
+			        <button type="button" class="btn btn-link link-gray" data-dismiss="modal">Cancelar</button>
+			        <button type="button" class="btn btn-red upper btn-loading confirm-remove-btn btn-loading" data-dismiss="modal" ng-click="excluirUsuarios()">EXCLUIR</button>
 			    </div>
 	    	</div>
 	  	</div>
@@ -349,7 +353,7 @@
 	    
 			    <div class="modal-footer">
 			        <button type="button" class="btn btn-link link-gray" data-dismiss="modal">Fechar</button>
-			        <button type="button" class="btn btn-red upper btn-loading confirm-remove-btn btn-loading" data-dismiss="modal" ng-click="salvarEdicaoUsuario()" ng-disabled="emailExisteEditarUsuario || emailVazioEditarUsuario || nomeVazioEditarUsuario">Salvar</button>
+			        <button type="button" class="btn btn-red upper btn-loading confirm-remove-btn btn-loading" data-dismiss="modal" ng-click="salvarEdicaoUsuario()" ng-disabled="emailExisteEditarUsuario || emailVazioEditarUsuario || nomeVazioEditarUsuario">SALVAR</button>
 			    </div>
 	    	</div>
 	  	</div>
@@ -523,8 +527,8 @@
 
 	<!-- Modals Pacientes -->
 
-	<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="modalExclusaoPacientes">
-	  	<div class="modal-dialog modal-sm" role="document">
+	<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="modalExclusaoPacientes">
+	  	<div class="modal-dialog" role="document">
 	    	<div class="modal-content">
 	      		<div class="modal-header">
 	        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -532,12 +536,12 @@
 	      		</div>
 
 		      	<div class="modal-body">
-			        Deseja excluir os pacientes selecionados?
+		      		Todos os dados relacionados aos pacientes selecionados serão removidos, incluindo agendamentos e atendimentos. Esta operação é irreversível e não poderá ser desfeita. Mesmo assim, tem certeza que deseja excluir os pacientes?
 		    	</div>
 	    
 			    <div class="modal-footer">
-			        <button type="button" class="btn btn-link link-gray" data-dismiss="modal">Não</button>
-			        <button type="button" class="btn btn-red upper btn-loading confirm-remove-btn btn-loading" data-dismiss="modal" ng-click="excluirPacientes()">Sim</button>
+			        <button type="button" class="btn btn-link link-gray" data-dismiss="modal">Cancelar</button>
+			        <button type="button" class="btn btn-red upper btn-loading confirm-remove-btn btn-loading" data-dismiss="modal" ng-click="excluirPacientes()">EXCLUIR</button>
 			    </div>
 	    	</div>
 	  	</div>
@@ -1030,13 +1034,13 @@
 
 
 	<!-- ----- Início View de Pacientes ------- -->
-	<div ng-if="showViewPacientes" class="peb-containers" style="margin-left: 300px">
+	<div ng-if="showViewPacientes" class="peb-containers atendimentos-page">
 		<div class="content-records">
 			<div>
 				<div class="container-fluid p-l-s p-r-s">
 					<h2 class="title-lg">Resumo</h2>
 
-					<div class="container-patient p-s bd bd-gray bg-white">
+					<div class="container-patient p-s bd bd-gray bg-white" ng-if="!showSpinnerGetAtendimento">
 						<div class="ib patient-data">
 							<div class="data row">
 								<p class="name c-ic-dark-blue semi-bold">
@@ -1048,7 +1052,7 @@
 								</p>
 								<p class="col-sm-8">
 									<span>Atendimentos: </span>
-									<strong>0</strong>
+									<strong>[[ atendimentos.length ]]</strong>
 								</p>
 							</div>
 						</div>
@@ -1058,20 +1062,20 @@
 					</div>
 				</div>
 
-				<div ng-show="viewResumo">
+				<div ng-show="viewResumo" ng-if="!showSpinnerGetAtendimento">
 					<div>
 						<div>
-							<div class="container-fluid p-t-s p-b-s p-l-s p-r-s">
+							<div class="container-fluid p-t-s p-b-s p-l-s p-r-s" ng-if="atendimentos.length == 0">
 								<div class="alert alert-warning">
 									<p>
-										<span>Não há atendimentos no momento. <br>Para iniciar um atendimento, clique no botão </span>
+										<span>Não há atendimentos no momento. <br>Para iniciar um atendimento, clique no botão</span>
 										<strong>Iniciar Atendimento</strong>
 									</p>
 								</div>
 							</div>
 
-							<ul class="p-s list-records reset-list">
-								<li class="item-records p-b-l clearfix">
+							<ul class="p-s list-records reset-list" ng-if="atendimentos.length > 0">
+								<!-- <li class="item-records p-b-l clearfix">
 									<div class="date-record pull-left">
 										<div class="date">
 											<span class="day">13</span>
@@ -1135,19 +1139,49 @@
 									</div>
 
 									<span class="item-records-line"></span>
-								</li>
+								</li> -->
+
+								<table class="table table-default table-list table-list-patients">
+								    <thead>
+								      	<tr>
+								      		<th></th>
+								      		<th ng-repeat="atendimento in atendimentos">
+									            [[ $index + 1 ]]
+									        </th>
+								      	</tr>
+								    </thead>
+								    
+								    <tbody>
+									    <tr ng-repeat="(key, value) in atendimentos[0].atendimento">
+									      	<th>[[ key ]]</th>
+									      	<td ng-repeat="obj in atendimentos">
+									        	[[ obj.atendimento[key] ]]
+									      	</td>
+									    </tr>
+
+									    <tr ng-repeat="(key, value) in atendimentos[0].medidas">
+									      	<th>[[ key ]]</th>
+									      	<td ng-repeat="obj in atendimentos">
+									        	[[ obj.medidas[key] ]]
+									      	</td>
+									    </tr>
+								    </tbody>
+								</table>
 							</ul>
 						</div>
 					</div>
 				</div>
 
-				<div ng-show="viewAtendimento" ng-if="showFinalizarAtendimento">
+				<div ng-show="viewAtendimento" ng-if="showFinalizarAtendimento && !showSpinnerGetAtendimento">
 					<div>
 						<div class="p-t-s p-l-s p-r-s">
 							<div>
 								<div class="bd-radius bg-gray p-l m-b-m">
 									<div class="content-records-exam box-shadow reset-text">
-										<p class="bd-b bd-gray p-s semi-bold">Atendimento</p>
+										<h2 class="item-title p-s bd-b bd-gray clearfix">
+											<span class="c-ic-blue semi-bold pull-left">Atendimento</span>
+											<span></span>
+										</h2>
 
 										<div>
 											<ul class="reset-list p-s">
@@ -1250,13 +1284,16 @@
 					</div>
 				</div>
 
-				<div ng-show="viewMedidas" ng-if="showFinalizarAtendimento">
+				<div ng-show="viewMedidas" ng-if="showFinalizarAtendimento && !showSpinnerGetAtendimento">
 					<div>
 						<div class="p-t-s p-l-s p-r-s">
 							<div>
 								<div class="bd-radius bg-gray p-l m-b-m">
 									<div class="content-records-exam box-shadow reset-text">
-										<p class="bd-b bd-gray p-s semi-bold">Medidas</p>
+										<h2 class="item-title p-s bd-b bd-gray clearfix">
+											<span class="c-ic-blue semi-bold pull-left">Medidas</span>
+											<span></span>
+										</h2>
 
 										<div>
 											<ul class="reset-list p-s">
@@ -1425,7 +1462,10 @@
 									</div>
 
 									<div class="content-records-exam box-shadow reset-text">
-										<p class="bd-b bd-gray p-s semi-bold">Plano Frontal</p>
+										<h2 class="item-title p-s bd-b bd-gray clearfix">
+											<span class="c-ic-blue semi-bold pull-left">Plano Frontal</span>
+											<span></span>
+										</h2>
 
 										<div>
 											<ul class="reset-list p-s">
@@ -1447,7 +1487,10 @@
 									</div>
 
 									<div class="content-records-exam box-shadow reset-text">
-										<p class="bd-b bd-gray p-s semi-bold">Plano Horizontal</p>
+										<h2 class="item-title p-s bd-b bd-gray clearfix">
+											<span class="c-ic-blue semi-bold pull-left">Plano Horizontal</span>
+											<span></span>
+										</h2>
 
 										<div>
 											<ul class="reset-list p-s">
@@ -1483,7 +1526,10 @@
 									</div>
 
 									<div class="content-records-exam box-shadow reset-text">
-										<p class="bd-b bd-gray p-s semi-bold">Plano Sagital</p>
+										<h2 class="item-title p-s bd-b bd-gray clearfix">
+											<span class="c-ic-blue semi-bold pull-left">Plano Sagital</span>
+											<span></span>
+										</h2>
 
 										<div>
 											<ul class="reset-list p-s">
@@ -1512,7 +1558,10 @@
 									</div>
 
 									<div class="content-records-exam box-shadow reset-text">
-										<p class="bd-b bd-gray p-s semi-bold">Mobilidade Articular</p>
+										<h2 class="item-title p-s bd-b bd-gray clearfix">
+											<span class="c-ic-blue semi-bold pull-left">Mobilidade Articular</span>
+											<span></span>
+										</h2>
 
 										<div>
 											<ul class="reset-list p-s">
@@ -1545,13 +1594,16 @@
 					</div>
 				</div>
 
-				<div ng-show="viewDiagProg" ng-if="showFinalizarAtendimento">
+				<div ng-show="viewDiagProg" ng-if="showFinalizarAtendimento && !showSpinnerGetAtendimento">
 					<div>
 						<div class="p-t-s p-l-s p-r-s">
 							<div>
 								<div class="bd-radius bg-gray p-l m-b-m">
 									<div class="content-records-exam box-shadow reset-text">
-										<p class="bd-b bd-gray p-s semi-bold">Diagnóstico Prognóstico</p>
+										<h2 class="item-title p-s bd-b bd-gray clearfix">
+											<span class="c-ic-blue semi-bold pull-left">Diagnóstico Prognóstico</span>
+											<span></span>
+										</h2>
 
 										<div>
 											<ul class="reset-list p-s">
@@ -1660,7 +1712,10 @@
 									</div>
 
 									<div class="content-records-exam box-shadow reset-text">
-										<p class="bd-b bd-gray p-s semi-bold">Curva</p>
+										<h2 class="item-title p-s bd-b bd-gray clearfix">
+											<span class="c-ic-blue semi-bold pull-left">Curva</span>
+											<span></span>
+										</h2>
 
 										<div>
 											<ul class="reset-list p-s">
@@ -1703,7 +1758,10 @@
 									</div>
 
 									<div class="content-records-exam box-shadow reset-text">
-										<p class="bd-b bd-gray p-s semi-bold">Local da Escoliose</p>
+										<h2 class="item-title p-s bd-b bd-gray clearfix">
+											<span class="c-ic-blue semi-bold pull-left">Local Escoliose</span>
+											<span></span>
+										</h2>
 
 										<div>
 											<ul class="reset-list p-s">
@@ -1725,7 +1783,10 @@
 									</div>
 
 									<div class="content-records-exam box-shadow reset-text">
-										<p class="bd-b bd-gray p-s semi-bold">Vértebra</p>
+										<h2 class="item-title p-s bd-b bd-gray clearfix">
+											<span class="c-ic-blue semi-bold pull-left">Vértebra</span>
+											<span></span>
+										</h2>
 
 										<div>
 											<ul class="reset-list p-s">
@@ -1763,6 +1824,10 @@
 							</div>
 						</div>
 					</div>
+				</div>
+
+				<div class="spinnerAtendimento">
+					<span us-spinner="{radius:30, width:8, length: 16, color: '#2c97d1'}" spinner-on="showSpinnerGetAtendimento"></span>
 				</div>
 			</div>
 		</div>
@@ -1806,6 +1871,45 @@
 		      		<div style="height: 25px">
 		      			<span us-spinner="{radius:10, width:4, length: 8, color: '#2c97d1'}" spinner-on="showSpinnerAddAtendimento"></span>
 		      		</div>
+		    	</div>
+	    
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-link link-gray" data-dismiss="modal">Fechar</button>
+			    </div>
+	    	</div>
+	  	</div>
+	</div>
+
+	<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="modalCancelarAtendimento">
+	  	<div class="modal-dialog modal-sm" role="document">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        		<h4 class="modal-title" id="gridSystemModalLabel">Cancelar atendimento</h4>
+	      		</div>
+
+		      	<div class="modal-body">
+			        Ao cancelar um atendimento, você perderá todos os dados não salvos. Deseja prosseguir?
+		    	</div>
+	    
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-link link-gray" data-dismiss="modal">Fechar</button>
+			        <button type="button" class="btn btn-green btn-loading" data-dismiss="modal" ng-click="cancelarAtendimento()">SIM</button>
+			    </div>
+	    	</div>
+	  	</div>
+	</div>
+
+	<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="modalErroCarregarAtendimentos">
+	  	<div class="modal-dialog modal-sm" role="document">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        		<h4 class="modal-title" id="gridSystemModalLabel">Carregando...</h4>
+	      		</div>
+
+		      	<div class="modal-body">
+		      		Erro ao carregar atendimentos. Verifique sua conexão com a internet e tente novamente.
 		    	</div>
 	    
 			    <div class="modal-footer">

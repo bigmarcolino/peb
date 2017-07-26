@@ -17,6 +17,10 @@ class Atendimento extends Model
         'idade_cronologica', 'idade_ossea', 'menarca', 'num_atendimento', 'data_atendimento', 'altura', 'altura_sentada', 'peso', 'risser', 'data_raio_x'
     ];
 
+    protected $hidden = [
+        'created_at', 'updated_at', 'id', 'cpf_paciente'
+    ];
+
     public function medidas()
     {
         return $this->hasOne('App\Medidas');

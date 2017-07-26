@@ -12,19 +12,10 @@ class PacienteApiController extends Controller
     public function addPaciente(Request $request)
     { 
         $paciente = sizeof($_POST) > 0 ? $_POST : json_decode($request->getContent(), true);
-        $paciente["data_nasc"] = explode("T", $paciente["data_nasc"])[0];
-        Paciente::insert($paciente);
+        $paciente["data_nasc"] = date('Y-m-d', strtotime($paciente["data_nasc"]));
 
-        /*return Usuario::create([
-            'cpf' => $data['cpf'],
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'sexo' => $data['sexo'],
-            'data_nasc' => date('Y-m-d', strtotime($data['data_nasc'])),
-            'password' => bcrypt($data['password']),
-            'funcao' => "",
-            'ativo' => 0,
-        ]);*/
+        $novoPaciente = new Paciente($paciente);
+        $novoPaciente->save();
     }
 
     public function excluirPacientes(Request $request)

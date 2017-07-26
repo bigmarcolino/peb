@@ -19,16 +19,16 @@ class DiagnosticoPrognostico extends Model
 
     public function curva()
     {
-        return $this->hasMany('App\Curva');
+        return $this->hasOne('App\Curva');
     }
 
     public function local_escoliose()
     {
-        return $this->hasMany('App\LocalEscoliose');
+        return $this->hasOne('App\LocalEscoliose');
     }
 
     public function vertebra()
     {
-        return $this->hasMany('App\Vertebra');
+        return $this->hasOne('App\Vertebra');
     }
 }
