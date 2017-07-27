@@ -16,4 +16,8 @@ class MobilidadeArticular extends Model
     protected $fillable = [
         'lado', 'valor', 'inclinacao'
     ];
+
+    protected $hidden = [
+        'created_at', 'updated_at', 'id', 'medidas_id'
+    ];
 }

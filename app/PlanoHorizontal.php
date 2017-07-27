@@ -16,4 +16,8 @@ class PlanoHorizontal extends Model
     protected $fillable = [
         'vertebra', 'valor', 'tipo', 'calco'
     ];
+
+    protected $hidden = [
+        'created_at', 'updated_at', 'id', 'medidas_id'
+    ];
 }

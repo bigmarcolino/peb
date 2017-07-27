@@ -16,4 +16,8 @@ class Vertebra extends Model
     protected $fillable = [
         'tipo', 'local', 'altura', 'vertebra_nome'
     ];
+
+    protected $hidden = [
+        'created_at', 'updated_at', 'id', 'diagnostico_prognostico_id'
+    ];
 }

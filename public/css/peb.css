@@ -324,3 +324,15 @@ body {
     top: 50%;
     left: 50%;
 }
+
+.input-refresh-atends input {
+    text-align: center;
+}
+
+.input-refresh-atends span {
+    margin-left: 10px;
+}
+
+.table-atendimentos thead tr th {
+    text-align: center;
+}

@@ -16,4 +16,8 @@ class PlanoFrontal extends Model
     protected $fillable = [
         'calco', 'valor'
     ];
+
+    protected $hidden = [
+        'created_at', 'updated_at', 'id', 'medidas_id'
+    ];
 }

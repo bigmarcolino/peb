@@ -16,4 +16,8 @@ class PlanoSagital extends Model
     protected $fillable = [
         'localizacao', 'valor', 'diferenca'
     ];
+
+    protected $hidden = [
+        'created_at', 'updated_at', 'id', 'medidas_id'
+    ];
 }

@@ -17,6 +17,10 @@ class DiagnosticoPrognostico extends Model
         'diagnostico_clinico', 'tipo_escoliose', 'cifose', 'lordose', 'prescricao_medica', 'prescricao_fisioterapeutica', 'colete', 'colete_hs', 'etiologia', 'idade_aparecimento', 'topografia', 'calco', 'hpp'
     ];
 
+    protected $hidden = [
+        'created_at', 'updated_at', 'id', 'atendimento_id'
+    ];
+
     public function curva()
     {
         return $this->hasOne('App\Curva');

@@ -22,9 +22,19 @@ class AtendimentoApiController extends Controller
 {
     public function addAtendimento($cpf, Request $request)
     { 
-        DB::transaction(function() use ($cpf, $request)
+        $dados = sizeof($_POST) > 0 ? $_POST : json_decode($request->getContent(), true);
+
+        if(isset($dados['atendimento']['menarca']))
+            $dados['atendimento']['menarca'] = explode("T", $dados['atendimento']['menarca'])[0];
+
+        if(isset($dados['atendimento']['data_atendimento']))
+            $dados['atendimento']['data_atendimento'] = explode("T", $dados['atendimento']['data_atendimento'])[0];
+
+        if(isset($dados['atendimento']['data_raio_x']))
+            $dados['atendimento']['data_raio_x'] = explode("T", $dados['atendimento']['data_raio_x'])[0];
+
+        DB::transaction(function() use ($cpf, $request, $dados)
         {
-            $dados = sizeof($_POST) > 0 ? $_POST : json_decode($request->getContent(), true);
             $paciente = Paciente::where('cpf', $cpf)->first();
 
             $atendimento = $dados["atendimento"];
@@ -39,7 +49,7 @@ class AtendimentoApiController extends Controller
             $vertebra = $dados["vertebra"];
 
             $novoAtendimento = new Atendimento($atendimento);
-            $paciente->atendimento()->save($novoAtendimento);
+            $paciente->atendimento()->save($novoAtendimento);            
 
             // Medidas
 
@@ -132,12 +142,50 @@ class AtendimentoApiController extends Controller
         });
     }
 
-    public function getAtendimentos($cpf)
+    public function getAtendimentos($cpf, $offset)
     {
         $paciente = Paciente::where('cpf', $cpf)->first();
 
-        $atendimentos = $paciente->atendimento()->getResults();
+        $todosAtendimentos = $paciente->atendimento();
+        $atendCount = $todosAtendimentos->count();
+
+        $limit = 5;
+        $newOffset = 0;
+        $atendimentos = null;
+
         $atendimentosResponse = array();
+        $atendimentosNums = array();
+
+        if($offset == -1) {
+            if($atendCount > $limit) {
+                $newOffset = $atendCount - $limit;
+
+                for ($i = 1; $i <= $limit; $i++) {
+                    array_push($atendimentosNums, $newOffset + $i);
+                }
+            }
+            else {
+                for ($i = 1; $i <= $atendCount; $i++) {
+                    array_push($atendimentosNums, $atendCount);
+                } 
+            }
+
+            $atendimentos = $todosAtendimentos->offset($newOffset)->limit($limit)->getResults();
+        }
+        else {
+            $newOffset = $offset - 1;
+
+            $atendimentos = $todosAtendimentos->offset($newOffset)->limit($limit)->getResults();
+
+            if($atendCount - $newOffset > $limit)
+                $num = $limit;
+            else
+                $num = $atendCount - $newOffset;
+            
+            for ($i = 1; $i <= $num; $i++) {
+                array_push($atendimentosNums, $newOffset + $i);
+            }
+        }
 
         foreach ($atendimentos as $atendimento) {
             $var = new StdClass();
@@ -188,6 +236,6 @@ class AtendimentoApiController extends Controller
             array_push($atendimentosResponse, $var);
         }
 
-        return $atendimentosResponse;
+        return ['quantidade' => $atendCount, 'atendimentos' => $atendimentosResponse, 'atendimentosNums' => $atendimentosNums];
     } 
 }

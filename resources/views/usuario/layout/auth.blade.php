@@ -41,7 +41,7 @@
         <script src="/js/peb.js" type="text/javascript"></script>
     </head>
 
-    <body ng-controller="pebController" style="padding-right: 0 !important" ng-class="{'auto-height': showViewPacientes && atendimentos.length > 0}">
+    <body ng-controller="pebController" style="padding-right: 0 !important" ng-class="{'auto-height': showViewPacientes && qtdAtendimentos > 0}">
         @if (Auth::check())
             <div class="clearfix ic-header">
                 

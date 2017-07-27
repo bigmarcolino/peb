@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="ic-sidebar" ng-if="showViewPacientes  && !showSpinnerGetAtendimento">
+<div class="ic-sidebar" ng-if="showViewPacientes && !showSpinnerGetAtendimento">
     <div class="sidebar-records">
     	<div class="ps-container ps-theme-default ps-active-y">
     		<h1 class="module-title bd-b bd-gray">Prontuários</h1>
@@ -1052,7 +1052,7 @@
 								</p>
 								<p class="col-sm-8">
 									<span>Atendimentos: </span>
-									<strong>[[ atendimentos.length ]]</strong>
+									<strong>[[ qtdAtendimentos ]]</strong>
 								</p>
 							</div>
 						</div>
@@ -1065,7 +1065,7 @@
 				<div ng-show="viewResumo" ng-if="!showSpinnerGetAtendimento">
 					<div>
 						<div>
-							<div class="container-fluid p-t-s p-b-s p-l-s p-r-s" ng-if="atendimentos.length == 0">
+							<div class="container-fluid p-t-s p-b-s p-l-s p-r-s" ng-if="qtdAtendimentos == 0">
 								<div class="alert alert-warning">
 									<p>
 										<span>Não há atendimentos no momento. <br>Para iniciar um atendimento, clique no botão</span>
@@ -1074,7 +1074,7 @@
 								</div>
 							</div>
 
-							<ul class="p-s list-records reset-list" ng-if="atendimentos.length > 0">
+							<ul class="p-s list-records reset-list" ng-if="qtdAtendimentos > 0">
 								<!-- <li class="item-records p-b-l clearfix">
 									<div class="date-record pull-left">
 										<div class="date">
@@ -1141,28 +1141,128 @@
 									<span class="item-records-line"></span>
 								</li> -->
 
-								<table class="table table-default table-list table-list-patients">
+								<table class="table table-default table-list table-list-patients table-atendimentos">
 								    <thead>
 								      	<tr>
-								      		<th></th>
-								      		<th ng-repeat="atendimento in atendimentos">
-									            [[ $index + 1 ]]
+								      		<th colspan="2" class="input-refresh-atends">
+								      			<input type="text" ng-model="atendOffset" numbers-only>
+								      			<span class="glyphicon glyphicon-search pointer" ng-click="refreshTableAtend()"></span>
+								      		</th>
+
+								      		<th ng-repeat="num in atendimentosNums">
+									            [[ num ]]
 									        </th>
 								      	</tr>
 								    </thead>
 								    
 								    <tbody>
-									    <tr ng-repeat="(key, value) in atendimentos[0].atendimento">
-									      	<th>[[ key ]]</th>
+								    	<th rowspan='[[countShowAtendKey(atendimentoKeys, "atendimento") + 1]]' ng-if="countShowAtendKey(atendimentoKeys, 'atendimento') > 0">
+								    		Atendimento
+								    	</th>
+
+									    <tr ng-repeat="key in atendimentoKeys | filter : showAtendKey('atendimento')">
+									      	<th>[[ key[1] ]]</th>
 									      	<td ng-repeat="obj in atendimentos">
-									        	[[ obj.atendimento[key] ]]
+									        	[[ obj.atendimento[ key[0] ] ]]
 									      	</td>
 									    </tr>
 
-									    <tr ng-repeat="(key, value) in atendimentos[0].medidas">
-									      	<th>[[ key ]]</th>
+									    <th rowspan='[[countShowAtendKey(medidasKeys, "medidas") + 1]]' ng-if="countShowAtendKey(medidasKeys, 'medidas') > 0">
+								    		Medidas
+								    	</th>
+
+									    <tr ng-repeat="key in medidasKeys | filter : showAtendKey('medidas')">
+									      	<th>[[ key[1] ]]</th>
 									      	<td ng-repeat="obj in atendimentos">
-									        	[[ obj.medidas[key] ]]
+									        	[[ obj.medidas[ key[0] ] ]]
+									      	</td>
+									    </tr>
+
+									    <th rowspan='[[countShowAtendKey(planoFrontalKeys, "plano_frontal") + 1]]' ng-if="countShowAtendKey(planoFrontalKeys, 'plano_frontal') > 0">
+								    		Plano Frontal
+								    	</th>
+
+									    <tr ng-repeat="key in planoFrontalKeys | filter : showAtendKey('plano_frontal')">
+									      	<th>[[ key[1] ]]</th>
+									      	<td ng-repeat="obj in atendimentos">
+									        	[[ obj.plano_frontal[ key[0] ] ]]
+									      	</td>
+									    </tr>
+
+									    <th rowspan='[[countShowAtendKey(planoSagitalKeys, "plano_sagital") + 1]]' ng-if="countShowAtendKey(planoSagitalKeys, 'plano_sagital') > 0">
+								    		Plano Sagital
+								    	</th>
+
+									    <tr ng-repeat="key in planoSagitalKeys | filter : showAtendKey('plano_sagital')">
+									      	<th>[[ key[1] ]]</th>
+									      	<td ng-repeat="obj in atendimentos">
+									        	[[ obj.plano_sagital[ key[0] ] ]]
+									      	</td>
+									    </tr>
+
+									    <th rowspan='[[countShowAtendKey(planoHorizontalKeys, "plano_horizontal") + 1]]' ng-if="countShowAtendKey(planoHorizontalKeys, 'plano_horizontal') > 0">
+								    		Plano Horizontal
+								    	</th>
+
+									    <tr ng-repeat="key in planoHorizontalKeys | filter : showAtendKey('plano_horizontal')">
+									      	<th>[[ key[1] ]]</th>
+									      	<td ng-repeat="obj in atendimentos">
+									        	[[ obj.plano_horizontal[ key[0] ] ]]
+									      	</td>
+									    </tr>
+
+									    <th rowspan='[[countShowAtendKey(mobilidadeArticularKeys, "mobilidade_articular") + 1]]' ng-if="countShowAtendKey(mobilidadeArticularKeys, 'mobilidade_articular') > 0">
+								    		Mobilidade Articular
+								    	</th>
+
+									    <tr ng-repeat="key in mobilidadeArticularKeys | filter : showAtendKey('mobilidade_articular')">
+									      	<th>[[ key[1] ]]</th>
+									      	<td ng-repeat="obj in atendimentos">
+									        	[[ obj.mobilidade_articular[ key[0] ] ]]
+									      	</td>
+									    </tr>
+
+									    <th rowspan='[[countShowAtendKey(diagProgKeys, "diag_prog") + 1]]' ng-if="countShowAtendKey(diagProgKeys, 'diag_prog') > 0">
+								    		Diagnóstico Prognóstico
+								    	</th>
+
+									    <tr ng-repeat="key in diagProgKeys | filter : showAtendKey('diag_prog')">
+									      	<th>[[ key[1] ]]</th>
+									      	<td ng-repeat="obj in atendimentos">
+									        	[[ obj.diag_prog[ key[0] ] ]]
+									      	</td>
+									    </tr>
+
+									    <th rowspan='[[countShowAtendKey(vertebraKeys, "vertebra") + 1]]'  ng-if="countShowAtendKey(vertebraKeys, 'vertebra') > 0">
+								    		Vértebra
+								    	</th>
+
+									    <tr ng-repeat="key in vertebraKeys | filter : showAtendKey('vertebra')">
+									      	<th>[[ key[1] ]]</th>
+									      	<td ng-repeat="obj in atendimentos">
+									        	[[ obj.vertebra[ key[0] ] ]]
+									      	</td>
+									    </tr>
+
+									    <th rowspan='[[countShowAtendKey(localEscolioseKeys, "local_escoliose") + 1]]'  ng-if="countShowAtendKey(localEscolioseKeys, 'local_escoliose') > 0">
+								    		Local Escoliose
+								    	</th>
+
+									    <tr ng-repeat="key in localEscolioseKeys | filter : showAtendKey('local_escoliose')">
+									      	<th>[[ key[1] ]]</th>
+									      	<td ng-repeat="obj in atendimentos">
+									        	[[ obj.local_escoliose[ key[0] ] ]]
+									      	</td>
+									    </tr>
+
+									    <th rowspan='[[countShowAtendKey(curvaKeys, "curva") + 1]]'  ng-if="countShowAtendKey(curvaKeys, 'curva') > 0">
+								    		Curva
+								    	</th>
+
+									    <tr ng-repeat="key in curvaKeys | filter : showAtendKey('curva')">
+									      	<th>[[ key[1] ]]</th>
+									      	<td ng-repeat="obj in atendimentos">
+									        	[[ obj.curva[ key[0] ] ]]
 									      	</td>
 									    </tr>
 								    </tbody>
@@ -1910,6 +2010,31 @@
 
 		      	<div class="modal-body">
 		      		Erro ao carregar atendimentos. Verifique sua conexão com a internet e tente novamente.
+		    	</div>
+	    
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-link link-gray" data-dismiss="modal">Fechar</button>
+			    </div>
+	    	</div>
+	  	</div>
+	</div>
+
+	<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="modalErroTabelaAtendimentos">
+	  	<div class="modal-dialog modal-sm" role="document">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        		<h4 class="modal-title" id="gridSystemModalLabel">Carregando...</h4>
+	      		</div>
+
+		    	<div class="modal-body">
+		      		<span ng-if="!showSpinnerTabelaAtendimentos">
+		      			Erro ao atualizar tabela de atendimentos. Verifique sua conexão com a internet e tente novamente.
+		      		</span>
+
+		      		<div style="height: 25px">
+		      			<span us-spinner="{radius:10, width:4, length: 8, color: '#2c97d1'}" spinner-on="showSpinnerTabelaAtendimentos"></span>
+		      		</div>
 		    	</div>
 	    
 			    <div class="modal-footer">

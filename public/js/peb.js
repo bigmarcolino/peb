@@ -233,8 +233,8 @@ app.factory('apiService', function($http) {
             return $http.post('/usuario/addAtendimento/' + cpf, dados);
         },
 
-        getAtendimentos: function(cpf) {
-            return $http.get('/usuario/getAtendimentos/' + cpf);
+        getAtendimentos: function(cpf, offset) {
+            return $http.get('/usuario/getAtendimentos/' + cpf + '/' + offset);
         }
 	}
 });
@@ -262,6 +262,8 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
                 $scope.pacientes = response.data.pacientes;
                 $scope.filtrarPacientes();
                 $scope.ordenarPacientes($scope.sortTypePaciente);
+
+                document.documentElement.style.backgroundColor = '#efefef';
             })
             .catch(function(response) {
                 $scope.showSpinnerUsuarios = false;
@@ -308,7 +310,6 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
                 $scope.filtrarUsuarios();
                 $scope.sortReverseUser = !$scope.sortReverseUser;
                 $scope.ordenarUsuarios($scope.sortTypeUser);
-                $scope.showSpinnerExcluirUsuarios = false;
             })
             .catch(function(response) {
                 $scope.showSpinnerExcluirUsuarios = false;
@@ -496,8 +497,6 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
                 $scope.filtrarUsuarios();
                 $scope.sortReverseUser = !$scope.sortReverseUser;
                 $scope.ordenarUsuarios($scope.sortTypeUser);
-
-                $scope.showSpinnerEditarUsuario = false;
             }, 1000 );
         })
         .catch(function(res) {
@@ -672,7 +671,6 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
                 $scope.filtrarPacientes();
                 $scope.sortReversePaciente = !$scope.sortReversePaciente;
                 $scope.ordenarPacientes($scope.sortTypePaciente);
-                $scope.showSpinnerExcluirPacientes = false;
             })
             .catch(function(response) {
                 $scope.showSpinnerExcluirPacientes = false;
@@ -832,11 +830,15 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
         $scope.showSpinnerGetAtendimento = true;
         $scope.togglePaginas('viewPaciente');
         $scope.viewPaciente = angular.copy(paciente);
+        var offsetAtend = -1;
 
         $timeout( function() {
-            apiService.getAtendimentos($scope.viewPaciente.cpf).then(function(response) {
+            apiService.getAtendimentos($scope.viewPaciente.cpf, offsetAtend).then(function(response) {
                 $scope.showSpinnerGetAtendimento = false;
-                $scope.atendimentos = response.data;
+                $scope.atendimentos = response.data.atendimentos;
+                $scope.qtdAtendimentos = response.data.quantidade;
+                $scope.atendimentosNums = response.data.atendimentosNums;
+                $scope.atendOffset = $scope.atendimentosNums[0];
             })
             .catch(function(response) {
                 $scope.showSpinnerGetAtendimento = false;
@@ -963,11 +965,16 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
             if(!atendimentoVazio(dados)) {
                 apiService.addAtendimento($scope.viewPaciente.cpf, dados).then(function(response) {
                     $('#modalErroAddAtendimento').modal('hide');
-
                     $scope.resetAtendimento();
-
                     $scope.toggleButtonAtendimento();
-                    $scope.showSpinnerAddAtendimento = false;
+
+                    apiService.getAtendimentos($scope.viewPaciente.cpf, -1).then(function(response) {
+                        $scope.atendimentos = response.data.atendimentos;
+                        $scope.qtdAtendimentos = response.data.quantidade;
+                        $scope.atendimentosNums = response.data.atendimentosNums;
+                        $scope.atendOffset = $scope.atendimentosNums[0];
+                        this.atendOffset = $scope.atendimentosNums[0];
+                    })
                 })
                 .catch(function(response) {
                     $scope.showSpinnerAddAtendimento = false;
@@ -976,7 +983,6 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
             else {
                 $('#modalErroAddAtendimento').modal('hide');
                 $scope.toggleButtonAtendimento();
-                $scope.showSpinnerAddAtendimento = false;
             }
         }, 1000 );
     }
@@ -984,5 +990,172 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
     $scope.cancelarAtendimento = function() {
         $scope.resetAtendimento();
         $scope.toggleButtonAtendimento();
+    }
+
+    $scope.atendimentoKeys = [
+        ['idade_cronologica', 'Idade cronológica'],
+        ['idade_ossea', 'Idade óssea'],
+        ['menarca', 'Menarca'],
+        ['num_atendimento', 'Número de atendimento'],
+        ['data_atendimento', 'Data de atendimento'],
+        ['altura', 'Altura'],
+        ['altura_sentada', 'Altura sentada'],
+        ['peso', 'Peso'],
+        ['risser', 'Risser'],
+        ['data_raio_x', 'Data raio X']
+    ];
+
+    $scope.medidasKeys = [
+        ['assimetria_ombro', 'Assimetria ombro'],
+        ['assimetria_escapulas', 'Assimetria escápulas'],
+        ['hemi_torax', 'Hemi-Tórax'], ['cintura', 'Cintura'],                             
+        ['teste_fukuda_deslocamento', 'Teste Fukuda deslocamento'],
+        ['teste_fukuda_rotacao', 'Teste Fukuda rotação'],
+        ['teste_fukuda_desvio', 'Teste Fukuda desvio'],
+        ['habilidade_ocular_direito', 'Habilidade ocular direito'],                             
+        ['habilidade_ocular_esquerdo', 'Habilidade ocular esquerdo'],
+        ['romberg_mono_direito', 'Romberg mono direito'],
+        ['romberg_mono_esquerdo', 'Romberg mono esquerdo'], 
+        ['romberg_sensibilizado_direito', 'Romberg sensibilizado direito'],                               
+        ['romberg_sensibilizado_esquerdo', 'Romberg sensibilizado esquerdo'],
+        ['balanco_direito', 'Balanço direito'],
+        ['balanco_esquerdo', 'Balanço esquerdo'],
+        ['retracao_posterior', 'Retração posterior'],                              
+        ['teste_thomas_direito', 'Teste Thomas direito'],
+        ['teste_thomas_esquerdo', 'Teste Thomas esquerdo'],
+        ['retracao_peitoral_direito', 'Retração peitoral direito'],
+        ['retracao_peitoral_esquerdo', 'Retração peitoral esquerdo'],                              
+        ['forca_muscular_abs', 'Força muscular ABS'],
+        ['forca_ext_tronco', 'Força extensores tronco'],
+        ['resistencia_extensores_tronco', 'Resistência extensores tronco']
+    ];
+
+    $scope.planoFrontalKeys = [
+        ['calco', 'Calço'],
+        ['valor', 'Valor']
+    ];
+
+    $scope.planoHorizontalKeys = [
+        ['calco', 'Calço'],
+        ['valor', 'Valor'],
+        ['tipo', 'Tipo'],
+        ['vertebra', 'Vértebra']
+    ];
+
+    $scope.planoSagitalKeys = [
+        ['localizacao', 'Localização'],
+        ['valor', 'Valor'],
+        ['diferenca', 'Diferença']
+    ];
+
+    $scope.mobilidadeArticularKeys = [
+        ['lado', 'Lado'],
+        ['valor', 'Valor'],
+        ['inclinacao', 'Inclinação']
+    ];
+
+    $scope.diagProgKeys = [
+        ['diagnostico_clinico', 'Diagnóstico clínico'],
+        ['tipo_escoliose', 'Tipo escoliose'],
+        ['cifose', 'Cifose'],
+        ['lordose', 'Lordose'],
+        ['prescricao_medica', 'Prescrição médica'],
+        ['prescricao_fisioterapeutica', 'Prescrição fisioterapêutica'],
+        ['colete', 'Colete'],
+        ['colete_hs', 'Colete HS'],
+        ['etiologia', 'Etiologia'],
+        ['idade_aparecimento', 'Idade aparecimento'],
+        ['topografia', 'Topografia'],
+        ['calco', 'Calço'],
+        ['hpp', 'HPP']
+    ];
+
+    $scope.vertebraKeys = [
+        ['tipo', 'Tipo'],
+        ['local', 'Local'],
+        ['altura', 'Altura'],
+        ['vertebra_nome', 'Nome da vértebra']
+    ];
+
+    $scope.localEscolioseKeys = [
+        ['local', 'Local'], 
+        ['lado', 'Lado']
+    ];
+
+    $scope.curvaKeys = [
+        ['ordenacao', 'Ordenação'],
+        ['tipo', 'Tipo'],
+        ['angulo_cobb', 'Ângulo COBB'],
+        ['angulo_ferguson', 'Ângulo Ferguson'],
+        ['grau_rotacao', 'Grau rotação']
+    ];
+
+    $scope.refreshTableAtend = function() {
+        $scope.atendOffset = this.atendOffset;
+
+        if($scope.atendOffset > 0 && $scope.atendOffset <= $scope.qtdAtendimentos && $scope.atendOffset != $scope.atendimentosNums[0]) {
+            $('#modalErroTabelaAtendimentos').modal('show');
+            $scope.showSpinnerTabelaAtendimentos = true;
+
+            $timeout( function() {
+                apiService.getAtendimentos($scope.viewPaciente.cpf, $scope.atendOffset).then(function(response) {
+                    $('#modalErroTabelaAtendimentos').modal('hide');
+                    $scope.atendimentos = response.data.atendimentos;
+                    $scope.atendimentosNums = response.data.atendimentosNums;
+                })
+                .catch(function(response) {
+                    $scope.showSpinnerTabelaAtendimentos = false;
+                    this.atendOffset = $scope.atendimentosNums[0];
+                })
+            }, 500 );
+        }
+        else {
+            this.atendOffset = $scope.atendimentosNums[0];
+        }
+    }
+
+    $scope.showAtendKey = function(nomeTabela) {
+        return function(key) {
+            var res = false;
+
+            for(var i = 0; i < $scope.atendimentos.length; i++) {
+                _.forOwn($scope.atendimentos[i], function(value1, prop1) {
+                    if(prop1 == nomeTabela){
+                        _.forOwn(value1, function(value2, prop2) {
+                            if(key[0] == prop2 && value2 != null){
+                                res = true;
+                            }
+                        });
+                    }
+                });
+            }
+
+            return res;
+        }
+    }
+
+    $scope.countShowAtendKey = function(array, nomeTabela) {
+        var count = 0;
+
+        for(var j = 0; j < array.length; j++) {
+            var find = false;
+
+            for(var i = 0; i < $scope.atendimentos.length; i++) {
+                _.forOwn($scope.atendimentos[i], function(value1, prop1) {
+                    if(prop1 == nomeTabela){
+                        _.forOwn(value1, function(value2, prop2) {
+                            if(array[j][0] == prop2 && value2 != null){
+                                find = true;
+                            }
+                        });
+                    }
+                });
+            }
+
+            if(find)
+                count++;
+        }
+
+        return count;
     }
 });

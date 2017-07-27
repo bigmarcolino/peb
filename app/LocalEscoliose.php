@@ -16,4 +16,8 @@ class LocalEscoliose extends Model
     protected $fillable = [
         'local', 'lado'
     ];
+
+    protected $hidden = [
+        'created_at', 'updated_at', 'id', 'diagnostico_prognostico_id'
+    ];
 }
