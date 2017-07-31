@@ -2,73 +2,75 @@
 
 @section('content')
 
-<div class="ic-sidebar" ng-if="showViewPacientes && !showSpinnerGetAtendimento">
-    <div class="sidebar-records">
-    	<div class="ps-container ps-theme-default ps-active-y">
-    		<h1 class="module-title bd-b bd-gray">Prontuários</h1>
+@if (Auth::user()->funcao != "Analista")
+	<div class="ic-sidebar" ng-if="showViewPacientes && !showSpinnerGetAtendimento">
+	    <div class="sidebar-records">
+	    	<div class="ps-container ps-theme-default ps-active-y">
+	    		<h1 class="module-title bd-b bd-gray">Prontuários</h1>
 
-    		<div class="time-visit p-s">
-    			<div class="collapse in">
-    				<span class="btn btn-block btn-green text-medium m-t-es btn-loading" ng-if="showIniciarAtendimento" ng-click="toggleButtonAtendimento()">
-    					<span>
-    						<span>
-    							<span class="text-small glyphicon glyphicon-play"></span>
-    							<span></span>
-    							<span>INICIAR ATENDIMENTO</span>
-    						</span>
-    					</span>
-    				</span>
+	    		<div class="time-visit p-s">
+	    			<div class="collapse in">
+	    				<span class="btn btn-block btn-green text-medium m-t-es btn-loading" ng-if="showIniciarAtendimento" ng-click="toggleButtonAtendimento()">
+	    					<span>
+	    						<span>
+	    							<span class="text-small glyphicon glyphicon-play"></span>
+	    							<span></span>
+	    							<span>INICIAR ATENDIMENTO</span>
+	    						</span>
+	    					</span>
+	    				</span>
 
-    				<span class="btn btn-block btn-red text-medium m-t-es btn-loading" data-toggle="modal" data-target="#modalFinalizarAtendimento" ng-if="showFinalizarAtendimento">
-    					<span>
-    						<span>
-    							<span class="text-small glyphicon glyphicon-stop"></span>
-    							<span></span>
-    							<span>FINALIZAR ATENDIMENTO</span>
-    						</span>
-    					</span>
-    				</span>
+	    				<span class="btn btn-block btn-red text-medium m-t-es btn-loading" data-toggle="modal" data-target="#modalFinalizarAtendimento" ng-if="showFinalizarAtendimento">
+	    					<span>
+	    						<span>
+	    							<span class="text-small glyphicon glyphicon-stop"></span>
+	    							<span></span>
+	    							<span>FINALIZAR ATENDIMENTO</span>
+	    						</span>
+	    					</span>
+	    				</span>
 
-    				<span class="link-gray btn-block" data-toggle="modal" data-target="#modalCancelarAtendimento" ng-if="showFinalizarAtendimento">
-                        Cancelar atendimento
-                    </span>
-    			</div>
-    		</div>
+	    				<span class="link-gray btn-block" data-toggle="modal" data-target="#modalCancelarAtendimento" ng-if="showFinalizarAtendimento">
+	                        Cancelar atendimento
+	                    </span>
+	    			</div>
+	    		</div>
 
-    		<div class="p-b-s nav-records">
-    			<ul class="side-navbar">
-    				<li ng-class="{'active' : viewResumo}" ng-click="toggleAtendimento('resumo')">
-    					<a href="#" title="Resumo">Resumo</a>
-    				</li>
+	    		<div class="p-b-s nav-records">
+	    			<ul class="side-navbar">
+	    				<li ng-class="{'active' : viewResumo}" ng-click="toggleAtendimento('resumo')">
+	    					<a href="#" title="Resumo">Resumo</a>
+	    				</li>
 
-    				<li ng-class="{'active' : viewAtendimento}" ng-click="toggleAtendimento('atendimento')" ng-if="showFinalizarAtendimento">
-    					<a href="#" title="Atendimento">Atendimento</a>
-    				</li>
+	    				<li ng-class="{'active' : viewAtendimento}" ng-click="toggleAtendimento('atendimento')" ng-if="showFinalizarAtendimento">
+	    					<a href="#" title="Atendimento">Atendimento</a>
+	    				</li>
 
-    				<li ng-class="{'active' : viewMedidas}" ng-click="toggleAtendimento('medidas')" ng-if="showFinalizarAtendimento">
-    					<a href="#" title="Medidas">Medidas</a>
-    				</li>
+	    				<li ng-class="{'active' : viewMedidas}" ng-click="toggleAtendimento('medidas')" ng-if="showFinalizarAtendimento">
+	    					<a href="#" title="Medidas">Medidas</a>
+	    				</li>
 
-    				<li ng-class="{'active' : viewDiagProg}" ng-click="toggleAtendimento('diagprog')" ng-if="showFinalizarAtendimento">
-    					<a href="#" title="Diagnóstico Prognóstico">Diagnóstico Prognóstico</a>
-    				</li>
-    			</ul>
-    		</div>
+	    				<li ng-class="{'active' : viewDiagProg}" ng-click="toggleAtendimento('diagprog')" ng-if="showFinalizarAtendimento">
+	    					<a href="#" title="Diagnóstico Prognóstico">Diagnóstico Prognóstico</a>
+	    				</li>
+	    			</ul>
+	    		</div>
 
-    		<div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;">
-    			<div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
-    		</div>
+	    		<div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;">
+	    			<div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+	    		</div>
 
-    		<div class="ps-scrollbar-y-rail" style="top: 0px; height: 138px; right: 3px;">
-    			<div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 52px;"></div>
-    		</div>
-    	</div>
-    </div>
+	    		<div class="ps-scrollbar-y-rail" style="top: 0px; height: 138px; right: 3px;">
+	    			<div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 52px;"></div>
+	    		</div>
+	    	</div>
+	    </div>
 
-	<span class="sidebar-toggle">
-        <span class="glyphicon glyphicon-menu-right icon"></span>
-    </span>
-</div>
+		<span class="sidebar-toggle">
+	        <span class="glyphicon glyphicon-menu-right icon"></span>
+	    </span>
+	</div>
+@endif
 
 <div class="container-fluid main-container" ng-init="qtdUsuariosInativos(); listarUsuariosPacientes()">
 
@@ -589,7 +591,7 @@
                         <div>
                             <label class="col-sm-2 control-label">Nome*</label>
                             <div class="col-sm-3" ng-class="{'has-error': nomeVazioPaciente}">
-                                <input type="text" name="nome" class="form-control" ng-model="novoPaciente.nome" ng-change="checkNomePaciente('add')">
+                                <input type="text" class="form-control" ng-model="novoPaciente.nome" ng-change="checkNomePaciente('add')">
 
                                 <span class="help-block" ng-if="nomeVazioPaciente">
 	                                <strong>O campo nome é obrigatório</strong>
@@ -598,8 +600,8 @@
                         </div>
                         <div>
                             <label class="col-sm-1 control-label">CPF*</label>
-                            <div class="col-sm-2" id="patient-code-gen" ng-class="{'has-error': cpfVazioPaciente || cpfExistePaciente}">
-                                <input id="id_patient_code" type="text" name="cpf" class="form-control" ng-model="novoPaciente.cpf" numbers-only ng-change="checkCpfPaciente('add'); checkCpfExistenciaPaciente('add')">
+                            <div class="col-sm-2" ng-class="{'has-error': cpfVazioPaciente || cpfExistePaciente}">
+                                <input type="text" class="form-control" ng-model="novoPaciente.cpf" numbers-only ng-change="checkCpfPaciente()" ng-blur="checkCpfExistenciaPaciente()">
 
                                 <span class="help-block" ng-if="cpfExistePaciente">
 	                                <strong>O CPF já existe</strong>
@@ -612,8 +614,8 @@
                         </div>
                         <div>
                             <label class="col-sm-1 control-label">Identidade</label>
-                            <div class="col-sm-1" id="patient-code-gen">
-                                <input id="id_patient_code" type="text" name="identidade" class="form-control" ng-model="novoPaciente.identidade" numbers-only>
+                            <div class="col-sm-1">
+                                <input type="text" class="form-control" ng-model="novoPaciente.identidade" numbers-only>
                             </div>
                         </div>
                     </div>
@@ -623,7 +625,7 @@
 	                        <label class="col-sm-2 control-label">Data de nascimento*</label>
 	                        <div class="col-sm-3" ng-class="{'has-error': dataVazioPaciente}">
 	                        	<div class="input-group">
-		                            <input class="form-control" id="birth-date-field" name="data_nasc" type="text" ng-model="novoPaciente.data_nasc" options="dpNovoPacienteOptions" datetimepicker readonly ng-change="checkDataPaciente('add')">
+		                            <input class="form-control" type="text" ng-model="novoPaciente.data_nasc" options="dpNovoPacienteOptions" datetimepicker readonly ng-change="checkDataPaciente('add'); checkMaioridadePaciente('add')">
 
 		                            <span class="input-group-addon pointer">
 		                                <span class="glyphicon glyphicon-calendar"></span>
@@ -639,7 +641,7 @@
 	                    <div>
 	                    	<label class="col-sm-1 control-label">E-mail</label>
 	                        <div class="col-sm-3">
-	                            <input class="form-control" type="text" name="email" ng-model="novoPaciente.email">
+	                            <input class="form-control" type="text" ng-model="novoPaciente.email">
 	                        </div>
 	                    </div>
                     </div>
@@ -648,18 +650,72 @@
                         <div>
                             <label class="col-sm-2 control-label">Médico</label>
                             <div class="col-sm-2">
-                                <input type="text" name="medico" class="form-control" ng-model="novoPaciente.medico">
+                                <input type="text" class="form-control" ng-model="novoPaciente.medico">
                             </div>
                         </div>
                         <div>
                             <label class="col-sm-1 control-label">Indicação</label>
                             <div class="col-sm-2">
-                                <input class="form-control" id="id_office_phone" name="indicacao" type="text" ng-model="novoPaciente.indicacao">
+                                <input class="form-control" type="text" ng-model="novoPaciente.indicacao">
                             </div>
                         </div>
                     </div>
 
-                    <div class="form-group form-group-sm"></div>
+                    <h3 class="title-form text-medium semi-bold p-b-s p-t-el c-ic-blue upper" ng-if="pacienteMenorIdade">Responsável</h3>
+
+                    <div class="form-group form-group-sm" ng-if="pacienteMenorIdade">
+                        <div>
+                            <label class="col-sm-2 control-label">Nome*</label>
+                            <div class="col-sm-3" ng-class="{'has-error': nomeVazioResponsavel}">
+                                <input type="text" class="form-control" ng-model="novoResponsavel.nome" ng-change="checkNomeResponsavel('add')">
+
+                                <span class="help-block" ng-if="nomeVazioResponsavel">
+	                                <strong>O campo nome é obrigatório</strong>
+	                            </span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="col-sm-1 control-label">CPF*</label>
+                            <div class="col-sm-2" ng-class="{'has-error': cpfVazioResponsavel || cpfExisteResponsavel}">
+                                <input type="text" class="form-control" ng-model="novoResponsavel.cpf" numbers-only ng-change="checkCpfResponsavel()" ng-blur="checkCpfExistenciaResponsavel()">
+
+                                <span class="help-block" ng-if="cpfExisteResponsavel">
+	                                <strong>O CPF já existe</strong>
+	                            </span>
+
+                                <span class="help-block" ng-if="cpfVazioResponsavel">
+	                                <strong>O campo CPF é obrigatório</strong>
+	                            </span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="col-sm-1 control-label">Identidade</label>
+                            <div class="col-sm-1">
+                                <input type="text" class="form-control" ng-model="novoResponsavel.identidade" numbers-only>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-group-sm" ng-if="pacienteMenorIdade">
+                        <div>
+                            <label class="col-sm-2 control-label">Email</label>
+                            <div class="col-sm-2">
+                                <input type="text" class="form-control" ng-model="novoResponsavel.email">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="col-sm-1 control-label">Ocupação</label>
+                            <div class="col-sm-2">
+                                <input type="text" class="form-control" ng-model="novoResponsavel.ocupacao">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="col-sm-1 control-label">Telefone</label>
+                            <div class="col-sm-2">
+                                <input class="form-control" type="text" ng-model="novoResponsavel.telefone" numbers-only>
+                            </div>
+                        </div>
+                    </div>
 
                     <h3 class="title-form text-medium semi-bold p-b-s p-t-el c-ic-blue upper">Telefones</h3>
 
@@ -752,11 +808,11 @@
 
 				<div class="bg-white-light p-s text-right bd-t bd-gray clearfix submit-row">
 				    <div class="clearfix pull-right">
-				        <button type="button" class="btn btn-green upper pull-right btn-loading" id="form-submit-button" ng-click="addPaciente()" ng-disabled="dataVazioPaciente || nomeVazioPaciente || cpfVazioPaciente || cpfExistePaciente">
+				        <button type="button" class="btn btn-green upper pull-right btn-loading" id="form-submit-button" ng-click="addPaciente()" ng-disabled="ataVazioPaciente || nomeVazioPaciente || cpfVazioPaciente || cpfExistePaciente || (pacienteMenorIdade && nomeVazioResponsavel) || (pacienteMenorIdade && cpfVazioResponsavel) || (pacienteMenorIdade && cpfExisteResponsavel)">
 				        	<span class="btn-loading-text">Salvar</span>			            	
 			            </button>
 
-			            <button type="button" class="btn btn-default upper m-r-es pull-left btn-loading" ng-click="addPaciente(true)" ng-disabled="dataVazioPaciente || nomeVazioPaciente || cpfVazioPaciente || cpfExistePaciente">
+			            <button type="button" class="btn btn-default upper m-r-es pull-left btn-loading" ng-click="addPaciente(true)" ng-disabled="dataVazioPaciente || nomeVazioPaciente || cpfVazioPaciente || cpfExistePaciente || (pacienteMenorIdade && nomeVazioResponsavel) || (pacienteMenorIdade && cpfVazioResponsavel) || (pacienteMenorIdade && cpfExisteResponsavel)">
 			            	<span class="btn-loading-text">Salvar e adicionar outro</span>
 			            </button>	
 				    </div>
@@ -870,7 +926,47 @@
                         </div>
                     </div>
 
-                    <div class="form-group form-group-sm"></div>
+                    <h3 class="title-form text-medium semi-bold p-b-s p-t-el c-ic-blue upper" ng-if="pacienteMenorIdade">Responsável</h3>
+
+                    <div class="form-group form-group-sm" ng-if="pacienteMenorIdade">
+                        <div>
+                            <label class="col-sm-2 control-label">Nome*</label>
+                            <div class="col-sm-3" ng-class="{'has-error': nomeVazioResponsavel}">
+                                <input type="text" class="form-control" ng-model="responsavelEdit.nome" ng-change="checkNomeResponsavel('edit')">
+
+                                <span class="help-block" ng-if="nomeVazioResponsavel">
+	                                <strong>O campo nome é obrigatório</strong>
+	                            </span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="col-sm-1 control-label">Identidade</label>
+                            <div class="col-sm-1">
+                                <input type="text" class="form-control" ng-model="responsavelEdit.identidade" numbers-only>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-group-sm" ng-if="pacienteMenorIdade">
+                        <div>
+                            <label class="col-sm-2 control-label">Email</label>
+                            <div class="col-sm-2">
+                                <input type="text" class="form-control" ng-model="responsavelEdit.email">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="col-sm-1 control-label">Ocupação</label>
+                            <div class="col-sm-2">
+                                <input type="text" class="form-control" ng-model="responsavelEdit.ocupacao">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="col-sm-1 control-label">Telefone</label>
+                            <div class="col-sm-2">
+                                <input class="form-control" type="text" ng-model="responsavelEdit.telefone" numbers-only>
+                            </div>
+                        </div>
+                    </div>
 
                     <h3 class="title-form text-medium semi-bold p-b-s p-t-el c-ic-blue upper">Telefones</h3>
 
@@ -965,11 +1061,11 @@
                 @if (Auth::user()->funcao != "Analista")
 					<div class="bg-white-light p-s text-right bd-t bd-gray clearfix submit-row">
 					    <div class="clearfix pull-right">
-					        <button type="button" class="btn btn-green upper pull-right btn-loading" id="form-submit-button" ng-click="editarPaciente()" ng-disabled="nomeVazioPaciente">
+					        <button type="button" class="btn btn-green upper pull-right btn-loading" id="form-submit-button" ng-click="editarPaciente()" ng-disabled="nomeVazioPaciente || (pacienteMenorIdade && nomeVazioResponsavel)">
 					        	<span class="btn-loading-text">Salvar</span>			            	
 				            </button>
 
-				            <button type="button" class="btn btn-default upper m-r-es pull-left btn-loading" ng-click="editarPaciente(true)" ng-disabled="nomeVazioPaciente">
+				            <button type="button" class="btn btn-default upper m-r-es pull-left btn-loading" ng-click="editarPaciente(true)" ng-disabled="nomeVazioPaciente || (pacienteMenorIdade && nomeVazioResponsavel)">
 				            	<span class="btn-loading-text">Salvar e continuar editando</span>
 				            </button>	
 					    </div>
@@ -1056,9 +1152,12 @@
 								</p>
 							</div>
 						</div>
-						<div class="pull-right patient-detail-modal" ng-click="setPacienteEdit(viewPaciente)" ng-if="showIniciarAtendimento">
-							<span class="btn btn-blue text-medium semi-bold">VISUALIZAR CADASTRO</span>
-						</div>
+
+						@if (Auth::user()->funcao != "Analista")
+							<div class="pull-right patient-detail-modal" ng-click="setPacienteEdit(viewPaciente)" ng-if="showIniciarAtendimento">
+								<span class="btn btn-blue text-medium semi-bold">VISUALIZAR CADASTRO</span>
+							</div>
+						@endif
 					</div>
 				</div>
 
@@ -1075,87 +1174,21 @@
 							</div>
 
 							<ul class="p-s list-records reset-list" ng-if="qtdAtendimentos > 0">
-								<!-- <li class="item-records p-b-l clearfix">
-									<div class="date-record pull-left">
-										<div class="date">
-											<span class="day">13</span>
-											<span class="monthy desktop">JUL</span>
-											<span class="monthy mobile">07</span>
-											<span class="year">2017</span>
-										</div>
-									</div>
-
-									<div class="content-record pull-left">
-										<div class="content-record-inner bg-white bd bd-gray">
-											<div class="header-record reset-text p-s clearfix">
-												<p class="pull-left bold physician-name">
-													<span>Por: </span>
-													<span>Dr. Teste</span>
-													<span> </span>
-													<span>
-														<span class="f-lock event-share-icon"></span>
-													</span>
-												</p>
-
-												<p class="pull-right normal c-ic-blue event-duration">
-													<span class="glyphicon glyphicon-time"></span>
-													<span> </span>
-													<span>16:50</span>
-													<span> </span>
-													<span>(9 minutos)</span>
-												</p>
-											</div>
-
-											<div class="record-descritption">
-												<div class="item-description bd-t bd-gray">
-													<h2 class="item-title p-s bd-b bd-gray clearfix">
-													<span class="c-ic-blue semi-bold pull-left">Exame físico</span>
-													<span ></span>
-												</h2>
-
-												<div class="item-text p-s">
-													<p>
-														<span>Altura:</span>
-														<span> </span>
-														<strong>
-															<span>44</span>
-															<span> </span>
-															<span>m</span>
-														</strong>
-													</p>
-
-													<p>
-														<span>Peso:</span>
-														<span> </span>
-														<strong>
-															<span>44</span>
-															<span> </span>
-															<span>kg</span>
-														</strong>
-													</p>
-												</div>
-											</div>
-										</div>
-									</div>
-
-									<span class="item-records-line"></span>
-								</li> -->
-
 								<table class="table table-default table-list table-list-patients table-atendimentos">
 								    <thead>
 								      	<tr>
-								      		<th colspan="2" class="input-refresh-atends">
+								      		<th colspan="2" class="input-refresh-atends" ng-show="!showAtendimento">
 								      			<input type="text" ng-model="atendOffset" numbers-only>
 								      			<span class="glyphicon glyphicon-search pointer" ng-click="refreshTableAtend()"></span>
 								      		</th>
 
-								      		<th ng-repeat="num in atendimentosNums">
+								      		<th ng-repeat="num in atendimentosNums" ng-click="toggleViewAtendimento()" class="pointer">
 									            [[ num ]]
 									        </th>
 								      	</tr>
 								    </thead>
 								    
-								    <tbody>
+								    <tbody ng-show="!showAtendimento">
 								    	<th rowspan='[[countShowAtendKey(atendimentoKeys, "atendimento") + 1]]' ng-if="countShowAtendKey(atendimentoKeys, 'atendimento') > 0">
 								    		Atendimento
 								    	</th>
@@ -1221,52 +1254,68 @@
 									        	[[ obj.mobilidade_articular[ key[0] ] ]]
 									      	</td>
 									    </tr>
-
-									    <th rowspan='[[countShowAtendKey(diagProgKeys, "diag_prog") + 1]]' ng-if="countShowAtendKey(diagProgKeys, 'diag_prog') > 0">
-								    		Diagnóstico Prognóstico
-								    	</th>
-
-									    <tr ng-repeat="key in diagProgKeys | filter : showAtendKey('diag_prog')">
-									      	<th>[[ key[1] ]]</th>
-									      	<td ng-repeat="obj in atendimentos">
-									        	[[ obj.diag_prog[ key[0] ] ]]
-									      	</td>
-									    </tr>
-
-									    <th rowspan='[[countShowAtendKey(vertebraKeys, "vertebra") + 1]]'  ng-if="countShowAtendKey(vertebraKeys, 'vertebra') > 0">
-								    		Vértebra
-								    	</th>
-
-									    <tr ng-repeat="key in vertebraKeys | filter : showAtendKey('vertebra')">
-									      	<th>[[ key[1] ]]</th>
-									      	<td ng-repeat="obj in atendimentos">
-									        	[[ obj.vertebra[ key[0] ] ]]
-									      	</td>
-									    </tr>
-
-									    <th rowspan='[[countShowAtendKey(localEscolioseKeys, "local_escoliose") + 1]]'  ng-if="countShowAtendKey(localEscolioseKeys, 'local_escoliose') > 0">
-								    		Local Escoliose
-								    	</th>
-
-									    <tr ng-repeat="key in localEscolioseKeys | filter : showAtendKey('local_escoliose')">
-									      	<th>[[ key[1] ]]</th>
-									      	<td ng-repeat="obj in atendimentos">
-									        	[[ obj.local_escoliose[ key[0] ] ]]
-									      	</td>
-									    </tr>
-
-									    <th rowspan='[[countShowAtendKey(curvaKeys, "curva") + 1]]'  ng-if="countShowAtendKey(curvaKeys, 'curva') > 0">
-								    		Curva
-								    	</th>
-
-									    <tr ng-repeat="key in curvaKeys | filter : showAtendKey('curva')">
-									      	<th>[[ key[1] ]]</th>
-									      	<td ng-repeat="obj in atendimentos">
-									        	[[ obj.curva[ key[0] ] ]]
-									      	</td>
-									    </tr>
 								    </tbody>
 								</table>
+
+								<li class="item-records p-b-l clearfix" ng-show="showAtendimento">
+									<div class="date-record pull-left">
+										<div class="date">
+											<span class="day">13</span>
+											<span class="monthy desktop">JUL</span>
+											<span class="monthy mobile">07</span>
+											<span class="year">2017</span>
+										</div>
+									</div>
+
+									<div class="content-record pull-left">
+										<div class="content-record-inner bg-white bd bd-gray">
+											<div class="header-record reset-text p-s clearfix">
+												<p class="pull-left bold physician-name">
+													<span>Ícone Foto</span>
+													<span>- qtd fotos</span>
+												</p>
+
+												<p class="pull-right normal c-ic-blue event-duration">
+													<span class="glyphicon glyphicon-time"></span>
+													<span> </span>
+													<span>16:50</span>
+												</p>
+											</div>
+
+											<div class="record-descritption">
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+													<span class="c-ic-blue semi-bold pull-left">Exame físico</span>
+													<span ></span>
+												</h2>
+
+												<div class="item-text p-s">
+													<p>
+														<span>Altura:</span>
+														<span> </span>
+														<strong>
+															<span>44</span>
+															<span> </span>
+															<span>m</span>
+														</strong>
+													</p>
+
+													<p>
+														<span>Peso:</span>
+														<span> </span>
+														<strong>
+															<span>44</span>
+															<span> </span>
+															<span>kg</span>
+														</strong>
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<span class="item-records-line"></span>
+								</li>
 							</ul>
 						</div>
 					</div>
@@ -1283,99 +1332,64 @@
 											<span></span>
 										</h2>
 
-										<div>
-											<ul class="reset-list p-s">
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Idade cronológica:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="atendimento.idade_cronologica" numbers-only>
+										<div class="form-atendimento">
+											<div class="form-group row">
+										        <div class="col-md-3 col-sm-3 col-xs-6">
+										        	<label>Idade cronológica:</label>
+													<input class="form-control" type="text" ng-model="atendimento.idade_cronologica" numbers-only>
+										        </div>
+
+										        <div class="col-md-3 col-sm-3 col-xs-6">
+										        	<label>Idade óssea:</label>
+													<input class="form-control" type="text" ng-model="atendimento.idade_ossea" numbers-only>
+										        </div>
+
+										        <div class="col-md-3 col-sm-3 col-xs-6">
+										        	<label>Menarca:</label>
+
+													<div class="input-group">
+														<input class="form-control" type="text" ng-model="atendimento.menarca" options="dpAtendimentoOptions" datetimepicker readonly>
+
+														<span class="input-group-addon pointer">
+													        <span class="glyphicon glyphicon-calendar"></span>
+													    </span>
 													</div>
-												</li>
+										        </div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Idade óssea:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="atendimento.idade_ossea" numbers-only>
+										        <div class="col-md-3 col-sm-3 col-xs-6">
+										        	<label>Altura:</label>
+													<input class="form-control" type="text" ng-model="atendimento.altura" floating-number-only>
+										        </div>
+										    </div>
+
+										    <div class="form-group row">
+										        <div class="col-md-3 col-sm-3 col-xs-6">
+										        	<label>Altura sentada:</label>
+													<input class="form-control" type="text" ng-model="atendimento.altura_sentada" floating-number-only>
+										        </div>
+
+										        <div class="col-md-3 col-sm-3 col-xs-6">
+										        	<label>Peso:</label>
+													<input class="form-control" type="text" ng-model="atendimento.peso" floating-number-only>
+										        </div>
+
+										        <div class="col-md-3 col-sm-3 col-xs-6">
+										        	<label>Risser:</label>
+													<input class="form-control" type="text" ng-model="atendimento.risser" numbers-only>
+										        </div>
+
+										        <div class="col-md-3 col-sm-3 col-xs-6">
+										        	<label>Data do raio X:</label>
+
+													<div class="input-group">														
+														<input class="form-control" type="text" ng-model="atendimento.data_raio_x" options="dpAtendimentoOptions" datetimepicker readonly>
+
+														<div class="input-group-addon pointer">
+													        <span class="glyphicon glyphicon-calendar"></span>
+													    </div>
 													</div>
-												</li>
-
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Menarca:</label>
-
-														<div class="input-group">
-															<input class="form-control" type="text" ng-model="atendimento.menarca" options="dpAtendimentoOptions" datetimepicker readonly>
-
-															<span class="input-group-addon pointer">
-														        <span class="glyphicon glyphicon-calendar"></span>
-														    </span>
-														</div>
-													</div>
-												</li>
-
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Número do atendimento:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="atendimento.num_atendimento" numbers-only>
-													</div>
-												</li>
-
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Data de atendimento:</label>
-														
-														<div class="input-group">
-															<input class="form-control" type="text" ng-model="atendimento.data_atendimento" options="dpAtendimentoOptions" datetimepicker readonly>
-
-															<span class="input-group-addon pointer">
-														        <span class="glyphicon glyphicon-calendar"></span>
-														    </span>
-														</div>
-													</div>
-												</li>
-
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Altura:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="atendimento.altura" floating-number-only>
-													</div>
-												</li>
-
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Altura sentada:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="atendimento.altura_sentada" floating-number-only>
-													</div>
-												</li>
-
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Peso:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="atendimento.peso" floating-number-only>
-													</div>
-												</li>
-
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Risser:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="atendimento.risser" numbers-only>
-													</div>
-												</li>
-
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Data do raio X:</label>
-
-														<div class="input-group">														
-															<input class="form-control" type="text" ng-model="atendimento.data_raio_x" options="dpAtendimentoOptions" datetimepicker readonly>
-
-															<span class="input-group-addon pointer">
-														        <span class="glyphicon glyphicon-calendar"></span>
-														    </span>
-														</div>
-													</div>
-												</li>
-											</ul>
+										        </div>
+										    </div>
 										</div>
 									</div>
 								</div>
@@ -1395,298 +1409,250 @@
 											<span></span>
 										</h2>
 
-										<div>
-											<ul class="reset-list p-s">
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Assimentria ombro:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.assimetria_ombro" numbers-only>
-													</div>
-												</li>
+										<uib-accordion>
+										    <div uib-accordion-group class="panel-default" heading="Plano Frontal" is-open="true">
+										    	<div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Valor:</label>
+														<input class="form-control" type="text" ng-model="plano_frontal.valor" numbers-only>
+										        	</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Assimetria escápulas:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.assimetria_escapulas" numbers-only>
-													</div>
-												</li>
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Calço:</label>
+														<input class="form-control" type="text" ng-model="plano_frontal.calco">
+										        	</div>
+										        </div>
+										    </div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Hemi-Tórax:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.hemi_torax" numbers-only>
-													</div>
-												</li>
+										    <div uib-accordion-group class="panel-default" heading="Plano Horizontal">
+										    	<div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Valor:</label>
+														<input class="form-control" type="text" ng-model="plano_horizontal.valor" numbers-only>
+										        	</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Cintura:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.cintura" numbers-only>
-													</div>
-												</li>
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Tipo:</label>
+														<input class="form-control" type="text" ng-model="plano_horizontal.tipo" numbers-only>
+										        	</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Teste Fukuda deslocamento:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.teste_fukuda_deslocamento" numbers-only>
-													</div>
-												</li>
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Calço:</label>
+														<input class="form-control" type="text" ng-model="plano_horizontal.calco">
+										        	</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Teste Fukuda rotação:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.teste_fukuda_rotacao" numbers-only>
-													</div>
-												</li>
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Vértebra:</label>
+														<input class="form-control" type="text" ng-model="plano_horizontal.vertebra">
+										        	</div>
+										        </div>
+										    </div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Teste Fukuda desvio:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.teste_fukuda_desvio" numbers-only>
-													</div>
-												</li>
+										    <div uib-accordion-group class="panel-default" heading="Plano Sagital">
+										    	<div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Valor:</label>
+														<input class="form-control" type="text" ng-model="plano_sagital.valor" numbers-only>
+										        	</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Habilidade ocular direito:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.habilidade_ocular_direito">
-													</div>
-												</li>
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Diferença:</label>
+														<input class="form-control" type="text" ng-model="plano_sagital.diferenca" numbers-only>
+										        	</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Habilidade ocular esquerdo:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.habilidade_ocular_esquerdo">
-													</div>
-												</li>
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Localização:</label>
+														<input class="form-control" type="text" ng-model="plano_sagital.localizacao">
+										        	</div>
+										        </div>
+											</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Romberg mono direito:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.romberg_mono_direito" numbers-only>
-													</div>
-												</li>
+											<div uib-accordion-group class="panel-default" heading="Assimetria">
+												<div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Ombro:</label>
+														<input class="form-control" type="text" ng-model="medidas.assimetria_ombro" numbers-only>
+										        	</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Romberg mono esquerdo:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.romberg_mono_esquerdo" numbers-only>
-													</div>
-												</li>
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Escápulas:</label>
+														<input class="form-control" type="text" ng-model="medidas.assimetria_escapulas" numbers-only>
+										        	</div>
+										        </div>
+											</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Romberg sensibilizado direito:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.romberg_sensibilizado_direito" numbers-only>
-													</div>
-												</li>
+											<div uib-accordion-group class="panel-default" heading="Hemi-Tórax">
+												<div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Hemi-Tórax:</label>
+														<input class="form-control" type="text" ng-model="medidas.hemi_torax" numbers-only>
+										        	</div>
+										        </div>
+											</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Romberg sensibilizado esquerdo:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.romberg_sensibilizado_esquerdo" numbers-only>
-													</div>
-												</li>
+											<div uib-accordion-group class="panel-default" heading="Cintura">
+												<div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Cintura:</label>
+														<input class="form-control" type="text" ng-model="medidas.cintura" numbers-only>
+										        	</div>
+										        </div>
+											</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Balanço direito:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.balanco_direito">
-													</div>
-												</li>
+											<div uib-accordion-group class="panel-default" heading="Mobilidade Articular">
+												<div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Valor:</label>
+														<input class="form-control" type="text" ng-model="mobilidade_articular.valor" floating-number-only>
+										        	</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Balanço esquerdo:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.balanco_esquerdo">
-													</div>
-												</li>
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Inclinação:</label>
+														<input class="form-control" type="text" ng-model="mobilidade_articular.inclinacao">
+										        	</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Retração posterior:</label>
-														<input class="form-control" maxlength="254" type="text"  ng-model="medidas.retracao_posterior" numbers-only>
-													</div>
-												</li>
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Lado:</label>
+														<input class="form-control" type="text" ng-model="mobilidade_articular.lado">
+										        	</div>
+										        </div>
+											</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Teste Thomas direito:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.teste_thomas_direito" numbers-only>
-													</div>
-												</li>
+											<div uib-accordion-group class="panel-default" heading="Teste Fukuda">
+												<div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Deslocamento:</label>
+														<input class="form-control" type="text" ng-model="medidas.teste_fukuda_deslocamento" numbers-only>
+										        	</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Teste Thomas esquerdo:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.teste_thomas_esquerdo" numbers-only>
-													</div>
-												</li>
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Rotação:</label>
+														<input class="form-control" type="text" ng-model="medidas.teste_fukuda_rotacao" numbers-only>
+										        	</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Retração peitoral direito:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.retracao_peitoral_direito" numbers-only>
-													</div>
-												</li>
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Desvio:</label>
+														<input class="form-control" type="text" ng-model="medidas.teste_fukuda_desvio" numbers-only>
+										        	</div>
+										        </div>
+											</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Retração peitoral esquerdo:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.retracao_peitoral_esquerdo" numbers-only>
-													</div>
-												</li>
+											<div uib-accordion-group class="panel-default" heading="Habilidade Ocular">
+												<div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Direito:</label>
+														<input class="form-control" type="text" ng-model="medidas.habilidade_ocular_direito">
+										        	</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Força muscular ABS:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.forca_muscular_abs" numbers-only>
-													</div>
-												</li>
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Esquerdo:</label>
+														<input class="form-control" type="text" ng-model="medidas.habilidade_ocular_esquerdo">
+										        	</div>
+										        </div>
+											</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Força ext. tronco:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.forca_ext_tronco" numbers-only>
-													</div>
-												</li>
+											<div uib-accordion-group class="panel-default" heading="Romberg Mono">
+												<div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Direito:</label>
+														<input class="form-control" type="text" ng-model="medidas.romberg_mono_direito" numbers-only>
+										        	</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Resistência extensores tronco:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="medidas.resistencia_extensores_tronco" numbers-only>
-													</div>
-												</li>
-											</ul>
-										</div>
-									</div>
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Esquerdo:</label>
+														<input class="form-control" type="text" ng-model="medidas.romberg_mono_esquerdo" numbers-only>
+										        	</div>
+										        </div>
+											</div>
 
-									<div class="content-records-exam box-shadow reset-text">
-										<h2 class="item-title p-s bd-b bd-gray clearfix">
-											<span class="c-ic-blue semi-bold pull-left">Plano Frontal</span>
-											<span></span>
-										</h2>
+											<div uib-accordion-group class="panel-default" heading="Romberg Sensibilizado">
+												<div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Direito:</label>
+														<input class="form-control" type="text" ng-model="medidas.romberg_sensibilizado_direito" numbers-only>
+										        	</div>
 
-										<div>
-											<ul class="reset-list p-s">
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Valor:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="plano_frontal.valor" numbers-only>
-													</div>
-												</li>
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Esquerdo:</label>
+														<input class="form-control" type="text" ng-model="medidas.romberg_sensibilizado_esquerdo" numbers-only>
+										        	</div>
+										        </div>
+											</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Calço:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="plano_frontal.calco">
-													</div>
-												</li>
-											</ul>
-										</div>
-									</div>
+											<div uib-accordion-group class="panel-default" heading="Balanço">
+												<div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Direito:</label>
+														<input class="form-control" type="text" ng-model="medidas.balanco_direito">
+										        	</div>
 
-									<div class="content-records-exam box-shadow reset-text">
-										<h2 class="item-title p-s bd-b bd-gray clearfix">
-											<span class="c-ic-blue semi-bold pull-left">Plano Horizontal</span>
-											<span></span>
-										</h2>
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Esquerdo:</label>
+														<input class="form-control" type="text" ng-model="medidas.balanco_esquerdo">
+										        	</div>
+										        </div>
+											</div>
 
-										<div>
-											<ul class="reset-list p-s">
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Valor:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="plano_horizontal.valor" numbers-only>
-													</div>
-												</li>
+											<div uib-accordion-group class="panel-default" heading="Retração Posterior">
+												<div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Retração posterior:</label>
+														<input class="form-control" type="text" ng-model="medidas.retracao_posterior" numbers-only>
+										        	</div>
+										        </div>
+											</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Tipo:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="plano_horizontal.tipo" numbers-only>
-													</div>
-												</li>
+											<div uib-accordion-group class="panel-default" heading="Teste Thomas">
+												<div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Direito:</label>
+														<input class="form-control" type="text" ng-model="medidas.teste_thomas_direito" numbers-only>
+										        	</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Calço:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="plano_horizontal.calco">
-													</div>
-												</li>
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Esquerdo:</label>
+														<input class="form-control" type="text" ng-model="medidas.teste_thomas_esquerdo" numbers-only>
+										        	</div>
+										        </div>
+											</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Vértebra:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="plano_horizontal.vertebra">
-													</div>
-												</li>
-											</ul>
-										</div>
-									</div>
+											<div uib-accordion-group class="panel-default" heading="Retração Peitoral">
+												<div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Direito:</label>
+														<input class="form-control" type="text" ng-model="medidas.retracao_peitoral_direito" numbers-only>
+										        	</div>
 
-									<div class="content-records-exam box-shadow reset-text">
-										<h2 class="item-title p-s bd-b bd-gray clearfix">
-											<span class="c-ic-blue semi-bold pull-left">Plano Sagital</span>
-											<span></span>
-										</h2>
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Esquerdo:</label>
+														<input class="form-control" type="text" ng-model="medidas.retracao_peitoral_esquerdo" numbers-only>
+										        	</div>
+										        </div>
+											</div>
 
-										<div>
-											<ul class="reset-list p-s">
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Valor:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="plano_sagital.valor" numbers-only>
-													</div>
-												</li>
+											<div uib-accordion-group class="panel-default" heading="Força Muscular">
+												<div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>ABS:</label>
+														<input class="form-control" type="text" ng-model="medidas.forca_muscular_abs" numbers-only>
+										        	</div>
+										        </div>
+											</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Diferença:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="plano_sagital.diferenca" numbers-only>
-													</div>
-												</li>
+											<div uib-accordion-group class="panel-default" heading="Extensores Tronco">
+												<div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Força:</label>
+														<input class="form-control" type="text" ng-model="medidas.forca_ext_tronco" numbers-only>
+										        	</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Localização:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="plano_sagital.localizacao">
-													</div>
-												</li>
-											</ul>
-										</div>
-									</div>
-
-									<div class="content-records-exam box-shadow reset-text">
-										<h2 class="item-title p-s bd-b bd-gray clearfix">
-											<span class="c-ic-blue semi-bold pull-left">Mobilidade Articular</span>
-											<span></span>
-										</h2>
-
-										<div>
-											<ul class="reset-list p-s">
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Valor:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="mobilidade_articular.valor" floating-number-only>
-													</div>
-												</li>
-
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Inclinação:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="mobilidade_articular.inclinacao">
-													</div>
-												</li>
-
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Lado:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="mobilidade_articular.lado">
-													</div>
-												</li>
-											</ul>
-										</div>
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Resistência:</label>
+														<input class="form-control" type="text" ng-model="medidas.resistencia_extensores_tronco" numbers-only>
+										        	</div>
+										        </div>
+											</div>
+										</uib-accordion>
 									</div>
 								</div>
 							</div>
@@ -1705,219 +1671,164 @@
 											<span></span>
 										</h2>
 
-										<div>
-											<ul class="reset-list p-s">
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Diagnóstico clínico:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="diag_prog.diagnostico_clinico">
-													</div>
-												</li>
+										<div class="form-atendimento">
+											<div class="form-group row">
+										        <div class="padding-full-input">
+										        	<label>Diagnóstico clínico:</label>
+													<input class="form-control" type="text" ng-model="diag_prog.diagnostico_clinico">
+										        </div>
+										    </div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Tipo escoliose:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="diag_prog.tipo_escoliose">
-													</div>
-												</li>
+										    <div class="form-group row">
+										        <div class="col-md-3 col-sm-3 col-xs-6">
+										        	<label>Tipo escoliose:</label>
+													<input class="form-control" type="text" ng-model="diag_prog.tipo_escoliose">
+										        </div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Cifose:</label>
+										        <div class="col-md-3 col-sm-3 col-xs-6">
+										        	<label>Cifose:</label>
 
-														<select class="select-picker form-control" ng-model="diag_prog.cifose">
-															<option value="" selected="selected"></option>
-															<option value="Sim">Sim</option>
-															<option value="Não">Não</option>
-														</select>
-													</div>
-												</li>
+													<select class="select-picker form-control" ng-model="diag_prog.cifose">
+														<option value="" selected="selected"></option>
+														<option value="Sim">Sim</option>
+														<option value="Não">Não</option>
+													</select>
+										        </div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Lordose:</label>
+										        <div class="col-md-3 col-sm-3 col-xs-6">
+										        	<label>Lordose:</label>
 
-														<select class="select-picker form-control" ng-model="diag_prog.lordose">
-															<option value="" selected="selected"></option>
-															<option value="Sim">Sim</option>
-															<option value="Não">Não</option>
-														</select>
-													</div>
-												</li>
+													<select class="select-picker form-control" ng-model="diag_prog.lordose">
+														<option value="" selected="selected"></option>
+														<option value="Sim">Sim</option>
+														<option value="Não">Não</option>
+													</select>
+										        </div>
+										    </div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Prescrição médica:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="diag_prog.prescricao_medica">
-													</div>
-												</li>
+										    <div class="form-group row">
+										        <div class="padding-full-input">
+										        	<label>Prescrição médica:</label>
+													<input class="form-control" type="text" ng-model="diag_prog.prescricao_medica">
+										        </div>
+										    </div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Prescrição fisioterapêutica:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="diag_prog.prescricao_fisioterapeutica">
-													</div>
-												</li>
+										    <div class="form-group row">
+										        <div class="padding-full-input">
+										        	<label>Prescrição fisioterapêutica:</label>
+													<input class="form-control" type="text" ng-model="diag_prog.prescricao_fisioterapeutica">
+										        </div>
+										    </div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Colete:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="diag_prog.colete">
-													</div>
-												</li>
+										    <div class="form-group row">
+										        <div class="col-md-3 col-sm-3 col-xs-6">
+										        	<label>Colete:</label>
+													<input class="form-control" type="text" ng-model="diag_prog.colete">
+										        </div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Colete HS:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="diag_prog.colete_hs">
-													</div>
-												</li>
+										        <div class="col-md-3 col-sm-3 col-xs-6">
+										        	<label>Colete HS:</label>
+													<input class="form-control" type="text" ng-model="diag_prog.colete_hs">
+										        </div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Etiologia:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="diag_prog.etiologia">
-													</div>
-												</li>
+										        <div class="col-md-3 col-sm-3 col-xs-6">
+										        	<label>Idade do aparecimento:</label>
+													<input class="form-control" type="text" ng-model="diag_prog.idade_aparecimento">
+										        </div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Idade do aparecimento:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="diag_prog.idade_aparecimento">
-													</div>
-												</li>
+										        <div class="col-md-3 col-sm-3 col-xs-6">
+										        	<label>Calço:</label>
+													<input class="form-control" type="text" ng-model="diag_prog.calco">
+										        </div>
+										    </div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Topografia:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="diag_prog.topografia">
-													</div>
-												</li>
+										    <div class="form-group row">
+										        <div class="col-md-6 col-sm-6 col-xs-6">
+										        	<label>Etiologia:</label>
+													<input class="form-control" type="text" ng-model="diag_prog.etiologia">
+										        </div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Calço:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="diag_prog.calco">
-													</div>
-												</li>
+										        <div class="col-md-6 col-sm-6 col-xs-6">
+										        	<label>Topografia:</label>
+													<input class="form-control" type="text" ng-model="diag_prog.topografia">
+										        </div>
+										    </div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>HPP:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="diag_prog.hpp">
-													</div>
-												</li>
-											</ul>
-										</div>
-									</div>
+										    <uib-accordion>
+											    <div uib-accordion-group class="panel-default" heading="Curva">
+													<div class="form-group row forms-accordion">
+											        	<div class="col-md-2 col-sm-3 col-xs-6">
+											        		<label>Ordenação:</label>
+															<input class="form-control" type="text" ng-model="curva.ordenacao">
+											        	</div>
 
-									<div class="content-records-exam box-shadow reset-text">
-										<h2 class="item-title p-s bd-b bd-gray clearfix">
-											<span class="c-ic-blue semi-bold pull-left">Curva</span>
-											<span></span>
-										</h2>
+											        	<div class="col-md-2 col-sm-3 col-xs-6">
+											        		<label>Tipo:</label>
+															<input class="form-control" type="text" ng-model="curva.tipo">
+											        	</div>
 
-										<div>
-											<ul class="reset-list p-s">
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Ordenação:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="curva.ordenacao">
-													</div>
-												</li>
+											        	<div class="col-md-2 col-sm-3 col-xs-6">
+											        		<label>Ângulo de COBB:</label>
+															<input class="form-control" type="text" ng-model="curva.angulo_cobb">
+											        	</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Tipo:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="curva.tipo">
-													</div>
-												</li>
+											        	<div class="col-md-2 col-sm-3 col-xs-6">
+											        		<label>Ângulo Ferguson:</label>
+															<input class="form-control" type="text" ng-model="curva.angulo_ferguson">
+											        	</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Ângulo de COBB:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="curva.angulo_cobb">
-													</div>
-												</li>
+											        	<div class="col-md-2 col-sm-3 col-xs-6">
+											        		<label>Grau de rotação:</label>
+															<input class="form-control" type="text" ng-model="curva.grau_rotacao">
+											        	</div>
+											        </div>
+												</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Ângulo Ferguson:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="curva.angulo_ferguson">
-													</div>
-												</li>
+												<div uib-accordion-group class="panel-default" heading="Local Escoliose">
+													<div class="form-group row forms-accordion">
+											        	<div class="col-md-3 col-sm-3 col-xs-6">
+											        		<label>Local:</label>
+															<input class="form-control" type="text" ng-model="local_escoliose.local">
+											        	</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Grau de rotação:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="curva.grau_rotacao">
-													</div>
-												</li>
-											</ul>
-										</div>
-									</div>
+											        	<div class="col-md-3 col-sm-3 col-xs-6">
+											        		<label>Lado:</label>
+															<input class="form-control" type="text" ng-model="local_escoliose.lado">
+											        	</div>
+											        </div>
+												</div>
 
-									<div class="content-records-exam box-shadow reset-text">
-										<h2 class="item-title p-s bd-b bd-gray clearfix">
-											<span class="c-ic-blue semi-bold pull-left">Local Escoliose</span>
-											<span></span>
-										</h2>
+												<div uib-accordion-group class="panel-default" heading="Vértebra">
+													<div class="form-group row forms-accordion">
+											        	<div class="col-md-3 col-sm-3 col-xs-6">
+											        		<label>Tipo</label>
+															<input class="form-control" type="text" ng-model="vertebra.tipo">
+											        	</div>
 
-										<div>
-											<ul class="reset-list p-s">
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Local:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="local_escoliose.local">
-													</div>
-												</li>
+											        	<div class="col-md-3 col-sm-3 col-xs-6">
+											        		<label>Local:</label>
+															<input class="form-control" type="text" ng-model="vertebra.local">
+											        	</div>
 
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Lado:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="local_escoliose.lado">
-													</div>
-												</li>
-											</ul>
-										</div>
-									</div>
+											        	<div class="col-md-3 col-sm-3 col-xs-6">
+											        		<label>Altura:</label>
+															<input class="form-control" type="text" ng-model="vertebra.altura">
+											        	</div>
 
-									<div class="content-records-exam box-shadow reset-text">
-										<h2 class="item-title p-s bd-b bd-gray clearfix">
-											<span class="c-ic-blue semi-bold pull-left">Vértebra</span>
-											<span></span>
-										</h2>
+											        	<div class="col-md-3 col-sm-3 col-xs-6">
+											        		<label>Nome:</label>
+															<input class="form-control" maxlength="254" type="text" ng-model="vertebra.vertebra_nome">
+											        	</div>
+											        </div>
+												</div>
+											</uib-accordion>
 
-										<div>
-											<ul class="reset-list p-s">
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Tipo</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="vertebra.tipo">
-													</div>
-												</li>
-
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Local:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="vertebra.local">
-													</div>
-												</li>
-
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Altura:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="vertebra.altura">
-													</div>
-												</li>
-
-												<li>
-													<div class="form-group form-group-sm size-710">
-														<label>Nome da vértebra:</label>
-														<input class="form-control" maxlength="254" type="text" ng-model="vertebra.vertebra_nome">
-													</div>
-												</li>
-											</ul>
+											<div class="form-group row">
+										        <div class="padding-full-input">
+													<label>HPP:</label>
+													<textarea class="form-control" rows="4" ng-model="diag_prog.hpp"></textarea>
+												</div>
+										    </div>
 										</div>
 									</div>
 								</div>

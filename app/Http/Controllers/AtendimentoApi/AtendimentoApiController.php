@@ -27,9 +27,6 @@ class AtendimentoApiController extends Controller
         if(isset($dados['atendimento']['menarca']))
             $dados['atendimento']['menarca'] = explode("T", $dados['atendimento']['menarca'])[0];
 
-        if(isset($dados['atendimento']['data_atendimento']))
-            $dados['atendimento']['data_atendimento'] = explode("T", $dados['atendimento']['data_atendimento'])[0];
-
         if(isset($dados['atendimento']['data_raio_x']))
             $dados['atendimento']['data_raio_x'] = explode("T", $dados['atendimento']['data_raio_x'])[0];
 
@@ -149,7 +146,7 @@ class AtendimentoApiController extends Controller
         $todosAtendimentos = $paciente->atendimento();
         $atendCount = $todosAtendimentos->count();
 
-        $limit = 5;
+        $limit = 7;
         $newOffset = 0;
         $atendimentos = null;
 
@@ -192,6 +189,16 @@ class AtendimentoApiController extends Controller
 
             $var->atendimento = $atendimento;
 
+            if(isset($var->atendimento->menarca)) {
+                $explode = explode("-", $var->atendimento->menarca);
+                $var->atendimento->menarca = $explode[2] . "-" . $explode[1] . "-" . $explode[0];
+            }
+
+            if(isset($var->atendimento->data_raio_x)) {
+                $explode = explode("-", $var->atendimento->data_raio_x);
+                $var->atendimento->data_raio_x = $explode[2] . "-" . $explode[1] . "-" . $explode[0];
+            }
+            
             $medidas = $atendimento->medidas();
             $diag_prog = $atendimento->diag_prog();
 

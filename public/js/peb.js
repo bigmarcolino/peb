@@ -1,5 +1,5 @@
 'use strict';
-var app = angular.module('peb', ['angularSpinner', '720kb.tooltips', 'ae-datetimepicker'], function($interpolateProvider, $qProvider) {
+var app = angular.module('peb', ['angularSpinner', '720kb.tooltips', 'ae-datetimepicker', 'ngAnimate', 'ui.bootstrap'], function($interpolateProvider, $qProvider) {
   $interpolateProvider.startSymbol('[[');
   $interpolateProvider.endSymbol(']]');
   $qProvider.errorOnUnhandledRejections(false);
@@ -217,6 +217,14 @@ app.factory('apiService', function($http) {
 			return $http.post('/usuario/addPaciente', paciente);
 		},
 
+        checkExistenciaCpfPaciente: function(cpf) {
+            return $http.get('/usuario/checkExistenciaCpfPaciente/' + cpf);
+        },
+
+        checkExistenciaCpfResponsavel: function(cpf) {
+            return $http.get('/usuario/checkExistenciaCpfResponsavel/' + cpf);
+        },
+
         excluirPacientes: function(cpfs) {
             return $http.post('/usuario/excluirPacientes', cpfs);
         },
@@ -269,7 +277,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
                 $scope.showSpinnerUsuarios = false;
                 $('#modalErroUsuarios').modal('show');
             })
-        }, 1000 );       
+        }, 500 );       
 	}
 
     $scope.qtdUsuariosInativos = function() {
@@ -314,7 +322,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
             .catch(function(response) {
                 $scope.showSpinnerExcluirUsuarios = false;
             })
-        }, 1000 );    
+        }, 500 );    
     }
 
 	$scope.sortTypeUser = 'funcao';
@@ -349,6 +357,11 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
             $scope.dataVazioPaciente = undefined;
             $scope.nomeVazioPaciente = undefined;
             $scope.cpfVazioPaciente = undefined;
+
+            $scope.pacienteMenorIdade = false;
+            $scope.novoResponsavel = {};
+            $scope.nomeVazioResponsavel = undefined;
+            $scope.cpfVazioResponsavel = undefined;
         }
         else if (pagina == 'editPaciente') {
             $scope.showUsuarios = false;
@@ -360,6 +373,10 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
             $scope.dataVazioPaciente = undefined;
             $scope.nomeVazioPaciente = undefined;
             $scope.cpfVazioPaciente = undefined;
+
+            $scope.pacienteMenorIdade = false;
+            $scope.nomeVazioResponsavel = undefined;
+            $scope.cpfVazioResponsavel = undefined;
         }
         else if (pagina == 'viewPaciente') {
             $scope.showUsuarios = false;
@@ -497,12 +514,12 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
                 $scope.filtrarUsuarios();
                 $scope.sortReverseUser = !$scope.sortReverseUser;
                 $scope.ordenarUsuarios($scope.sortTypeUser);
-            }, 1000 );
+            }, 500 );
         })
         .catch(function(res) {
             $timeout( function() {
                 $scope.showSpinnerEditarUsuario = false;
-            }, 1000 );
+            }, 500 );
         })
     }
 
@@ -579,14 +596,28 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
             $scope.cpfVazioPaciente = true;
         }
 
-        if(!$scope.dataVazioPaciente && !$scope.nomeVazioPaciente && !$scope.cpfVazioPaciente) {
+        if($scope.pacienteMenorIdade && $scope.cpfVazioResponsavel == undefined) {
+            $scope.cpfVazioResponsavel = true;
+        }
+
+        if($scope.pacienteMenorIdade && $scope.nomeVazioResponsavel == undefined) {
+            $scope.nomeVazioResponsavel = true;
+        }
+
+        if(!$scope.dataVazioPaciente && !$scope.nomeVazioPaciente && !$scope.cpfVazioPaciente && !$scope.nomeVazioResponsavel && !$scope.cpfVazioResponsavel) {
             $scope.showSpinnerAddPaciente = true;
             $('#modalAddPaciente').modal('show');
 
             $scope.novoPaciente.data_nasc = $scope.novoPaciente.data_nasc.format("YYYY-MM-DD").toString();
 
+            var obj = {};
+            obj.paciente = angular.copy($scope.novoPaciente);
+
+            if($scope.pacienteMenorIdade)
+                obj.responsavel = angular.copy($scope.novoResponsavel);
+
             $timeout( function() {
-                apiService.addPaciente($scope.novoPaciente).then(function(response) {
+                apiService.addPaciente(obj).then(function(response) {
                     $('#modalAddPaciente').modal('hide');
 
                     var obj = {};
@@ -611,7 +642,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
                 .catch(function(response) {
                     $scope.showSpinnerAddPaciente = false;
                 })
-            }, 1000 );
+            }, 500 );
         }        
     }
 
@@ -675,7 +706,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
             .catch(function(response) {
                 $scope.showSpinnerExcluirPacientes = false;
             })
-        }, 1000 );
+        }, 500 );
     }
 
     $scope.checkboxSelecionarPacientes = false;
@@ -693,6 +724,30 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
                 $scope.pacientesFiltrados[i].checked = false;
             }
         }
+    }
+
+    $scope.checkMaioridadePaciente = function(option) {
+        if(option == 'add') {
+            if(moment().diff(moment($scope.novoPaciente.data_nasc), 'years') < 18) {
+                $scope.pacienteMenorIdade = true;
+            }
+            else {
+                $scope.pacienteMenorIdade = false;
+            }
+        }
+        else if (option == 'edit') {
+            if(moment().diff(moment($scope.pacienteEdit.data_nasc), 'years') < 18) {
+                $scope.pacienteMenorIdade = true;
+            }
+            else {
+                $scope.pacienteMenorIdade = false;
+            }
+        }
+
+        $scope.novoResponsavel = {};
+        $scope.nomeVazioResponsavel = undefined;
+        $scope.cpfVazioResponsavel = undefined;
+        $scope.cpfExisteResponsavel = false;
     }
 
     $scope.checkDataPaciente = function(option) {
@@ -714,64 +769,87 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
         }
     }
 
-    $scope.checkNomePaciente = function(option) {
+    $scope.checkNomeResponsavel = function(option) {
         if(option == 'add') {
-            if($scope.novoPaciente.nome == '') {
-                $scope.nomeVazioPaciente = true;
+            if($scope.pacienteMenorIdade) {
+                if($scope.novoResponsavel.nome == '') {
+                    $scope.nomeVazioResponsavel = true;
+                }
+                else {
+                    $scope.nomeVazioResponsavel = false;
+                }
             }
             else {
-                $scope.nomeVazioPaciente = false;
+                $scope.nomeVazioResponsavel = false;
             }
         }
         else if (option == 'edit') {
-            if($scope.pacienteEdit.nome == '') {
-                $scope.nomeVazioPaciente = true;
+            if($scope.pacienteMenorIdade) {
+                if($scope.responsavelEdit.nome == '') {
+                    $scope.nomeVazioResponsavel = true;
+                }
+                else {
+                    $scope.nomeVazioResponsavel = false;
+                }
             }
             else {
-                $scope.nomeVazioPaciente = false;
+                $scope.nomeVazioResponsavel = false;
             }
         }
     }
 
-    $scope.checkCpfPaciente = function(option) {
-        if(option == 'add') {
-            if($scope.novoPaciente.cpf == '' || $scope.novoPaciente.cpf == undefined) {
-                $scope.cpfVazioPaciente = true;
-            }
-            else {
-                $scope.cpfVazioPaciente = false;
-            }
+    $scope.checkCpfResponsavel = function(option) {
+        if($scope.novoResponsavel.cpf == '' || $scope.novoResponsavel.cpf == undefined) {
+            $scope.cpfVazioResponsavel = true;
+            $scope.cpfExisteResponsavel = false;
         }
-        else if (option == 'edit') {
-            if($scope.pacienteEdit.cpf == '' || $scope.pacienteEdit.cpf == undefined) {
-                $scope.cpfVazioPaciente = true;
-            }
-            else {
-                $scope.cpfVazioPaciente = false;
-            }
+        else {
+            $scope.cpfVazioResponsavel = false;
         }
     }
 
-    $scope.checkCpfExistenciaPaciente = function(option) {
-        if(option == 'add') {
-            var index = _.findIndex($scope.pacientesFiltrados, function(o) { return o.cpf == $scope.novoPaciente.cpf; });
-
-            if(index == -1) {
-                $scope.cpfExistePaciente = false;
-            }
-            else {
-                $scope.cpfExistePaciente = true;
-            }
+    $scope.checkCpfExistenciaResponsavel = function() {
+        if($scope.novoResponsavel.cpf != '' && $scope.novoResponsavel.cpf != undefined) {
+            apiService.checkExistenciaCpfResponsavel($scope.novoResponsavel.cpf).then(function(response) {
+                if(response.data == 1){
+                    $scope.cpfExisteResponsavel = true;
+                }
+                else {
+                    $scope.cpfExisteResponsavel = false;
+                }
+            })
         }
-        else if (option == 'edit') {
-            var index = _.findIndex($scope.pacientesFiltrados, function(o) { return o.cpf == $scope.pacienteEdit.cpf; });
+    }
 
-            if(index == -1) {
-                $scope.cpfExistePaciente = false;
-            }
-            else {
-                $scope.cpfExistePaciente = true;
-            }
+    $scope.checkNomePaciente = function() {
+        if($scope.novoPaciente.nome == '') {
+            $scope.nomeVazioPaciente = true;
+        }
+        else {
+            $scope.nomeVazioPaciente = false;
+        }
+    }
+
+    $scope.checkCpfPaciente = function() {
+        if($scope.novoPaciente.cpf == '' || $scope.novoPaciente.cpf == undefined) {
+            $scope.cpfVazioPaciente = true;
+            $scope.cpfExistePaciente = false;
+        }
+        else {
+            $scope.cpfVazioPaciente = false;
+        }
+    }
+
+    $scope.checkCpfExistenciaPaciente = function() {
+        if($scope.novoPaciente.cpf != '' && $scope.novoPaciente.cpf != undefined) {
+            apiService.checkExistenciaCpfPaciente($scope.novoPaciente.cpf).then(function(response) {
+                if(response.data == 1){
+                    $scope.cpfExistePaciente = true;
+                }
+                else {
+                    $scope.cpfExistePaciente = false;
+                }
+            })
         }
     }
 
@@ -782,15 +860,24 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
 
         $timeout( function() {
             apiService.getPacienteEdit(paciente.cpf).then(function(response) {
-               $scope.pacienteEdit = angular.copy(response.data[0]);
-               $scope.showSpinnerLoadPacienteEdit = false;
-               $scope.successLoadPacienteEdit = true;
+                $scope.pacienteEdit = angular.copy(response.data.paciente);
+                $scope.showSpinnerLoadPacienteEdit = false;
+                $scope.successLoadPacienteEdit = true;
+
+                if(response.data.hasOwnProperty('responsavel')){
+                    $scope.responsavelEdit = angular.copy(response.data.responsavel);
+                    $scope.pacienteMenorIdade = true;
+                }
+                else {
+                    $scope.responsavelEdit = {};
+                    $scope.pacienteMenorIdade = false;
+                }               
             })
             .catch(function(response) {
                 $scope.showSpinnerLoadPacienteEdit = false;
                 $('#modalErroLoadPacienteEdit').modal('show');
             })
-        }, 1000 );
+        }, 500 );
     }
 
     $scope.editarPaciente = function(option) {
@@ -798,11 +885,13 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
         $('#modalEditPaciente').modal('show');
 
         $scope.pacienteEdit.data_nasc = $scope.pacienteEdit.data_nasc.format("YYYY-MM-DD").toString();
-        delete $scope.pacienteEdit.created_at;
-        delete $scope.pacienteEdit.updated_at;
+
+        var obj = {};
+        obj.paciente = $scope.pacienteEdit;
+        obj.responsavel = $scope.responsavelEdit;
 
         $timeout( function() {
-            apiService.editarPaciente($scope.pacienteEdit).then(function(response) {
+            apiService.editarPaciente(obj).then(function(response) {
                 $('#modalEditPaciente').modal('hide');
 
                 var index = _.findIndex($scope.pacientesFiltrados, function(o) { return o.cpf == $scope.pacienteEdit.cpf; });
@@ -821,7 +910,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
             .catch(function(response) {
                 $scope.showSpinnerEditPaciente = false;
             })
-        }, 1000 );
+        }, 500 );
     }
 
     $scope.showSpinnerAtendimento = true;
@@ -844,7 +933,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
                 $scope.showSpinnerGetAtendimento = false;
                 $('#modalErroCarregarAtendimentos').modal('show');
             })
-        }, 1000 );
+        }, 500 );
     }
 
     $scope.calcIdade = function(data) {
@@ -984,7 +1073,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
                 $('#modalErroAddAtendimento').modal('hide');
                 $scope.toggleButtonAtendimento();
             }
-        }, 1000 );
+        }, 500 );
     }
 
     $scope.cancelarAtendimento = function() {
@@ -993,11 +1082,6 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
     }
 
     $scope.atendimentoKeys = [
-        ['idade_cronologica', 'Idade cronológica'],
-        ['idade_ossea', 'Idade óssea'],
-        ['menarca', 'Menarca'],
-        ['num_atendimento', 'Número de atendimento'],
-        ['data_atendimento', 'Data de atendimento'],
         ['altura', 'Altura'],
         ['altura_sentada', 'Altura sentada'],
         ['peso', 'Peso'],
@@ -1052,42 +1136,6 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
         ['lado', 'Lado'],
         ['valor', 'Valor'],
         ['inclinacao', 'Inclinação']
-    ];
-
-    $scope.diagProgKeys = [
-        ['diagnostico_clinico', 'Diagnóstico clínico'],
-        ['tipo_escoliose', 'Tipo escoliose'],
-        ['cifose', 'Cifose'],
-        ['lordose', 'Lordose'],
-        ['prescricao_medica', 'Prescrição médica'],
-        ['prescricao_fisioterapeutica', 'Prescrição fisioterapêutica'],
-        ['colete', 'Colete'],
-        ['colete_hs', 'Colete HS'],
-        ['etiologia', 'Etiologia'],
-        ['idade_aparecimento', 'Idade aparecimento'],
-        ['topografia', 'Topografia'],
-        ['calco', 'Calço'],
-        ['hpp', 'HPP']
-    ];
-
-    $scope.vertebraKeys = [
-        ['tipo', 'Tipo'],
-        ['local', 'Local'],
-        ['altura', 'Altura'],
-        ['vertebra_nome', 'Nome da vértebra']
-    ];
-
-    $scope.localEscolioseKeys = [
-        ['local', 'Local'], 
-        ['lado', 'Lado']
-    ];
-
-    $scope.curvaKeys = [
-        ['ordenacao', 'Ordenação'],
-        ['tipo', 'Tipo'],
-        ['angulo_cobb', 'Ângulo COBB'],
-        ['angulo_ferguson', 'Ângulo Ferguson'],
-        ['grau_rotacao', 'Grau rotação']
     ];
 
     $scope.refreshTableAtend = function() {
@@ -1157,5 +1205,11 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
         }
 
         return count;
+    }
+
+    $scope.showAtendimento = false;
+
+    $scope.toggleViewAtendimento = function() {
+        $scope.showAtendimento = !$scope.showAtendimento;
     }
 });

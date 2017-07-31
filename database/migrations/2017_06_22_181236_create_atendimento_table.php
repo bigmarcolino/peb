@@ -18,8 +18,6 @@ class CreateAtendimentoTable extends Migration
             $table->integer('idade_cronologica')->nullable();
             $table->integer('idade_ossea')->nullable();
             $table->date('menarca')->nullable();
-            $table->integer('num_atendimento')->nullable();
-            $table->date('data_atendimento')->nullable();
             $table->float('altura')->nullable();
             $table->float('altura_sentada')->nullable();
             $table->float('peso')->nullable();

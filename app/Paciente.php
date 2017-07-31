@@ -20,6 +20,10 @@ class Paciente extends Model
         'cpf', 'nome', 'end_res', 'data_nasc', 'estado', 'cidade', 'cep', 'tel_res', 'tel_trab', 'medico', 'celular', 'indicacao', 'identidade', 'email'
     ];
 
+    protected $hidden = [
+        'created_at', 'updated_at'
+    ];
+
     public function responsavel()
     {
         return $this->hasOne('App\Responsavel', 'cpf_paciente');

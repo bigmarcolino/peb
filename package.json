@@ -1,10 +1,12 @@
 {
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "dev": "npm run development",
+    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "watch-poll": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --watch-poll --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch-poll": "npm run watch -- --watch-poll",
     "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "prod": "npm run production",
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "devDependencies": {
@@ -18,16 +20,20 @@
   },
   "dependencies": {
     "angular": "^1.6.5",
+    "angular-animate": "^1.6.5",
     "angular-eonasdan-datetimepicker": "^0.3.9",
     "angular-spinner": "^1.0.1",
     "angular-tooltips": "^1.2.2",
+    "angular-ui-bootstrap": "^2.5.0",
     "babel-loader": "^7.1.1",
     "css-loader": "^0.28.4",
+    "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^0.11.2",
     "font-awesome": "^4.7.0",
     "loader-utils": "^1.1.0",
     "moment": "^2.18.1",
     "postcss-loader": "^2.0.6",
+    "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
     "vue-loader": "^13.0.2",
     "vue-template-compiler": "^2.4.2",

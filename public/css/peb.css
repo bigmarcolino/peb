@@ -233,7 +233,7 @@ body {
 }
 
 .peb-containers .container-form {
-    height: calc(100vh - 227px);
+    min-height: calc(100vh - 227px);
 }
 
 .form-search-input .form-group {
@@ -291,7 +291,7 @@ body {
 }
 
 .container-form .p-t-el {
-    padding-top: 30px;
+    padding-top: 50px;
 }
 
 .peb-containers .patient-detail-modal {
@@ -302,11 +302,6 @@ body {
     color: #fff;
     background-color: #2379a7;
     border-color: #21729e;
-}
-
-.content-records .input-group .input-group-addon {
-    float: left;
-    padding-right: 24px;
 }
 
 .auto-height {
@@ -335,4 +330,17 @@ body {
 
 .table-atendimentos thead tr th {
     text-align: center;
+}
+
+.form-atendimento {
+    padding: 30px;
+}
+
+.forms-accordion {
+    padding: 10px;
+}
+
+.padding-full-input {
+    padding-left: 10px;
+    padding-right: 10px;
 }

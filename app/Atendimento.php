@@ -14,11 +14,11 @@ class Atendimento extends Model
      * @var array
      */
     protected $fillable = [
-        'idade_cronologica', 'idade_ossea', 'menarca', 'num_atendimento', 'data_atendimento', 'altura', 'altura_sentada', 'peso', 'risser', 'data_raio_x'
+        'idade_cronologica', 'idade_ossea', 'menarca', 'altura', 'altura_sentada', 'peso', 'risser', 'data_raio_x'
     ];
 
     protected $hidden = [
-        'created_at', 'updated_at', 'id', 'cpf_paciente'
+        'updated_at', 'id', 'cpf_paciente'
     ];
 
     public function medidas()

@@ -23,6 +23,7 @@
         <link href="/bower_components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css">
         <link href="/node_modules/angular-tooltips/dist/angular-tooltips.min.css" rel="stylesheet" type="text/css">
+        <link href="/node_modules/angular-ui-bootstrap/dist/ui-bootstrap-csp.css" rel="stylesheet" type="text/css">
         <link href="/css/peb.css" rel="stylesheet" type="text/css">
 
         <!-- Scripts -->
@@ -169,7 +170,8 @@
         <script src="/bower_components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js" type="text/javascript"></script>
         <script src="/node_modules/angular-spinner/dist/angular-spinner.min.js" type="text/javascript"></script>
         <script src="/node_modules/angular-tooltips/dist/angular-tooltips.min.js" type="text/javascript"></script>
-        
+        <script src="/node_modules/angular-animate/angular-animate.min.js" type="text/javascript"></script>
+        <script src="/node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js" type="text/javascript"></script>
 
         <script type="text/javascript">
             $("#myNavmenu").offcanvas({ toggle: false, disableScrolling: false, canvas: "body" })
