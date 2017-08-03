@@ -307,7 +307,7 @@
 		      	<div class="modal-body">
 		      		<form class="form-horizontal">
 	                    <div class="form-group" ng-class="{'has-error': nomeVazioEditarUsuario}">
-	                        <input id="name" type="text" class="form-control" name="name" placeholder="Nome:" ng-model="usuarioEdit.name" ng-change="checkNomeEditarUsuario()" autofocus>
+	                        <input id="name" type="text" class="form-control" name="name" placeholder="Nome:" ng-model="usuarioEdit.name" ng-change="checkNomeEditarUsuario()" maxlength="254" autofocus>
 
 	                        <span class="help-block" ng-if="nomeVazioEditarUsuario">
                                 <strong>O campo nome é obrigatório</strong>
@@ -315,7 +315,7 @@
 	                    </div>
 
 	                    <div class="form-group" ng-class="{'has-error': emailVazioEditarUsuario || emailExisteEditarUsuario}">
-	                        <input id="email" type="email" class="form-control" name="email" placeholder="Email:" ng-model="usuarioEdit.email" ng-change="checkEmailEditarUsuario(); checkEmailExistenciaEditarUsuario()">
+	                        <input id="email" type="email" class="form-control" name="email" placeholder="Email:" ng-model="usuarioEdit.email" ng-change="checkEmailEditarUsuario(); checkEmailExistenciaEditarUsuario()" maxlength="254">
 
 	                        <span class="help-block" ng-if="emailExisteEditarUsuario">
                                 <strong>O email já existe</strong>
@@ -327,7 +327,7 @@
 	                    </div>
 
 	                    <div class="form-group">
-	                        <select id="sexo" class="form-control" name="sexo" ng-model="usuarioEdit.sexo">
+	                        <select id="sexo" class="form-control" name="sexo" ng-model="usuarioEdit.sexo" maxlength="254">
 	                            <option ng-selected="usuarioEdit.sexo == 'Masculino'">Masculino</option>
 	                            <option ng-selected="usuarioEdit.sexo == 'Feminino'">Feminino</option>
 	                        </select>
@@ -335,7 +335,7 @@
 
 	                    <div class="form-group">
 	                    	<div class="input-group">
-		                    	<input class="form-control" type="text" name="data_nasc" placeholder="Data de Nascimento:" ng-model="usuarioEdit.data_nasc" options="dpEditarUsuarioOptions" datetimepicker readonly>
+		                    	<input class="form-control" type="text" name="data_nasc" placeholder="Data de Nascimento:" ng-model="usuarioEdit.data_nasc" options="dpEditarUsuarioOptions" datetimepicker readonly maxlength="254">
 							    <span class="input-group-addon" id="data_nasc">
 							        <span class="glyphicon glyphicon-calendar"></span>
 							    </span>
@@ -343,7 +343,7 @@
 	                    </div>
 
 	                    <div class="form-group" ng-if="cpfLogged() != usuarioEdit.cpf">
-	                        <select id="funcao" class="form-control" name="funcao" ng-model="usuarioEdit.funcao">
+	                        <select id="funcao" class="form-control" name="funcao" ng-model="usuarioEdit.funcao" maxlength="254">
 	                        	<option ng-selected="usuarioEdit.funcao == ''"></option>
 	                            <option ng-selected="usuarioEdit.funcao == 'Admin'">Admin</option>
 	                            <option ng-selected="usuarioEdit.funcao == 'Analista'">Analista</option>
@@ -591,7 +591,7 @@
                         <div>
                             <label class="col-sm-2 control-label">Nome*</label>
                             <div class="col-sm-3" ng-class="{'has-error': nomeVazioPaciente}">
-                                <input type="text" class="form-control" ng-model="novoPaciente.nome" ng-change="checkNomePaciente('add')">
+                                <input type="text" class="form-control" ng-model="novoPaciente.nome" ng-change="checkNomePaciente('add')" maxlength="254">
 
                                 <span class="help-block" ng-if="nomeVazioPaciente">
 	                                <strong>O campo nome é obrigatório</strong>
@@ -601,7 +601,7 @@
                         <div>
                             <label class="col-sm-1 control-label">CPF*</label>
                             <div class="col-sm-2" ng-class="{'has-error': cpfVazioPaciente || cpfExistePaciente}">
-                                <input type="text" class="form-control" ng-model="novoPaciente.cpf" numbers-only ng-change="checkCpfPaciente()" ng-blur="checkCpfExistenciaPaciente()">
+                                <input type="text" class="form-control" ng-model="novoPaciente.cpf" numbers-only ng-change="checkCpfPaciente()" ng-blur="checkCpfExistenciaPaciente()" maxlength="254">
 
                                 <span class="help-block" ng-if="cpfExistePaciente">
 	                                <strong>O CPF já existe</strong>
@@ -615,7 +615,7 @@
                         <div>
                             <label class="col-sm-1 control-label">Identidade</label>
                             <div class="col-sm-1">
-                                <input type="text" class="form-control" ng-model="novoPaciente.identidade" numbers-only>
+                                <input type="text" class="form-control" ng-model="novoPaciente.identidade" numbers-only maxlength="254">
                             </div>
                         </div>
                     </div>
@@ -625,7 +625,7 @@
 	                        <label class="col-sm-2 control-label">Data de nascimento*</label>
 	                        <div class="col-sm-3" ng-class="{'has-error': dataVazioPaciente}">
 	                        	<div class="input-group">
-		                            <input class="form-control" type="text" ng-model="novoPaciente.data_nasc" options="dpNovoPacienteOptions" datetimepicker readonly ng-change="checkDataPaciente('add'); checkMaioridadePaciente('add')">
+		                            <input class="form-control" type="text" ng-model="novoPaciente.data_nasc" options="dpNovoPacienteOptions" datetimepicker readonly ng-change="checkDataPaciente('add'); checkMaioridadePaciente('add')" maxlength="254">
 
 		                            <span class="input-group-addon pointer">
 		                                <span class="glyphicon glyphicon-calendar"></span>
@@ -641,7 +641,7 @@
 	                    <div>
 	                    	<label class="col-sm-1 control-label">E-mail</label>
 	                        <div class="col-sm-3">
-	                            <input class="form-control" type="text" ng-model="novoPaciente.email">
+	                            <input class="form-control" type="text" ng-model="novoPaciente.email" maxlength="254">
 	                        </div>
 	                    </div>
                     </div>
@@ -650,13 +650,13 @@
                         <div>
                             <label class="col-sm-2 control-label">Médico</label>
                             <div class="col-sm-2">
-                                <input type="text" class="form-control" ng-model="novoPaciente.medico">
+                                <input type="text" class="form-control" ng-model="novoPaciente.medico" maxlength="254">
                             </div>
                         </div>
                         <div>
                             <label class="col-sm-1 control-label">Indicação</label>
                             <div class="col-sm-2">
-                                <input class="form-control" type="text" ng-model="novoPaciente.indicacao">
+                                <input class="form-control" type="text" ng-model="novoPaciente.indicacao" maxlength="254">
                             </div>
                         </div>
                     </div>
@@ -667,7 +667,7 @@
                         <div>
                             <label class="col-sm-2 control-label">Nome*</label>
                             <div class="col-sm-3" ng-class="{'has-error': nomeVazioResponsavel}">
-                                <input type="text" class="form-control" ng-model="novoResponsavel.nome" ng-change="checkNomeResponsavel('add')">
+                                <input type="text" class="form-control" ng-model="novoResponsavel.nome" ng-change="checkNomeResponsavel('add')" maxlength="254">
 
                                 <span class="help-block" ng-if="nomeVazioResponsavel">
 	                                <strong>O campo nome é obrigatório</strong>
@@ -677,7 +677,7 @@
                         <div>
                             <label class="col-sm-1 control-label">CPF*</label>
                             <div class="col-sm-2" ng-class="{'has-error': cpfVazioResponsavel || cpfExisteResponsavel}">
-                                <input type="text" class="form-control" ng-model="novoResponsavel.cpf" numbers-only ng-change="checkCpfResponsavel()" ng-blur="checkCpfExistenciaResponsavel()">
+                                <input type="text" class="form-control" ng-model="novoResponsavel.cpf" numbers-only ng-change="checkCpfResponsavel()" ng-blur="checkCpfExistenciaResponsavel()" maxlength="254">
 
                                 <span class="help-block" ng-if="cpfExisteResponsavel">
 	                                <strong>O CPF já existe</strong>
@@ -691,7 +691,7 @@
                         <div>
                             <label class="col-sm-1 control-label">Identidade</label>
                             <div class="col-sm-1">
-                                <input type="text" class="form-control" ng-model="novoResponsavel.identidade" numbers-only>
+                                <input type="text" class="form-control" ng-model="novoResponsavel.identidade" numbers-only maxlength="254">
                             </div>
                         </div>
                     </div>
@@ -700,19 +700,19 @@
                         <div>
                             <label class="col-sm-2 control-label">Email</label>
                             <div class="col-sm-2">
-                                <input type="text" class="form-control" ng-model="novoResponsavel.email">
+                                <input type="text" class="form-control" ng-model="novoResponsavel.email" maxlength="254">
                             </div>
                         </div>
                         <div>
                             <label class="col-sm-1 control-label">Ocupação</label>
                             <div class="col-sm-2">
-                                <input type="text" class="form-control" ng-model="novoResponsavel.ocupacao">
+                                <input type="text" class="form-control" ng-model="novoResponsavel.ocupacao" maxlength="254">
                             </div>
                         </div>
                         <div>
                             <label class="col-sm-1 control-label">Telefone</label>
                             <div class="col-sm-2">
-                                <input class="form-control" type="text" ng-model="novoResponsavel.telefone" numbers-only>
+                                <input class="form-control" type="text" ng-model="novoResponsavel.telefone" numbers-only maxlength="254">
                             </div>
                         </div>
                     </div>
@@ -723,38 +723,38 @@
                         <div>
                             <label class="col-sm-2 control-label">Celular</label>
                             <div class="col-sm-2">
-                                <input type="text" name="celular" class="form-control" ng-model="novoPaciente.celular" numbers-only>
+                                <input type="text" class="form-control" ng-model="novoPaciente.celular" numbers-only maxlength="254">
                             </div>
                         </div>
                         <div>
                             <label class="col-sm-1 control-label">Casa</label>
                             <div class="col-sm-2">
-                                <input type="text" name="tel_res" class="form-control" ng-model="novoPaciente.tel_res" numbers-only>
+                                <input type="text" class="form-control" ng-model="novoPaciente.tel_res" numbers-only maxlength="254">
                             </div>
                         </div>
                         <div>
                             <label class="col-sm-1 control-label">Trabalho</label>
                             <div class="col-sm-2">
-                                <input class="form-control" id="id_office_phone" name="tel_trab" type="text" ng-model="novoPaciente.tel_trab" numbers-only>
+                                <input class="form-control" id="id_office_phone" type="text" ng-model="novoPaciente.tel_trab" numbers-only maxlength="254">
                             </div>
                         </div>
                     </div>
 
                     <h3 class="title-form text-medium semi-bold p-b-s p-t-el c-ic-blue upper">Endereço</h3>
 
-                    <div data-zipcode="context">
+                    <div>
                         <div class="form-group form-group-sm">
                         	<div>
                                 <label class="col-sm-2 control-label">Endereço</label>
                                 <div class="col-sm-4">
-                                    <input class="form-control" id="id_address" name="end_res" type="text" ng-model="novoPaciente.end_res">
+                                    <input class="form-control" type="text" ng-model="novoPaciente.end_res" maxlength="254">
                                 </div>
                             </div>
 
                             <div>
                                 <label class="col-sm-1 control-label">CEP</label>
                                 <div class="col-sm-2">
-                                    <input class="form-control" id="id_zip_code" name="cep" type="text" ng-model="novoPaciente.cep" numbers-only>
+                                    <input class="form-control" type="text" ng-model="novoPaciente.cep" numbers-only maxlength="254">
                                 </div>
                             </div>
                         </div>
@@ -763,14 +763,14 @@
                             <div>
                                 <label class="col-sm-2 control-label">Cidade</label>
                                 <div class="col-sm-3">
-                                    <input class="form-control" id="id_city" name="cidade" type="text" ng-model="novoPaciente.cidade">
+                                    <input class="form-control" type="text" ng-model="novoPaciente.cidade" maxlength="254">
                                 </div>
                             </div>
                             <div>
                                 <label class="col-sm-1 control-label">Estado</label>
 
                                 <div class="col-sm-2">
-	                              	<select class="select-picker form-control" id="id_state" name="estado" ng-model="novoPaciente.estado">
+	                              	<select class="select-picker form-control" ng-model="novoPaciente.estado" maxlength="254">
 										<option value="" selected="selected"></option>
 										<option value="AC">Acre</option>
 										<option value="AL">Alagoas</option>
@@ -865,7 +865,7 @@
 
                             @if (Auth::user()->funcao != "Analista")
 	                            <div class="col-sm-3" ng-class="{'has-error': nomeVazioPaciente}">
-	                                <input type="text" name="name" class="form-control" ng-model="pacienteEdit.nome" ng-change="checkNomePaciente('edit')">
+	                                <input type="text" class="form-control" ng-model="pacienteEdit.nome" ng-change="checkNomePaciente('edit')" maxlength="254">
 
 	                                <span class="help-block" ng-if="nomeVazioPaciente">
 		                                <strong>O campo nome é obrigatório</strong>
@@ -873,14 +873,14 @@
 	                            </div>
 	                        @else
 	                        	<div class="col-sm-3">
-	                                <input type="text" name="name" class="form-control" ng-model="pacienteEdit.nome">
+	                                <input type="text" class="form-control" ng-model="pacienteEdit.nome" maxlength="254">
 	                            </div>
 	                        @endif
                         </div>
                         <div>
                             <label class="col-sm-1 control-label">Identidade</label>
-                            <div class="col-sm-1" id="patient-code-gen">
-                                <input id="id_patient_code" type="text" name="patient_code" class="form-control" ng-model="pacienteEdit.identidade" numbers-only>
+                            <div class="col-sm-1">
+                                <input type="text" class="form-control" ng-model="pacienteEdit.identidade" numbers-only maxlength="254">
                             </div>
                         </div>
                     </div>
@@ -890,7 +890,7 @@
 	                        <label class="col-sm-2 control-label">Data de nascimento*</label>
 	                        <div class="col-sm-3" ng-class="{'has-error': dataVazioPaciente}">
 	                        	<div class="input-group">
-		                            <input class="form-control" id="birth-date-field" name="birth_date" type="text" ng-model="pacienteEdit.data_nasc" options="dpNovoPacienteOptions" datetimepicker readonly ng-change="checkDataPaciente('edit')">
+		                            <input class="form-control" type="text" ng-model="pacienteEdit.data_nasc" options="dpNovoPacienteOptions" datetimepicker readonly ng-change="checkDataPaciente('edit')" maxlength="254">
 
 		                            <span class="input-group-addon pointer">
 		                                <span class="glyphicon glyphicon-calendar"></span>
@@ -906,7 +906,7 @@
 	                    <div>
 	                    	<label class="col-sm-1 control-label">E-mail</label>
 	                        <div class="col-sm-3">
-	                            <input class="form-control" type="text" ng-model="pacienteEdit.email">
+	                            <input class="form-control" type="text" ng-model="pacienteEdit.email" maxlength="254">
 	                        </div>
 	                    </div>
                     </div>
@@ -915,13 +915,13 @@
                         <div>
                             <label class="col-sm-2 control-label">Médico</label>
                             <div class="col-sm-2">
-                                <input type="text" name="home_phone" class="form-control" ng-model="pacienteEdit.medico">
+                                <input type="text" class="form-control" ng-model="pacienteEdit.medico" maxlength="254">
                             </div>
                         </div>
                         <div>
                             <label class="col-sm-1 control-label">Indicação</label>
                             <div class="col-sm-2">
-                                <input class="form-control" id="id_office_phone" name="office_phone" type="text" ng-model="pacienteEdit.indicacao">
+                                <input class="form-control" type="text" ng-model="pacienteEdit.indicacao" maxlength="254">
                             </div>
                         </div>
                     </div>
@@ -932,7 +932,7 @@
                         <div>
                             <label class="col-sm-2 control-label">Nome*</label>
                             <div class="col-sm-3" ng-class="{'has-error': nomeVazioResponsavel}">
-                                <input type="text" class="form-control" ng-model="responsavelEdit.nome" ng-change="checkNomeResponsavel('edit')">
+                                <input type="text" class="form-control" ng-model="responsavelEdit.nome" ng-change="checkNomeResponsavel('edit')" maxlength="254">
 
                                 <span class="help-block" ng-if="nomeVazioResponsavel">
 	                                <strong>O campo nome é obrigatório</strong>
@@ -942,7 +942,7 @@
                         <div>
                             <label class="col-sm-1 control-label">Identidade</label>
                             <div class="col-sm-1">
-                                <input type="text" class="form-control" ng-model="responsavelEdit.identidade" numbers-only>
+                                <input type="text" class="form-control" ng-model="responsavelEdit.identidade" numbers-only maxlength="254">
                             </div>
                         </div>
                     </div>
@@ -951,19 +951,19 @@
                         <div>
                             <label class="col-sm-2 control-label">Email</label>
                             <div class="col-sm-2">
-                                <input type="text" class="form-control" ng-model="responsavelEdit.email">
+                                <input type="text" class="form-control" ng-model="responsavelEdit.email" maxlength="254">
                             </div>
                         </div>
                         <div>
                             <label class="col-sm-1 control-label">Ocupação</label>
                             <div class="col-sm-2">
-                                <input type="text" class="form-control" ng-model="responsavelEdit.ocupacao">
+                                <input type="text" class="form-control" ng-model="responsavelEdit.ocupacao" maxlength="254">
                             </div>
                         </div>
                         <div>
                             <label class="col-sm-1 control-label">Telefone</label>
                             <div class="col-sm-2">
-                                <input class="form-control" type="text" ng-model="responsavelEdit.telefone" numbers-only>
+                                <input class="form-control" type="text" ng-model="responsavelEdit.telefone" numbers-only maxlength="254">
                             </div>
                         </div>
                     </div>
@@ -974,20 +974,20 @@
                         <div>
                             <label class="col-sm-2 control-label">Celular</label>
                             <div class="col-sm-2">
-                                <input type="text" name="mobile_phone" class="form-control" ng-model="pacienteEdit.celular" numbers-only>
+                                <input type="text" class="form-control" ng-model="pacienteEdit.celular" numbers-only maxlength="254">
                             </div>
                         </div>
 
                         <div>
                             <label class="col-sm-1 control-label">Casa</label>
                             <div class="col-sm-2">
-                                <input type="text" name="home_phone" class="form-control" ng-model="pacienteEdit.tel_res" numbers-only>
+                                <input type="text" class="form-control" ng-model="pacienteEdit.tel_res" numbers-only maxlength="254">
                             </div>
                         </div>
                         <div>
                             <label class="col-sm-1 control-label">Trabalho</label>
                             <div class="col-sm-2">
-                                <input class="form-control" id="id_office_phone" name="office_phone" type="text" ng-model="pacienteEdit.tel_trab" numbers-only>
+                                <input class="form-control" type="text" ng-model="pacienteEdit.tel_trab" numbers-only maxlength="254">
                             </div>
                         </div>
                     </div>
@@ -999,14 +999,14 @@
                         	<div>
                                 <label class="col-sm-2 control-label">Endereço</label>
                                 <div class="col-sm-4">
-                                    <input class="form-control" id="id_address" name="address" type="text" ng-model="pacienteEdit.end_res">
+                                    <input class="form-control" type="text" ng-model="pacienteEdit.end_res" maxlength="254">
                                 </div>
                             </div>
 
                             <div>
                                 <label class="col-sm-1 control-label">CEP</label>
                                 <div class="col-sm-2">
-                                    <input class="form-control" id="id_zip_code" name="zip_code" type="text" ng-model="pacienteEdit.cep" numbers-only>
+                                    <input class="form-control" type="text" ng-model="pacienteEdit.cep" numbers-only maxlength="254">
                                 </div>
                             </div>
                         </div>
@@ -1015,14 +1015,14 @@
                             <div>
                                 <label class="col-sm-2 control-label">Cidade</label>
                                 <div class="col-sm-3">
-                                    <input class="form-control" id="id_city" name="city" type="text" ng-model="pacienteEdit.cidade">
+                                    <input class="form-control" type="text" ng-model="pacienteEdit.cidade" maxlength="254">
                                 </div>
                             </div>
                             <div>
                                 <label class="col-sm-1 control-label">Estado</label>
 
                                 <div class="col-sm-2">
-	                              	<select class="select-picker form-control" id="id_state" name="state" ng-model="pacienteEdit.estado">
+	                              	<select class="select-picker form-control" ng-model="pacienteEdit.estado" maxlength="254">
 										<option value="" selected="selected"></option>
 										<option value="AC">Acre</option>
 										<option value="AL">Alagoas</option>
@@ -1916,19 +1916,19 @@
 											<div class="form-group row">
 										        <div class="col-md-3 col-sm-3 col-xs-6">
 										        	<label>Idade cronológica:</label>
-													<input class="form-control" type="text" ng-model="atendimento.idade_cronologica" numbers-only>
+													<input class="form-control" type="text" ng-model="atendimento.idade_cronologica" numbers-only maxlength="9">
 										        </div>
 
 										        <div class="col-md-3 col-sm-3 col-xs-6">
 										        	<label>Idade óssea:</label>
-													<input class="form-control" type="text" ng-model="atendimento.idade_ossea" numbers-only>
+													<input class="form-control" type="text" ng-model="atendimento.idade_ossea" numbers-only maxlength="9">
 										        </div>
 
 										        <div class="col-md-3 col-sm-3 col-xs-6">
 										        	<label>Menarca:</label>
 
 													<div class="input-group">
-														<input class="form-control" type="text" ng-model="atendimento.menarca" options="dpAtendimentoOptions" datetimepicker readonly>
+														<input class="form-control" type="text" ng-model="atendimento.menarca" options="dpAtendimentoOptions" datetimepicker readonly maxlength="254">
 
 														<span class="input-group-addon pointer">
 													        <span class="glyphicon glyphicon-calendar"></span>
@@ -1938,31 +1938,31 @@
 
 										        <div class="col-md-3 col-sm-3 col-xs-6">
 										        	<label>Altura:</label>
-													<input class="form-control" type="text" ng-model="atendimento.altura" floating-number-only>
+													<input class="form-control" type="text" ng-model="atendimento.altura" floating-number-only maxlength="6">
 										        </div>
 										    </div>
 
 										    <div class="form-group row">
 										        <div class="col-md-3 col-sm-3 col-xs-6">
 										        	<label>Altura sentada:</label>
-													<input class="form-control" type="text" ng-model="atendimento.altura_sentada" floating-number-only>
+													<input class="form-control" type="text" ng-model="atendimento.altura_sentada" floating-number-only maxlength="6">
 										        </div>
 
 										        <div class="col-md-3 col-sm-3 col-xs-6">
 										        	<label>Peso:</label>
-													<input class="form-control" type="text" ng-model="atendimento.peso" floating-number-only>
+													<input class="form-control" type="text" ng-model="atendimento.peso" floating-number-only maxlength="6">
 										        </div>
 
 										        <div class="col-md-3 col-sm-3 col-xs-6">
 										        	<label>Risser:</label>
-													<input class="form-control" type="text" ng-model="atendimento.risser" numbers-only>
+													<input class="form-control" type="text" ng-model="atendimento.risser" numbers-only maxlength="9">
 										        </div>
 
 										        <div class="col-md-3 col-sm-3 col-xs-6">
 										        	<label>Data do raio X:</label>
 
 													<div class="input-group">														
-														<input class="form-control" type="text" ng-model="atendimento.data_raio_x" options="dpAtendimentoOptions" datetimepicker readonly>
+														<input class="form-control" type="text" ng-model="atendimento.data_raio_x" options="dpAtendimentoOptions" datetimepicker readonly maxlength="254">
 
 														<div class="input-group-addon pointer">
 													        <span class="glyphicon glyphicon-calendar"></span>
@@ -1994,12 +1994,12 @@
 										    	<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Valor:</label>
-														<input class="form-control" type="text" ng-model="plano_frontal.valor" numbers-only>
+														<input class="form-control" type="text" ng-model="plano_frontal.valor" numbers-only maxlength="9">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Calço:</label>
-														<input class="form-control" type="text" ng-model="plano_frontal.calco">
+														<input class="form-control" type="text" ng-model="plano_frontal.calco" maxlength="254">
 										        	</div>
 										        </div>
 										    </div>
@@ -2008,22 +2008,22 @@
 										    	<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Valor:</label>
-														<input class="form-control" type="text" ng-model="plano_horizontal.valor" numbers-only>
+														<input class="form-control" type="text" ng-model="plano_horizontal.valor" numbers-only maxlength="9">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Tipo:</label>
-														<input class="form-control" type="text" ng-model="plano_horizontal.tipo" numbers-only>
+														<input class="form-control" type="text" ng-model="plano_horizontal.tipo" numbers-only maxlength="9">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Calço:</label>
-														<input class="form-control" type="text" ng-model="plano_horizontal.calco">
+														<input class="form-control" type="text" ng-model="plano_horizontal.calco" maxlength="254">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Vértebra:</label>
-														<input class="form-control" type="text" ng-model="plano_horizontal.vertebra">
+														<input class="form-control" type="text" ng-model="plano_horizontal.vertebra" maxlength="254">
 										        	</div>
 										        </div>
 										    </div>
@@ -2032,17 +2032,17 @@
 										    	<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Valor:</label>
-														<input class="form-control" type="text" ng-model="plano_sagital.valor" numbers-only>
+														<input class="form-control" type="text" ng-model="plano_sagital.valor" numbers-only maxlength="9">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Diferença:</label>
-														<input class="form-control" type="text" ng-model="plano_sagital.diferenca" numbers-only>
+														<input class="form-control" type="text" ng-model="plano_sagital.diferenca" numbers-only maxlength="9">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Localização:</label>
-														<input class="form-control" type="text" ng-model="plano_sagital.localizacao">
+														<input class="form-control" type="text" ng-model="plano_sagital.localizacao" maxlength="254">
 										        	</div>
 										        </div>
 											</div>
@@ -2051,12 +2051,12 @@
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Ombro:</label>
-														<input class="form-control" type="text" ng-model="medidas.assimetria_ombro" numbers-only>
+														<input class="form-control" type="text" ng-model="medidas.assimetria_ombro" numbers-only maxlength="9">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Escápulas:</label>
-														<input class="form-control" type="text" ng-model="medidas.assimetria_escapulas" numbers-only>
+														<input class="form-control" type="text" ng-model="medidas.assimetria_escapulas" numbers-only maxlength="9">
 										        	</div>
 										        </div>
 											</div>
@@ -2065,7 +2065,7 @@
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Hemi-Tórax:</label>
-														<input class="form-control" type="text" ng-model="medidas.hemi_torax" numbers-only>
+														<input class="form-control" type="text" ng-model="medidas.hemi_torax" numbers-only maxlength="9">
 										        	</div>
 										        </div>
 											</div>
@@ -2074,7 +2074,7 @@
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Cintura:</label>
-														<input class="form-control" type="text" ng-model="medidas.cintura" numbers-only>
+														<input class="form-control" type="text" ng-model="medidas.cintura" numbers-only maxlength="9">
 										        	</div>
 										        </div>
 											</div>
@@ -2083,17 +2083,17 @@
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Valor:</label>
-														<input class="form-control" type="text" ng-model="mobilidade_articular.valor" floating-number-only>
+														<input class="form-control" type="text" ng-model="mobilidade_articular.valor" floating-number-only maxlength="6">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Inclinação:</label>
-														<input class="form-control" type="text" ng-model="mobilidade_articular.inclinacao">
+														<input class="form-control" type="text" ng-model="mobilidade_articular.inclinacao" maxlength="254">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Lado:</label>
-														<input class="form-control" type="text" ng-model="mobilidade_articular.lado">
+														<input class="form-control" type="text" ng-model="mobilidade_articular.lado" maxlength="254">
 										        	</div>
 										        </div>
 											</div>
@@ -2102,17 +2102,17 @@
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Deslocamento:</label>
-														<input class="form-control" type="text" ng-model="medidas.teste_fukuda_deslocamento" numbers-only>
+														<input class="form-control" type="text" ng-model="medidas.teste_fukuda_deslocamento" numbers-only maxlength="9">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Rotação:</label>
-														<input class="form-control" type="text" ng-model="medidas.teste_fukuda_rotacao" numbers-only>
+														<input class="form-control" type="text" ng-model="medidas.teste_fukuda_rotacao" numbers-only maxlength="9">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Desvio:</label>
-														<input class="form-control" type="text" ng-model="medidas.teste_fukuda_desvio" numbers-only>
+														<input class="form-control" type="text" ng-model="medidas.teste_fukuda_desvio" numbers-only maxlength="9">
 										        	</div>
 										        </div>
 											</div>
@@ -2121,12 +2121,12 @@
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Direito:</label>
-														<input class="form-control" type="text" ng-model="medidas.habilidade_ocular_direito">
+														<input class="form-control" type="text" ng-model="medidas.habilidade_ocular_direito" maxlength="254">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Esquerdo:</label>
-														<input class="form-control" type="text" ng-model="medidas.habilidade_ocular_esquerdo">
+														<input class="form-control" type="text" ng-model="medidas.habilidade_ocular_esquerdo" maxlength="254">
 										        	</div>
 										        </div>
 											</div>
@@ -2135,12 +2135,12 @@
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Direito:</label>
-														<input class="form-control" type="text" ng-model="medidas.romberg_mono_direito" numbers-only>
+														<input class="form-control" type="text" ng-model="medidas.romberg_mono_direito" numbers-only maxlength="9">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Esquerdo:</label>
-														<input class="form-control" type="text" ng-model="medidas.romberg_mono_esquerdo" numbers-only>
+														<input class="form-control" type="text" ng-model="medidas.romberg_mono_esquerdo" numbers-only maxlength="9">
 										        	</div>
 										        </div>
 											</div>
@@ -2149,12 +2149,12 @@
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Direito:</label>
-														<input class="form-control" type="text" ng-model="medidas.romberg_sensibilizado_direito" numbers-only>
+														<input class="form-control" type="text" ng-model="medidas.romberg_sensibilizado_direito" numbers-only maxlength="9">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Esquerdo:</label>
-														<input class="form-control" type="text" ng-model="medidas.romberg_sensibilizado_esquerdo" numbers-only>
+														<input class="form-control" type="text" ng-model="medidas.romberg_sensibilizado_esquerdo" numbers-only maxlength="9">
 										        	</div>
 										        </div>
 											</div>
@@ -2163,12 +2163,12 @@
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Direito:</label>
-														<input class="form-control" type="text" ng-model="medidas.balanco_direito">
+														<input class="form-control" type="text" ng-model="medidas.balanco_direito" maxlength="254">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Esquerdo:</label>
-														<input class="form-control" type="text" ng-model="medidas.balanco_esquerdo">
+														<input class="form-control" type="text" ng-model="medidas.balanco_esquerdo" maxlength="254">
 										        	</div>
 										        </div>
 											</div>
@@ -2177,7 +2177,7 @@
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Retração posterior:</label>
-														<input class="form-control" type="text" ng-model="medidas.retracao_posterior" numbers-only>
+														<input class="form-control" type="text" ng-model="medidas.retracao_posterior" numbers-only maxlength="9">
 										        	</div>
 										        </div>
 											</div>
@@ -2186,12 +2186,12 @@
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Direito:</label>
-														<input class="form-control" type="text" ng-model="medidas.teste_thomas_direito" numbers-only>
+														<input class="form-control" type="text" ng-model="medidas.teste_thomas_direito" numbers-only maxlength="9">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Esquerdo:</label>
-														<input class="form-control" type="text" ng-model="medidas.teste_thomas_esquerdo" numbers-only>
+														<input class="form-control" type="text" ng-model="medidas.teste_thomas_esquerdo" numbers-only maxlength="9">
 										        	</div>
 										        </div>
 											</div>
@@ -2200,12 +2200,12 @@
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Direito:</label>
-														<input class="form-control" type="text" ng-model="medidas.retracao_peitoral_direito" numbers-only>
+														<input class="form-control" type="text" ng-model="medidas.retracao_peitoral_direito" numbers-only maxlength="9">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Esquerdo:</label>
-														<input class="form-control" type="text" ng-model="medidas.retracao_peitoral_esquerdo" numbers-only>
+														<input class="form-control" type="text" ng-model="medidas.retracao_peitoral_esquerdo" numbers-only maxlength="9">
 										        	</div>
 										        </div>
 											</div>
@@ -2214,7 +2214,7 @@
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>ABS:</label>
-														<input class="form-control" type="text" ng-model="medidas.forca_muscular_abs" numbers-only>
+														<input class="form-control" type="text" ng-model="medidas.forca_muscular_abs" numbers-only maxlength="9">
 										        	</div>
 										        </div>
 											</div>
@@ -2223,12 +2223,12 @@
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Força:</label>
-														<input class="form-control" type="text" ng-model="medidas.forca_ext_tronco" numbers-only>
+														<input class="form-control" type="text" ng-model="medidas.forca_ext_tronco" numbers-only maxlength="9">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Resistência:</label>
-														<input class="form-control" type="text" ng-model="medidas.resistencia_extensores_tronco" numbers-only>
+														<input class="form-control" type="text" ng-model="medidas.resistencia_extensores_tronco" numbers-only maxlength="9">
 										        	</div>
 										        </div>
 											</div>
@@ -2255,20 +2255,20 @@
 											<div class="form-group row">
 										        <div class="padding-full-input">
 										        	<label>Diagnóstico clínico:</label>
-													<input class="form-control" type="text" ng-model="diag_prog.diagnostico_clinico">
+													<input class="form-control" type="text" ng-model="diag_prog.diagnostico_clinico" maxlength="254">
 										        </div>
 										    </div>
 
 										    <div class="form-group row">
 										        <div class="col-md-3 col-sm-3 col-xs-6">
 										        	<label>Tipo escoliose:</label>
-													<input class="form-control" type="text" ng-model="diag_prog.tipo_escoliose">
+													<input class="form-control" type="text" ng-model="diag_prog.tipo_escoliose" maxlength="254">
 										        </div>
 
 										        <div class="col-md-3 col-sm-3 col-xs-6">
 										        	<label>Cifose:</label>
 
-													<select class="select-picker form-control" ng-model="diag_prog.cifose">
+													<select class="select-picker form-control" ng-model="diag_prog.cifose" maxlength="254">
 														<option value="" selected="selected"></option>
 														<option value="1">Sim</option>
 														<option value="0">Não</option>
@@ -2278,7 +2278,7 @@
 										        <div class="col-md-3 col-sm-3 col-xs-6">
 										        	<label>Lordose:</label>
 
-													<select class="select-picker form-control" ng-model="diag_prog.lordose">
+													<select class="select-picker form-control" ng-model="diag_prog.lordose" maxlength="254">
 														<option value="" selected="selected"></option>
 														<option value="1">Sim</option>
 														<option value="0">Não</option>
@@ -2289,48 +2289,48 @@
 										    <div class="form-group row">
 										        <div class="padding-full-input">
 										        	<label>Prescrição médica:</label>
-													<input class="form-control" type="text" ng-model="diag_prog.prescricao_medica">
+													<input class="form-control" type="text" ng-model="diag_prog.prescricao_medica" maxlength="254">
 										        </div>
 										    </div>
 
 										    <div class="form-group row">
 										        <div class="padding-full-input">
 										        	<label>Prescrição fisioterapêutica:</label>
-													<input class="form-control" type="text" ng-model="diag_prog.prescricao_fisioterapeutica">
+													<input class="form-control" type="text" ng-model="diag_prog.prescricao_fisioterapeutica" maxlength="254">
 										        </div>
 										    </div>
 
 										    <div class="form-group row">
 										        <div class="col-md-3 col-sm-3 col-xs-6">
 										        	<label>Colete:</label>
-													<input class="form-control" type="text" ng-model="diag_prog.colete">
+													<input class="form-control" type="text" ng-model="diag_prog.colete" maxlength="254">
 										        </div>
 
 										        <div class="col-md-3 col-sm-3 col-xs-6">
 										        	<label>Colete HS:</label>
-													<input class="form-control" type="text" ng-model="diag_prog.colete_hs">
+													<input class="form-control" type="text" ng-model="diag_prog.colete_hs" numbers-only maxlength="9">
 										        </div>
 
 										        <div class="col-md-3 col-sm-3 col-xs-6">
 										        	<label>Idade do aparecimento:</label>
-													<input class="form-control" type="text" ng-model="diag_prog.idade_aparecimento">
+													<input class="form-control" type="text" ng-model="diag_prog.idade_aparecimento" numbers-only maxlength="9">
 										        </div>
 
 										        <div class="col-md-3 col-sm-3 col-xs-6">
 										        	<label>Calço:</label>
-													<input class="form-control" type="text" ng-model="diag_prog.calco">
+													<input class="form-control" type="text" ng-model="diag_prog.calco" maxlength="254">
 										        </div>
 										    </div>
 
 										    <div class="form-group row">
 										        <div class="col-md-6 col-sm-6 col-xs-6">
 										        	<label>Etiologia:</label>
-													<input class="form-control" type="text" ng-model="diag_prog.etiologia">
+													<input class="form-control" type="text" ng-model="diag_prog.etiologia" maxlength="254">
 										        </div>
 
 										        <div class="col-md-6 col-sm-6 col-xs-6">
 										        	<label>Topografia:</label>
-													<input class="form-control" type="text" ng-model="diag_prog.topografia">
+													<input class="form-control" type="text" ng-model="diag_prog.topografia" maxlength="254">
 										        </div>
 										    </div>
 
@@ -2339,27 +2339,27 @@
 													<div class="form-group row forms-accordion">
 											        	<div class="col-md-2 col-sm-3 col-xs-6">
 											        		<label>Ordenação:</label>
-															<input class="form-control" type="text" ng-model="curva.ordenacao">
+															<input class="form-control" type="text" ng-model="curva.ordenacao" maxlength="254">
 											        	</div>
 
 											        	<div class="col-md-2 col-sm-3 col-xs-6">
 											        		<label>Tipo:</label>
-															<input class="form-control" type="text" ng-model="curva.tipo">
+															<input class="form-control" type="text" ng-model="curva.tipo" maxlength="254">
 											        	</div>
 
 											        	<div class="col-md-2 col-sm-3 col-xs-6">
 											        		<label>Ângulo de COBB:</label>
-															<input class="form-control" type="text" ng-model="curva.angulo_cobb">
+															<input class="form-control" type="text" ng-model="curva.angulo_cobb" numbers-only maxlength="9">
 											        	</div>
 
 											        	<div class="col-md-2 col-sm-3 col-xs-6">
 											        		<label>Ângulo Ferguson:</label>
-															<input class="form-control" type="text" ng-model="curva.angulo_ferguson">
+															<input class="form-control" type="text" ng-model="curva.angulo_ferguson" numbers-only maxlength="9">
 											        	</div>
 
 											        	<div class="col-md-2 col-sm-3 col-xs-6">
 											        		<label>Grau de rotação:</label>
-															<input class="form-control" type="text" ng-model="curva.grau_rotacao">
+															<input class="form-control" type="text" ng-model="curva.grau_rotacao" numbers-only maxlength="9">
 											        	</div>
 											        </div>
 												</div>
@@ -2368,12 +2368,12 @@
 													<div class="form-group row forms-accordion">
 											        	<div class="col-md-3 col-sm-3 col-xs-6">
 											        		<label>Local:</label>
-															<input class="form-control" type="text" ng-model="local_escoliose.local">
+															<input class="form-control" type="text" ng-model="local_escoliose.local" maxlength="254">
 											        	</div>
 
 											        	<div class="col-md-3 col-sm-3 col-xs-6">
 											        		<label>Lado:</label>
-															<input class="form-control" type="text" ng-model="local_escoliose.lado">
+															<input class="form-control" type="text" ng-model="local_escoliose.lado" maxlength="254">
 											        	</div>
 											        </div>
 												</div>
@@ -2382,22 +2382,22 @@
 													<div class="form-group row forms-accordion">
 											        	<div class="col-md-3 col-sm-3 col-xs-6">
 											        		<label>Tipo</label>
-															<input class="form-control" type="text" ng-model="vertebra.tipo">
+															<input class="form-control" type="text" ng-model="vertebra.tipo" maxlength="254">
 											        	</div>
 
 											        	<div class="col-md-3 col-sm-3 col-xs-6">
 											        		<label>Local:</label>
-															<input class="form-control" type="text" ng-model="vertebra.local">
+															<input class="form-control" type="text" ng-model="vertebra.local" maxlength="254">
 											        	</div>
 
 											        	<div class="col-md-3 col-sm-3 col-xs-6">
 											        		<label>Altura:</label>
-															<input class="form-control" type="text" ng-model="vertebra.altura">
+															<input class="form-control" type="text" ng-model="vertebra.altura" maxlength="254">
 											        	</div>
 
 											        	<div class="col-md-3 col-sm-3 col-xs-6">
 											        		<label>Nome:</label>
-															<input class="form-control" maxlength="254" type="text" ng-model="vertebra.vertebra_nome">
+															<input class="form-control" type="text" ng-model="vertebra.vertebra_nome" maxlength="254">
 											        	</div>
 											        </div>
 												</div>

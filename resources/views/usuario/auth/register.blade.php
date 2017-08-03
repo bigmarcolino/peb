@@ -15,7 +15,7 @@
                     {{ csrf_field() }}
 
                     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                        <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="Nome:" autofocus>
+                        <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" maxlength="254" placeholder="Nome:" autofocus>
 
                         @if ($errors->has('name'))
                             <span class="help-block">
@@ -25,7 +25,7 @@
                     </div>
 
                     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" placeholder="Email:">
+                        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" maxlength="254" placeholder="Email:">
 
                         @if ($errors->has('email'))
                             <span class="help-block">
@@ -35,7 +35,7 @@
                     </div>
 
                     <div class="form-group{{ $errors->has('cpf') ? ' has-error' : '' }}">
-                        <input id="cpf" type="text" class="form-control" name="cpf" value="{{ old('cpf') }}" placeholder="CPF:" ng-model="registerCpf" numbers-only>
+                        <input id="cpf" type="text" class="form-control" name="cpf" value="{{ old('cpf') }}" maxlength="254" placeholder="CPF:" ng-model="registerCpf" numbers-only>
 
                         @if ($errors->has('cpf'))
                             <span class="help-block">
@@ -45,7 +45,7 @@
                     </div>
 
                     <div class="form-group{{ $errors->has('sexo') ? ' has-error' : '' }}">
-                        <select id="sexo" class="form-control" name="sexo" value="{{ old('sexo') }}" ng-model="selectSexo" ng-change="changeDefaultSelectColor()" ng-class="{'sexo-default-color': defaultSelectColor}">
+                        <select id="sexo" class="form-control" name="sexo" value="{{ old('sexo') }}" ng-model="selectSexo" maxlength="254" ng-change="changeDefaultSelectColor()" ng-class="{'sexo-default-color': defaultSelectColor}">
                             <option hidden value="">Sexo:</option>
                             <option>Masculino</option>
                             <option>Feminino</option>
@@ -60,7 +60,7 @@
 
                     <div class="form-group{{ $errors->has('data_nasc') ? ' has-error' : '' }}">
                         <div class="input-group">
-                            <input id="data_nasc" type="text" class="form-control" name="data_nasc" value="{{ old('data_nasc') }}" placeholder="Data de Nascimento:" ng-model="dataNascRegister" options="dpRegistrarsUsuarioOptions" datetimepicker readonly>
+                            <input id="data_nasc" type="text" class="form-control" name="data_nasc" value="{{ old('data_nasc') }}" maxlength="254" placeholder="Data de Nascimento:" ng-model="dataNascRegister" options="dpRegistrarsUsuarioOptions" datetimepicker readonly>
 
                             <span class="input-group-addon pointer">
                                 <span class="glyphicon glyphicon-calendar"></span>
@@ -75,7 +75,7 @@
                     </div>
 
                     <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                        <input id="password" type="password" class="form-control" name="password" placeholder="Senha:">
+                        <input id="password" type="password" class="form-control" name="password" placeholder="Senha:" maxlength="254">
 
                         @if ($errors->has('password'))
                             <span class="help-block">
@@ -85,7 +85,7 @@
                     </div>
 
                     <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                        <input id="password-confirm" type="password" class="form-control" name="password_confirmation" placeholder="Confirme a senha:">
+                        <input id="password-confirm" type="password" class="form-control" name="password_confirmation" placeholder="Confirme a senha:" maxlength="254">
 
                         @if ($errors->has('password_confirmation'))
                             <span class="help-block">

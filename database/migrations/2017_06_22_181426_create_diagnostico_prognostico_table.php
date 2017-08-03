@@ -27,7 +27,7 @@ class CreateDiagnosticoPrognosticoTable extends Migration
             $table->integer('idade_aparecimento')->nullable();
             $table->string('topografia')->nullable();
             $table->string('calco')->nullable();
-            $table->string('hpp')->nullable();
+            $table->text('hpp')->nullable();
             $table->integer('atendimento_id')->unsigned()->nullable();
             $table->foreign('atendimento_id')->references('id')->on('atendimento')->onDelete('cascade');
             $table->timestamps();
