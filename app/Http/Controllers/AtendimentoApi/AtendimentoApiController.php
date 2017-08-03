@@ -146,7 +146,7 @@ class AtendimentoApiController extends Controller
         $todosAtendimentos = $paciente->atendimento();
         $atendCount = $todosAtendimentos->count();
 
-        $limit = 7;
+        $limit = 5;
         $newOffset = 0;
         $atendimentos = null;
 
@@ -198,6 +198,12 @@ class AtendimentoApiController extends Controller
                 $explode = explode("-", $var->atendimento->data_raio_x);
                 $var->atendimento->data_raio_x = $explode[2] . "-" . $explode[1] . "-" . $explode[0];
             }
+
+            $explode = explode(" ", $var->atendimento->created_at);
+            $data = explode("-", $explode[0]);
+            $hora = $explode[1];
+            $var->atendimento->data = $data[2] . "-" . $data[1] . "-" . $data[0];
+            $var->atendimento->data_hora = $data[2] . "-" . $data[1] . "-" . $data[0] . " " . $hora;
             
             $medidas = $atendimento->medidas();
             $diag_prog = $atendimento->diag_prog();

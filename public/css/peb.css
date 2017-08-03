@@ -37,7 +37,7 @@ body {
 
 @media (min-width: 1271px) {
     .atendimentos-page {
-        margin-left: 300px;
+        margin-left: 250px;
     }
 }
 
@@ -241,7 +241,7 @@ body {
 }
 
 .table-default thead tr th {
-    border-bottom: 1px solid #ddd !important;
+    border-bottom: 1px solid #ddd;
     font-family: 'OpenSansSemiBold';
 }
 
@@ -343,4 +343,56 @@ body {
 .padding-full-input {
     padding-left: 10px;
     padding-right: 10px;
+}
+
+.date-atendimento {
+    background-color: #2c97d1 !important;
+}
+
+.date-atendimento:before, .list-records .item-records .item-records-line:after {
+    border-color: #2c97d1 !important;
+}
+
+.content-record .item-text {
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.record-descritption .item-text:last-child {
+    padding-bottom: 0;
+}
+
+.row-dados-paciente {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.table-atendimentos thead tr th:not(:first-child):hover {
+    background-color: #efefef;
+}
+
+.no-border-atendimentos {
+    border-top: none !important;
+    border-bottom: none !important;
+}
+
+.tab-open-atendimentos {
+    background-color: #efefef !important;
+    border-bottom: 3px solid #cccccc !important; 
+}
+
+.table-atendimentos td {
+    text-align: center;
+}
+
+.ic-sidebar, .ic-header .logo {
+    width: 250px;
+}
+
+.table-atendimentos th {
+    font-size: 12px;
+}
+
+.table-atendimentos tbody * {
+    background-color: #fff !important;
 }

@@ -1082,6 +1082,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
     }
 
     $scope.atendimentoKeys = [
+        ['data', 'Data'],
         ['altura', 'Altura'],
         ['altura_sentada', 'Altura sentada'],
         ['peso', 'Peso'],
@@ -1208,8 +1209,46 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
     }
 
     $scope.showAtendimento = false;
+    $scope.tabAtendimento = -1;
+    $scope.dataHoraAtendimento = {};
 
-    $scope.toggleViewAtendimento = function() {
-        $scope.showAtendimento = !$scope.showAtendimento;
+    $scope.toggleViewAtendimento = function(index) {
+        if($scope.tabAtendimento == index){
+            $scope.showAtendimento = !$scope.showAtendimento;
+            $scope.tabAtendimento = -1;
+        }
+        else {
+            $scope.tabAtendimento = index;
+            $scope.atendimentoFull = $scope.atendimentos[index];
+            $scope.showAtendimento = true;
+
+            var split = $scope.atendimentoFull.atendimento.data_hora.split(" ");
+
+            var hora = split[1];
+            $scope.dataHoraAtendimento.hora = hora.split(":")[0] + ":" + hora.split(":")[1];
+
+            var data = split[0];
+            $scope.dataHoraAtendimento.dia = data.split("-")[0];
+            $scope.dataHoraAtendimento.mes = data.split("-")[1];
+            $scope.dataHoraAtendimento.ano = data.split("-")[2];
+            $scope.dataHoraAtendimento.mesExtenso = moment.monthsShort('-MMM-', $scope.dataHoraAtendimento.mes - 1);
+        }
+    }
+
+    $scope.setDadosPaciente = function() {
+        $scope.showSpinnerDadosPacientes = true;
+        $scope.erroDadosPaciente = undefined;
+
+        $timeout( function() {
+            apiService.getPacienteEdit($scope.viewPaciente.cpf).then(function(response) {
+                $scope.showSpinnerDadosPacientes = false;
+                $scope.erroDadosPaciente = false;
+                $scope.dadosPaciente = response.data;
+            })
+            .catch(function(response) {
+                $scope.erroDadosPaciente = true;
+                $scope.showSpinnerDadosPacientes = false;
+            })
+        }, 500 );
     }
 });

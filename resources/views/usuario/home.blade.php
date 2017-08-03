@@ -246,7 +246,7 @@
 		      			Erro ao excluir todos os usuários. Verifique sua conexão com a internet e tente novamente.
 		      		</span>
 
-		      		<div style="height: 25px">
+		      		<div style="min-height: 25px">
 		      			<span us-spinner="{radius:10, width:4, length: 8, color: '#2c97d1'}" spinner-on="showSpinnerExcluirUsuarios"></span>
 		      		</div>
 		    	</div>
@@ -374,7 +374,7 @@
 		      			Erro ao editar o usuário. Verifique sua conexão com a internet e tente novamente.
 		      		</span>
 
-		      		<div style="height: 25px">
+		      		<div style="min-height: 25px">
 		      			<span us-spinner="{radius:10, width:4, length: 8, color: '#2c97d1'}" spinner-on="showSpinnerEditarUsuario"></span>
 		      		</div>
 		    	</div>
@@ -562,7 +562,7 @@
 		      			Erro ao excluir todos os usuários. Verifique sua conexão com a internet e tente novamente.
 		      		</span>
 
-		      		<div style="height: 25px">
+		      		<div style="min-height: 25px">
 		      			<span us-spinner="{radius:10, width:4, length: 8, color: '#2c97d1'}" spinner-on="showSpinnerExcluirPacientes"></span>
 		      		</div>
 		    	</div>
@@ -836,7 +836,7 @@
 		      			Erro ao adicionar o paciente. Verifique sua conexão com a internet e tente novamente.
 		      		</span>
 
-		      		<div style="height: 25px">
+		      		<div style="min-height: 25px">
 		      			<span us-spinner="{radius:10, width:4, length: 8, color: '#2c97d1'}" spinner-on="showSpinnerAddPaciente"></span>
 		      		</div>
 		    	</div>
@@ -1092,7 +1092,7 @@
 		      			Erro ao editar o paciente. Verifique sua conexão com a internet e tente novamente.
 		      		</span>
 
-		      		<div style="height: 25px">
+		      		<div style="min-height: 25px">
 		      			<span us-spinner="{radius:10, width:4, length: 8, color: '#2c97d1'}" spinner-on="showSpinnerEditPaciente"></span>
 		      		</div>
 		    	</div>
@@ -1130,7 +1130,11 @@
 
 
 	<!-- ----- Início View de Pacientes ------- -->
+	@if (Auth::user()->funcao != "Analista")
 	<div ng-if="showViewPacientes" class="peb-containers atendimentos-page">
+	@else
+	<div ng-if="showViewPacientes" class="peb-containers">
+	@endif
 		<div class="content-records">
 			<div>
 				<div class="container-fluid p-l-s p-r-s">
@@ -1153,11 +1157,9 @@
 							</div>
 						</div>
 
-						@if (Auth::user()->funcao != "Analista")
-							<div class="pull-right patient-detail-modal" ng-click="setPacienteEdit(viewPaciente)" ng-if="showIniciarAtendimento">
-								<span class="btn btn-blue text-medium semi-bold">VISUALIZAR CADASTRO</span>
-							</div>
-						@endif
+						<div class="pull-right patient-detail-modal" ng-click="setDadosPaciente()" data-toggle="modal" data-target="#modalDadosPaciente">
+							<span class="btn btn-blue text-medium semi-bold">VISUALIZAR CADASTRO</span>
+						</div>
 					</div>
 				</div>
 
@@ -1174,141 +1176,719 @@
 							</div>
 
 							<ul class="p-s list-records reset-list" ng-if="qtdAtendimentos > 0">
-								<table class="table table-default table-list table-list-patients table-atendimentos">
-								    <thead>
-								      	<tr>
-								      		<th colspan="2" class="input-refresh-atends" ng-show="!showAtendimento">
-								      			<input type="text" ng-model="atendOffset" numbers-only>
-								      			<span class="glyphicon glyphicon-search pointer" ng-click="refreshTableAtend()"></span>
-								      		</th>
+								<div ng-class="{'p-s bg-white bd bd-gray bd-radius': tabAtendimento == -1}">
+									<table class="table table-default table-list table-list-patients table-atendimentos">
+										<col style="width: 8%" ng-if="tabAtendimento == -1">
+										<col style="width: 8%" ng-if="tabAtendimento == -1">
 
-								      		<th ng-repeat="num in atendimentosNums" ng-click="toggleViewAtendimento()" class="pointer">
-									            [[ num ]]
-									        </th>
-								      	</tr>
-								    </thead>
-								    
-								    <tbody ng-show="!showAtendimento">
-								    	<th rowspan='[[countShowAtendKey(atendimentoKeys, "atendimento") + 1]]' ng-if="countShowAtendKey(atendimentoKeys, 'atendimento') > 0">
-								    		Atendimento
-								    	</th>
+									    <thead>
+									      	<tr>
+									      		<th colspan="2" class="input-refresh-atends no-border-atendimentos" ng-show="!showAtendimento">
+									      			<input type="text" ng-model="atendOffset" numbers-only style="vertical-align: middle; border: 1px solid #ccc; width: 80px">
+									      			
+													<span class="btn btn-sm btn-default" ng-click="refreshTableAtend()" style="height: 22px; padding-top: 2px">
+														<span class="glyphicon glyphicon-search pointer" style="margin: 0"></span>
+													</span>
+									      		</th>
 
-									    <tr ng-repeat="key in atendimentoKeys | filter : showAtendKey('atendimento')">
-									      	<th>[[ key[1] ]]</th>
-									      	<td ng-repeat="obj in atendimentos">
-									        	[[ obj.atendimento[ key[0] ] ]]
-									      	</td>
-									    </tr>
+									      		<th ng-repeat="num in atendimentosNums" ng-click="toggleViewAtendimento($index)" class="pointer" ng-class="{'tab-open-atendimentos': $index == tabAtendimento, 'no-border-atendimentos': $index != tabAtendimento}">
+										            [[ num ]]
+										        </th>
+									      	</tr>
+									    </thead>
+									    
+									    <tbody ng-show="!showAtendimento">
+									    	<th rowspan='[[countShowAtendKey(atendimentoKeys, "atendimento") + 1]]' ng-if="countShowAtendKey(atendimentoKeys, 'atendimento') > 0" style="border-top: none">
+									    		Atendimento
+									    	</th>
 
-									    <th rowspan='[[countShowAtendKey(medidasKeys, "medidas") + 1]]' ng-if="countShowAtendKey(medidasKeys, 'medidas') > 0">
-								    		Medidas
-								    	</th>
+										    <tr ng-repeat="key in atendimentoKeys | filter : showAtendKey('atendimento')">
+										      	<th style="border-top: none">[[ key[1] ]]</th>
+										      	<td ng-repeat="obj in atendimentos" style="border-top: none">
+										        	[[ obj.atendimento[ key[0] ] ]]
+										      	</td>
+										    </tr>
 
-									    <tr ng-repeat="key in medidasKeys | filter : showAtendKey('medidas')">
-									      	<th>[[ key[1] ]]</th>
-									      	<td ng-repeat="obj in atendimentos">
-									        	[[ obj.medidas[ key[0] ] ]]
-									      	</td>
-									    </tr>
+										    <th rowspan='[[countShowAtendKey(medidasKeys, "medidas") + 1]]' ng-if="countShowAtendKey(medidasKeys, 'medidas') > 0">
+									    		Medidas
+									    	</th>
 
-									    <th rowspan='[[countShowAtendKey(planoFrontalKeys, "plano_frontal") + 1]]' ng-if="countShowAtendKey(planoFrontalKeys, 'plano_frontal') > 0">
-								    		Plano Frontal
-								    	</th>
+										    <tr ng-repeat="key in medidasKeys | filter : showAtendKey('medidas')">
+										      	<th>[[ key[1] ]]</th>
+										      	<td ng-repeat="obj in atendimentos">
+										        	[[ obj.medidas[ key[0] ] ]]
+										      	</td>
+										    </tr>
 
-									    <tr ng-repeat="key in planoFrontalKeys | filter : showAtendKey('plano_frontal')">
-									      	<th>[[ key[1] ]]</th>
-									      	<td ng-repeat="obj in atendimentos">
-									        	[[ obj.plano_frontal[ key[0] ] ]]
-									      	</td>
-									    </tr>
+										    <th rowspan='[[countShowAtendKey(planoFrontalKeys, "plano_frontal") + 1]]' ng-if="countShowAtendKey(planoFrontalKeys, 'plano_frontal') > 0">
+									    		Plano Frontal
+									    	</th>
 
-									    <th rowspan='[[countShowAtendKey(planoSagitalKeys, "plano_sagital") + 1]]' ng-if="countShowAtendKey(planoSagitalKeys, 'plano_sagital') > 0">
-								    		Plano Sagital
-								    	</th>
+										    <tr ng-repeat="key in planoFrontalKeys | filter : showAtendKey('plano_frontal')">
+										      	<th>[[ key[1] ]]</th>
+										      	<td ng-repeat="obj in atendimentos">
+										        	[[ obj.plano_frontal[ key[0] ] ]]
+										      	</td>
+										    </tr>
 
-									    <tr ng-repeat="key in planoSagitalKeys | filter : showAtendKey('plano_sagital')">
-									      	<th>[[ key[1] ]]</th>
-									      	<td ng-repeat="obj in atendimentos">
-									        	[[ obj.plano_sagital[ key[0] ] ]]
-									      	</td>
-									    </tr>
+										    <th rowspan='[[countShowAtendKey(planoSagitalKeys, "plano_sagital") + 1]]' ng-if="countShowAtendKey(planoSagitalKeys, 'plano_sagital') > 0">
+									    		Plano Sagital
+									    	</th>
 
-									    <th rowspan='[[countShowAtendKey(planoHorizontalKeys, "plano_horizontal") + 1]]' ng-if="countShowAtendKey(planoHorizontalKeys, 'plano_horizontal') > 0">
-								    		Plano Horizontal
-								    	</th>
+										    <tr ng-repeat="key in planoSagitalKeys | filter : showAtendKey('plano_sagital')">
+										      	<th>[[ key[1] ]]</th>
+										      	<td ng-repeat="obj in atendimentos">
+										        	[[ obj.plano_sagital[ key[0] ] ]]
+										      	</td>
+										    </tr>
 
-									    <tr ng-repeat="key in planoHorizontalKeys | filter : showAtendKey('plano_horizontal')">
-									      	<th>[[ key[1] ]]</th>
-									      	<td ng-repeat="obj in atendimentos">
-									        	[[ obj.plano_horizontal[ key[0] ] ]]
-									      	</td>
-									    </tr>
+										    <th rowspan='[[countShowAtendKey(planoHorizontalKeys, "plano_horizontal") + 1]]' ng-if="countShowAtendKey(planoHorizontalKeys, 'plano_horizontal') > 0">
+									    		Plano Horizontal
+									    	</th>
 
-									    <th rowspan='[[countShowAtendKey(mobilidadeArticularKeys, "mobilidade_articular") + 1]]' ng-if="countShowAtendKey(mobilidadeArticularKeys, 'mobilidade_articular') > 0">
-								    		Mobilidade Articular
-								    	</th>
+										    <tr ng-repeat="key in planoHorizontalKeys | filter : showAtendKey('plano_horizontal')">
+										      	<th>[[ key[1] ]]</th>
+										      	<td ng-repeat="obj in atendimentos">
+										        	[[ obj.plano_horizontal[ key[0] ] ]]
+										      	</td>
+										    </tr>
 
-									    <tr ng-repeat="key in mobilidadeArticularKeys | filter : showAtendKey('mobilidade_articular')">
-									      	<th>[[ key[1] ]]</th>
-									      	<td ng-repeat="obj in atendimentos">
-									        	[[ obj.mobilidade_articular[ key[0] ] ]]
-									      	</td>
-									    </tr>
-								    </tbody>
-								</table>
+										    <th rowspan='[[countShowAtendKey(mobilidadeArticularKeys, "mobilidade_articular") + 1]]' ng-if="countShowAtendKey(mobilidadeArticularKeys, 'mobilidade_articular') > 0">
+									    		Mobilidade Articular
+									    	</th>
+
+										    <tr ng-repeat="key in mobilidadeArticularKeys | filter : showAtendKey('mobilidade_articular')">
+										      	<th>[[ key[1] ]]</th>
+										      	<td ng-repeat="obj in atendimentos">
+										        	[[ obj.mobilidade_articular[ key[0] ] ]]
+										      	</td>
+										    </tr>
+									    </tbody>
+									</table>
+								</div>
 
 								<li class="item-records p-b-l clearfix" ng-show="showAtendimento">
 									<div class="date-record pull-left">
-										<div class="date">
-											<span class="day">13</span>
-											<span class="monthy desktop">JUL</span>
-											<span class="monthy mobile">07</span>
-											<span class="year">2017</span>
+										<div class="date date-atendimento">
+											<span class="day">[[ dataHoraAtendimento.dia ]]</span>
+											<span class="monthy desktop">[[ dataHoraAtendimento.mesExtenso | uppercase ]]</span>
+											<span class="monthy mobile">[[ dataHoraAtendimento.mes ]]</span>
+											<span class="year">[[ dataHoraAtendimento.ano ]]</span>
 										</div>
 									</div>
 
 									<div class="content-record pull-left">
 										<div class="content-record-inner bg-white bd bd-gray">
 											<div class="header-record reset-text p-s clearfix">
-												<p class="pull-left bold physician-name">
-													<span>Ícone Foto</span>
-													<span>- qtd fotos</span>
+												<p class="pull-left bold physician-name pointer">
+													<span class="glyphicon glyphicon-camera"></span>
+													<span> - 0</span>
 												</p>
 
 												<p class="pull-right normal c-ic-blue event-duration">
 													<span class="glyphicon glyphicon-time"></span>
 													<span> </span>
-													<span>16:50</span>
+													<span>[[ dataHoraAtendimento.hora ]]</span>
 												</p>
 											</div>
 
 											<div class="record-descritption">
 												<div class="item-description bd-t bd-gray">
 													<h2 class="item-title p-s bd-b bd-gray clearfix">
-													<span class="c-ic-blue semi-bold pull-left">Exame físico</span>
-													<span ></span>
-												</h2>
+														<span class="c-ic-blue semi-bold pull-left">Atendimento</span>
+														<span></span>
+													</h2>
 
-												<div class="item-text p-s">
-													<p>
-														<span>Altura:</span>
-														<span> </span>
-														<strong>
-															<span>44</span>
-															<span> </span>
-															<span>m</span>
-														</strong>
-													</p>
+													<div class="item-text p-s">
+														<div class="form-group row">
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Idade cronológica:</label>
+													        	<p class="form-control-static">[[ atendimentoFull.atendimento.idade_cronologica ]]</p>
+													        </div>
 
-													<p>
-														<span>Peso:</span>
-														<span> </span>
-														<strong>
-															<span>44</span>
-															<span> </span>
-															<span>kg</span>
-														</strong>
-													</p>
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Idade óssea:</label>
+																<p class="form-control-static">[[ atendimentoFull.atendimento.idade_ossea ]]</p>
+													        </div>
+
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Menarca:</label>
+																<p class="form-control-static">[[ atendimentoFull.atendimento.menarca ]]</p>
+													        </div>
+
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Altura:</label>
+																<p class="form-control-static">[[ atendimentoFull.atendimento.altura ]]</p>
+													        </div>
+													    </div>
+
+													    <div class="form-group row">
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Altura sentada:</label>
+																<p class="form-control-static">[[ atendimentoFull.atendimento.altura_sentada ]]</p>
+													        </div>
+
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Peso:</label>
+																<p class="form-control-static">[[ atendimentoFull.atendimento.peso ]]</p>
+													        </div>
+
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Risser:</label>
+																<p class="form-control-static">[[ atendimentoFull.atendimento.risser ]]</p>
+													        </div>
+
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Data do raio X:</label>
+																<p class="form-control-static">[[ atendimentoFull.atendimento.data_raio_x ]]</p>
+													        </div>
+													    </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Plano Frontal</span>
+														<span></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Valor:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_frontal.valor ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Calço:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_frontal.calco ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Plano Horizontal</span>
+														<span></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Valor:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_horizontal.valor ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Tipo:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_horizontal.tipo ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Calço:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_horizontal.calco ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Vértebra:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_horizontal.vertebra ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Plano Sagital</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Valor:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_sagital.valor ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Diferença:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_sagital.diferenca ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Localização:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_sagital.localizacao ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Assimetria</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Ombro:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.assimetria_ombro ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Escápulas:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.assimetria_escapulas ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Hemi-Tórax</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Hemi-Tórax:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.hemi_torax ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Cintura</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Cintura:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.cintura ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Mobilidade Articular</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Valor:</label>
+																<p class="form-control-static">[[ atendimentoFull.mobilidade_articular.valor ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Inclinação:</label>
+																<p class="form-control-static">[[ atendimentoFull.mobilidade_articular.inclinacao ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Lado:</label>
+																<p class="form-control-static">[[ atendimentoFull.mobilidade_articular.lado ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Teste Fukuda</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Deslocamento:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.teste_fukuda_deslocamento ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Rotação:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.teste_fukuda_rotacao ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Desvio:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.teste_fukuda_desvio ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Habilidade Ocular</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Direito:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.habilidade_ocular_direito ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Esquerdo:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.habilidade_ocular_esquerdo ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Romberg Mono</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Direito:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.romberg_mono_direito ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Esquerdo:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.romberg_mono_esquerdo ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Romberg Sensibilizado</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Direito:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.romberg_sensibilizado_direito ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Esquerdo:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.romberg_sensibilizado_esquerdo ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Balanço</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Direito:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.balanco_direito ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Esquerdo:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.balanco_esquerdo ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Retração Posterior</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Retração posterior:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.retracao_posterior ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Teste Thomas</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Direito:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.teste_thomas_direito ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Esquerdo:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.teste_thomas_esquerdo ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Retração Peitoral</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Direito:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.retracao_peitoral_direito ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Esquerdo:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.retracao_peitoral_esquerdo ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Força Muscular</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>ABS:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.forca_muscular_abs ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Extensores Tronco</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Força:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.forca_ext_tronco ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Resistência:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.resistencia_extensores_tronco ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Diagnóstico Prognóstico</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+													        <div class="padding-full-input">
+													        	<label>Diagnóstico clínico:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.diagnostico_clinico ]]</p>
+													        </div>
+													    </div>
+
+													    <div class="form-group row">
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Tipo escoliose:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.tipo_escoliose ]]</p>
+													        </div>
+
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Cifose:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.cifose ]]</p>
+													        </div>
+
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Lordose:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.lordose ]]</p>
+													        </div>
+													    </div>
+
+													    <div class="form-group row">
+													        <div class="padding-full-input">
+													        	<label>Prescrição médica:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.prescricao_medica ]]</p>
+													        </div>
+													    </div>
+
+													    <div class="form-group row">
+													        <div class="padding-full-input">
+													        	<label>Prescrição fisioterapêutica:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.prescricao_fisioterapeutica ]]</p>
+													        </div>
+													    </div>
+
+													    <div class="form-group row">
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Colete:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.colete ]]</p>
+													        </div>
+
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Colete HS:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.colete_hs ]]</p>
+													        </div>
+
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Idade do aparecimento:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.idade_aparecimento ]]</p>
+													        </div>
+
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Calço:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.calco ]]</p>
+													        </div>
+													    </div>
+
+													    <div class="form-group row">
+													        <div class="col-md-6 col-sm-6 col-xs-6">
+													        	<label>Etiologia:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.etiologia ]]</p>
+													        </div>
+
+													        <div class="col-md-6 col-sm-6 col-xs-6">
+													        	<label>Topografia:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.topografia ]]</p>
+													        </div>
+													    </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Curva</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-2 col-sm-3 col-xs-6">
+												        		<label>Ordenação:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva.ordenacao ]]</p>
+												        	</div>
+
+												        	<div class="col-md-2 col-sm-3 col-xs-6">
+												        		<label>Tipo:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva.tipo ]]</p>
+												        	</div>
+
+												        	<div class="col-md-2 col-sm-3 col-xs-6">
+												        		<label>Ângulo de COBB:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva.angulo_cobb ]]</p>
+												        	</div>
+
+												        	<div class="col-md-2 col-sm-3 col-xs-6">
+												        		<label>Ângulo Ferguson:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva.angulo_ferguson ]]</p>
+												        	</div>
+
+												        	<div class="col-md-2 col-sm-3 col-xs-6">
+												        		<label>Grau de rotação:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva.grau_rotacao ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Local Escoliose</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Local:</label>
+																<p class="form-control-static">[[ atendimentoFull.local_escoliose.local ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Lado:</label>
+																<p class="form-control-static">[[ atendimentoFull.local_escoliose.lado ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Vértebra</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Tipo</label>
+																<p class="form-control-static">[[ atendimentoFull.vertebra.tipo ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Local:</label>
+																<p class="form-control-static">[[ atendimentoFull.vertebra.local ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Altura:</label>
+																<p class="form-control-static">[[ atendimentoFull.vertebra.altura ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Nome:</label>
+																<p class="form-control-static">[[ atendimentoFull.vertebra.vertebra_nome ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">HPP</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="padding-full-input">
+															<label>HPP:</label>
+															<p class="form-control-static">[[ atendimentoFull.diag_prog.hpp ]]</p>
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -1690,8 +2270,8 @@
 
 													<select class="select-picker form-control" ng-model="diag_prog.cifose">
 														<option value="" selected="selected"></option>
-														<option value="Sim">Sim</option>
-														<option value="Não">Não</option>
+														<option value="1">Sim</option>
+														<option value="0">Não</option>
 													</select>
 										        </div>
 
@@ -1700,8 +2280,8 @@
 
 													<select class="select-picker form-control" ng-model="diag_prog.lordose">
 														<option value="" selected="selected"></option>
-														<option value="Sim">Sim</option>
-														<option value="Não">Não</option>
+														<option value="1">Sim</option>
+														<option value="0">Não</option>
 													</select>
 										        </div>
 										    </div>
@@ -1879,7 +2459,7 @@
 		      			Erro ao adicionar atendimento. Verifique sua conexão com a internet e tente novamente.
 		      		</span>
 
-		      		<div style="height: 25px">
+		      		<div style="min-height: 25px">
 		      			<span us-spinner="{radius:10, width:4, length: 8, color: '#2c97d1'}" spinner-on="showSpinnerAddAtendimento"></span>
 		      		</div>
 		    	</div>
@@ -1943,8 +2523,159 @@
 		      			Erro ao atualizar tabela de atendimentos. Verifique sua conexão com a internet e tente novamente.
 		      		</span>
 
-		      		<div style="height: 25px">
+		      		<div style="min-height: 25px">
 		      			<span us-spinner="{radius:10, width:4, length: 8, color: '#2c97d1'}" spinner-on="showSpinnerTabelaAtendimentos"></span>
+		      		</div>
+		    	</div>
+	    
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-link link-gray" data-dismiss="modal">Fechar</button>
+			    </div>
+	    	</div>
+	  	</div>
+	</div>
+
+	<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="modalDadosPaciente">
+	  	<div class="modal-dialog modal-lg" role="document">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        		<h4 class="modal-title" id="gridSystemModalLabel">Dados do paciente</h4>
+	      		</div>
+
+		      	<div class="modal-body">
+		      		<span ng-if="!showSpinnerDadosPacientes && erroDadosPaciente">
+		      			Erro ao excluir todos os usuários. Verifique sua conexão com a internet e tente novamente.
+		      		</span>
+
+		      		<div ng-if="!showSpinnerDadosPacientes && !erroDadosPaciente">
+		      			<h3 class="title-form text-medium semi-bold p-b-s c-ic-blue upper">Geral</h3>
+
+		      			<div class="form-group row row-dados-paciente">
+				        	<div class="col-md-12 col-sm-12 col-xs-12">
+				        		<label>Nome:</label>
+								<p class="form-control-static">[[ dadosPaciente.paciente.nome ]]</p>
+				        	</div>
+				        </div>
+
+				        <div class="form-group row row-dados-paciente">
+				        	<div class="col-md-4 col-sm-4 col-xs-4">
+				        		<label>CPF:</label>
+								<p class="form-control-static">[[ dadosPaciente.paciente.cpf ]]</p>
+				        	</div>
+
+				        	<div class="col-md-4 col-sm-4 col-xs-4">
+				        		<label>Identidade:</label>
+								<p class="form-control-static">[[ dadosPaciente.paciente.identidade ]]</p>
+				        	</div>
+
+				        	<div class="col-md-4 col-sm-4 col-xs-4">
+				        		<label>Data de nascimento:</label>
+								<p class="form-control-static">[[ dadosPaciente.paciente.data_nasc ]]</p>
+				        	</div>
+				        </div>
+
+				        <div class="form-group row row-dados-paciente">
+				        	<div class="col-md-4 col-sm-4 col-xs-4">
+				        		<label>Email:</label>
+								<p class="form-control-static">[[ dadosPaciente.paciente.email ]]</p>
+				        	</div>
+
+				        	<div class="col-md-4 col-sm-4 col-xs-4">
+				        		<label>Médico:</label>
+								<p class="form-control-static">[[ dadosPaciente.paciente.medico ]]</p>
+				        	</div>
+
+				        	<div class="col-md-4 col-sm-4 col-xs-4">
+				        		<label>Indicação:</label>
+								<p class="form-control-static">[[ dadosPaciente.paciente.indicacao ]]</p>
+				        	</div>
+				        </div>
+
+				        <h3 class="title-form text-medium semi-bold p-b-s c-ic-blue upper" ng-if="dadosPaciente.responsavel">Responsável</h3>
+
+				        <div class="form-group row row-dados-paciente" ng-if="dadosPaciente.responsavel">
+				        	<div class="col-md-6 col-sm-6 col-xs-6">
+				        		<label>Nome:</label>
+								<p class="form-control-static">[[ dadosPaciente.responsavel.nome ]]</p>
+				        	</div>
+
+				        	<div class="col-md-3 col-sm-3 col-xs-3">
+				        		<label>CPF:</label>
+								<p class="form-control-static">[[ dadosPaciente.responsavel.cpf ]]</p>
+				        	</div>
+
+				        	<div class="col-md-3 col-sm-3 col-xs-3">
+				        		<label>Identidade:</label>
+								<p class="form-control-static">[[ dadosPaciente.responsavel.identidade ]]</p>
+				        	</div>
+				        </div>
+
+				        <div class="form-group row row-dados-paciente" ng-if="dadosPaciente.responsavel">
+				        	<div class="col-md-6 col-sm-6 col-xs-6">
+				        		<label>Email:</label>
+								<p class="form-control-static">[[ dadosPaciente.responsavel.email ]]</p>
+				        	</div>
+
+				        	<div class="col-md-3 col-sm-3 col-xs-3">
+				        		<label>Ocupação:</label>
+								<p class="form-control-static">[[ dadosPaciente.responsavel.ocupacao ]]</p>
+				        	</div>
+
+				        	<div class="col-md-3 col-sm-3 col-xs-3">
+				        		<label>Telefone:</label>
+								<p class="form-control-static">[[ dadosPaciente.responsavel.telefone ]]</p>
+				        	</div>
+				        </div>
+
+				        <h3 class="title-form text-medium semi-bold p-b-s c-ic-blue upper">Telefones</h3>
+
+				        <div class="form-group row row-dados-paciente">
+				        	<div class="col-md-4 col-sm-4 col-xs-4">
+				        		<label>Celular:</label>
+								<p class="form-control-static">[[ dadosPaciente.paciente.celular ]]</p>
+				        	</div>
+
+				        	<div class="col-md-4 col-sm-4 col-xs-4">
+				        		<label>Casa:</label>
+								<p class="form-control-static">[[ dadosPaciente.paciente.tel_res ]]</p>
+				        	</div>
+
+				        	<div class="col-md-4 col-sm-4 col-xs-4">
+				        		<label>Trabalho:</label>
+								<p class="form-control-static">[[ dadosPaciente.paciente.tel_trab ]]</p>
+				        	</div>
+				        </div>
+
+				        <h3 class="title-form text-medium semi-bold p-b-s c-ic-blue upper">Endereço</h3>
+
+				        <div class="form-group row row-dados-paciente">
+				        	<div class="col-md-12 col-sm-12 col-xs-12">
+				        		<label>Endereço:</label>
+								<p class="form-control-static">[[ dadosPaciente.paciente.end_res ]]</p>
+				        	</div>
+				        </div>
+
+				        <div class="form-group row row-dados-paciente">
+				        	<div class="col-md-4 col-sm-4 col-xs-4">
+				        		<label>CEP:</label>
+								<p class="form-control-static">[[ dadosPaciente.paciente.cep ]]</p>
+				        	</div>
+
+				        	<div class="col-md-4 col-sm-4 col-xs-4">
+				        		<label>Cidade:</label>
+								<p class="form-control-static">[[ dadosPaciente.paciente.cidade ]]</p>
+				        	</div>
+
+				        	<div class="col-md-4 col-sm-4 col-xs-4">
+				        		<label>Estado:</label>
+								<p class="form-control-static">[[ dadosPaciente.paciente.estado ]]</p>
+				        	</div>
+				        </div>
+		      		</div>
+
+		      		<div style="min-height: 150px" ng-if="showSpinnerDadosPacientes">
+		      			<span us-spinner="{radius: 30, width: 8, length: 16, color: '#2c97d1'}" spinner-on="showSpinnerDadosPacientes"></span>
 		      		</div>
 		    	</div>
 	    
@@ -1959,3 +2690,4 @@
 </div>
 
 @endsection
+	
