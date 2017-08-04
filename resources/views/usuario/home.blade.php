@@ -625,7 +625,7 @@
 	                        <label class="col-sm-2 control-label">Data de nascimento*</label>
 	                        <div class="col-sm-3" ng-class="{'has-error': dataVazioPaciente}">
 	                        	<div class="input-group">
-		                            <input class="form-control" type="text" ng-model="novoPaciente.data_nasc" options="dpNovoPacienteOptions" datetimepicker readonly ng-change="checkDataPaciente('add'); checkMaioridadePaciente('add')" maxlength="254">
+		                            <input class="form-control" type="text" ng-model="novoPaciente.data_nasc" options="dpNovoPacienteOptions" datetimepicker readonly ng-change="checkDataPaciente('add'); checkMaioridadePaciente('add')">
 
 		                            <span class="input-group-addon pointer">
 		                                <span class="glyphicon glyphicon-calendar"></span>
@@ -1928,7 +1928,7 @@
 										        	<label>Menarca:</label>
 
 													<div class="input-group">
-														<input class="form-control" type="text" ng-model="atendimento.menarca" options="dpAtendimentoOptions" datetimepicker readonly maxlength="254">
+														<input class="form-control" type="text" ng-model="atendimento.menarca" options="dpAtendimentoOptions" datetimepicker readonly>
 
 														<span class="input-group-addon pointer">
 													        <span class="glyphicon glyphicon-calendar"></span>
@@ -1962,7 +1962,7 @@
 										        	<label>Data do raio X:</label>
 
 													<div class="input-group">														
-														<input class="form-control" type="text" ng-model="atendimento.data_raio_x" options="dpAtendimentoOptions" datetimepicker readonly maxlength="254">
+														<input class="form-control" type="text" ng-model="atendimento.data_raio_x" options="dpAtendimentoOptions" datetimepicker readonly>
 
 														<div class="input-group-addon pointer">
 													        <span class="glyphicon glyphicon-calendar"></span>

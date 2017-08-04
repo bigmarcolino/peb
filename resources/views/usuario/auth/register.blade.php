@@ -60,7 +60,7 @@
 
                     <div class="form-group{{ $errors->has('data_nasc') ? ' has-error' : '' }}">
                         <div class="input-group">
-                            <input id="data_nasc" type="text" class="form-control" name="data_nasc" value="{{ old('data_nasc') }}" maxlength="254" placeholder="Data de Nascimento:" ng-model="dataNascRegister" options="dpRegistrarsUsuarioOptions" datetimepicker readonly>
+                            <input id="data_nasc" type="text" class="form-control" name="data_nasc" value="{{ old('data_nasc') }}" placeholder="Data de Nascimento:" ng-model="dataNascRegister" options="dpRegistrarsUsuarioOptions" datetimepicker readonly>
 
                             <span class="input-group-addon pointer">
                                 <span class="glyphicon glyphicon-calendar"></span>
