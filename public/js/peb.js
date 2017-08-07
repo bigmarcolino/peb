@@ -1090,10 +1090,14 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
         ['data_raio_x', 'Data raio X']
     ];
 
-    $scope.medidasKeys = [
+    $scope.medidasOneKeys = [
         ['assimetria_ombro', 'Assimetria ombro'],
         ['assimetria_escapulas', 'Assimetria escápulas'],
-        ['hemi_torax', 'Hemi-Tórax'], ['cintura', 'Cintura'],                             
+        ['hemi_torax', 'Hemi-Tórax'],
+        ['cintura', 'Cintura'],                             
+    ];
+
+    $scope.medidasTwoKeys = [                        
         ['teste_fukuda_deslocamento', 'Teste Fukuda deslocamento'],
         ['teste_fukuda_rotacao', 'Teste Fukuda rotação'],
         ['teste_fukuda_desvio', 'Teste Fukuda desvio'],

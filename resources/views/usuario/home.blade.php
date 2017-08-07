@@ -1209,17 +1209,6 @@
 										      	</td>
 										    </tr>
 
-										    <th rowspan='[[countShowAtendKey(medidasKeys, "medidas") + 1]]' ng-if="countShowAtendKey(medidasKeys, 'medidas') > 0">
-									    		Medidas
-									    	</th>
-
-										    <tr ng-repeat="key in medidasKeys | filter : showAtendKey('medidas')">
-										      	<th>[[ key[1] ]]</th>
-										      	<td ng-repeat="obj in atendimentos">
-										        	[[ obj.medidas[ key[0] ] ]]
-										      	</td>
-										    </tr>
-
 										    <th rowspan='[[countShowAtendKey(planoFrontalKeys, "plano_frontal") + 1]]' ng-if="countShowAtendKey(planoFrontalKeys, 'plano_frontal') > 0">
 									    		Plano Frontal
 									    	</th>
@@ -1228,17 +1217,6 @@
 										      	<th>[[ key[1] ]]</th>
 										      	<td ng-repeat="obj in atendimentos">
 										        	[[ obj.plano_frontal[ key[0] ] ]]
-										      	</td>
-										    </tr>
-
-										    <th rowspan='[[countShowAtendKey(planoSagitalKeys, "plano_sagital") + 1]]' ng-if="countShowAtendKey(planoSagitalKeys, 'plano_sagital') > 0">
-									    		Plano Sagital
-									    	</th>
-
-										    <tr ng-repeat="key in planoSagitalKeys | filter : showAtendKey('plano_sagital')">
-										      	<th>[[ key[1] ]]</th>
-										      	<td ng-repeat="obj in atendimentos">
-										        	[[ obj.plano_sagital[ key[0] ] ]]
 										      	</td>
 										    </tr>
 
@@ -1253,6 +1231,28 @@
 										      	</td>
 										    </tr>
 
+										    <th rowspan='[[countShowAtendKey(planoSagitalKeys, "plano_sagital") + 1]]' ng-if="countShowAtendKey(planoSagitalKeys, 'plano_sagital') > 0">
+									    		Plano Sagital
+									    	</th>
+
+										    <tr ng-repeat="key in planoSagitalKeys | filter : showAtendKey('plano_sagital')">
+										      	<th>[[ key[1] ]]</th>
+										      	<td ng-repeat="obj in atendimentos">
+										        	[[ obj.plano_sagital[ key[0] ] ]]
+										      	</td>
+										    </tr>
+
+										    <th rowspan='[[countShowAtendKey(medidasOneKeys, "medidas") + 1]]' ng-if="countShowAtendKey(medidasOneKeys, 'medidas') > 0">
+									    		Medidas
+									    	</th>
+
+										    <tr ng-repeat="key in medidasOneKeys | filter : showAtendKey('medidas')">
+										      	<th>[[ key[1] ]]</th>
+										      	<td ng-repeat="obj in atendimentos">
+										        	[[ obj.medidas[ key[0] ] ]]
+										      	</td>
+										    </tr>
+
 										    <th rowspan='[[countShowAtendKey(mobilidadeArticularKeys, "mobilidade_articular") + 1]]' ng-if="countShowAtendKey(mobilidadeArticularKeys, 'mobilidade_articular') > 0">
 									    		Mobilidade Articular
 									    	</th>
@@ -1261,6 +1261,17 @@
 										      	<th>[[ key[1] ]]</th>
 										      	<td ng-repeat="obj in atendimentos">
 										        	[[ obj.mobilidade_articular[ key[0] ] ]]
+										      	</td>
+										    </tr>
+
+										    <th rowspan='[[countShowAtendKey(medidasTwoKeys, "medidas") + 1]]' ng-if="countShowAtendKey(medidasTwoKeys, 'medidas') > 0">
+									    		Medidas
+									    	</th>
+
+										    <tr ng-repeat="key in medidasTwoKeys | filter : showAtendKey('medidas')">
+										      	<th>[[ key[1] ]]</th>
+										      	<td ng-repeat="obj in atendimentos">
+										        	[[ obj.medidas[ key[0] ] ]]
 										      	</td>
 										    </tr>
 									    </tbody>
