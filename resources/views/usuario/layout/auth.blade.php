@@ -24,6 +24,7 @@
         <link href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css">
         <link href="/node_modules/angular-tooltips/dist/angular-tooltips.min.css" rel="stylesheet" type="text/css">
         <link href="/node_modules/angular-ui-bootstrap/dist/ui-bootstrap-csp.css" rel="stylesheet" type="text/css">
+        <link href="/node_modules/ng-image-gallery/dist/ng-image-gallery.min.css" rel="stylesheet" type="text/css">
         <link href="/css/peb.css" rel="stylesheet" type="text/css">
 
         <!-- Scripts -->
@@ -172,6 +173,8 @@
         <script src="/node_modules/angular-tooltips/dist/angular-tooltips.min.js" type="text/javascript"></script>
         <script src="/node_modules/angular-animate/angular-animate.min.js" type="text/javascript"></script>
         <script src="/node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js" type="text/javascript"></script>
+        <script src="/node_modules/ng-image-gallery/dist/ng-image-gallery.min.js" type="text/javascript"></script>
+        <script src="http://hammerjs.github.io/dist/hammer-time.min.js" type="text/javascript"></script>
 
         <script type="text/javascript">
             $("#myNavmenu").offcanvas({ toggle: false, disableScrolling: false, canvas: "body" })

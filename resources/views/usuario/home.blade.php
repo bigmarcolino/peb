@@ -538,7 +538,7 @@
 	      		</div>
 
 		      	<div class="modal-body">
-		      		Todos os dados relacionados aos pacientes selecionados serão removidos, incluindo agendamentos e atendimentos. Esta operação é irreversível e não poderá ser desfeita. Mesmo assim, tem certeza que deseja excluir os pacientes?
+		      		Todos os dados relacionados aos pacientes selecionados serão removidos, incluindo atendimentos e fotos. Esta operação é irreversível e não poderá ser desfeita. Mesmo assim, tem certeza que deseja excluir os pacientes?
 		    	</div>
 	    
 			    <div class="modal-footer">
@@ -890,7 +890,7 @@
 	                        <label class="col-sm-2 control-label">Data de nascimento*</label>
 	                        <div class="col-sm-3" ng-class="{'has-error': dataVazioPaciente}">
 	                        	<div class="input-group">
-		                            <input class="form-control" type="text" ng-model="pacienteEdit.data_nasc" options="dpNovoPacienteOptions" datetimepicker readonly ng-change="checkDataPaciente('edit')" maxlength="254">
+		                            <input class="form-control" type="text" ng-model="pacienteEdit.data_nasc" options="dpNovoPacienteOptions" datetimepicker readonly ng-change="checkDataPaciente('edit')">
 
 		                            <span class="input-group-addon pointer">
 		                                <span class="glyphicon glyphicon-calendar"></span>
@@ -1137,10 +1137,10 @@
 	@endif
 		<div class="content-records">
 			<div>
-				<div class="container-fluid p-l-s p-r-s">
+				<div class="container-fluid p-l-s p-r-s" ng-if="!showSpinnerGetAtendimento">
 					<h2 class="title-lg">Resumo</h2>
 
-					<div class="container-patient p-s bd bd-gray bg-white" ng-if="!showSpinnerGetAtendimento">
+					<div class="container-patient p-s bd bd-gray bg-white">
 						<div class="ib patient-data">
 							<div class="data row">
 								<p class="name c-ic-dark-blue semi-bold">
@@ -1291,9 +1291,9 @@
 									<div class="content-record pull-left">
 										<div class="content-record-inner bg-white bd bd-gray">
 											<div class="header-record reset-text p-s clearfix">
-												<p class="pull-left bold physician-name pointer">
+												<p class="pull-left bold physician-name pointer" data-toggle="modal" data-target="#modalFotoAtendimento" ng-click="listarFotos(viewPaciente.nome, viewPaciente.cpf, atendimentosNums[tabAtendimento])">
 													<span class="glyphicon glyphicon-camera"></span>
-													<span> - 0</span>
+													<span> - [[ qtdFotosAtend ]]</span>
 												</p>
 
 												<p class="pull-right normal c-ic-blue event-duration">
@@ -2688,6 +2688,66 @@
 		      		<div style="min-height: 150px" ng-if="showSpinnerDadosPacientes">
 		      			<span us-spinner="{radius: 30, width: 8, length: 16, color: '#2c97d1'}" spinner-on="showSpinnerDadosPacientes"></span>
 		      		</div>
+		    	</div>
+	    
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-link link-gray" data-dismiss="modal">Fechar</button>
+			    </div>
+	    	</div>
+	  	</div>
+	</div>
+
+	<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="modalFotoAtendimento">
+	  	<div class="modal-dialog modal-fs" role="document">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        		<h4 class="modal-title" id="gridSystemModalLabel">Fotos</h4>
+	      		</div>
+
+		      	<div class="modal-body">
+		      		@if (Auth::user()->funcao != "Analista")
+			      		<div class="row">
+			                <div class="col-xs-5 col-sm-4">
+			                    <input type="file" ng-files="setTheFiles($files)" id="image_file" multiple accept="image/*" class="form-control pointer">
+			                </div>
+			       
+			                <div class="col-xs-2 col-sm-2">
+			                    <span ng-click="uploadFotos(viewPaciente.nome, viewPaciente.cpf, atendimentosNums[tabAtendimento])" class="btn btn-primary">Enviar</span>
+			                </div>
+
+			                <div class="col-xs-5 col-sm-6" style="height: 36px; padding-top: 8px">
+			                    <span>
+			                    	<strong>[[ qtdFotosAtend ]] foto<span ng-if="qtdFotosAtend != 1">s</span></strong>
+			                    </span>
+			                </div>
+				        </div>
+				    @endif
+
+			        <div class="row fotos-atend">
+						<ng-image-gallery images="imagesAtend"></ng-image-gallery>
+
+						<div style="min-height: 150px" ng-if="showSpinnerFotos">
+			      			<span us-spinner="{radius: 30, width: 8, length: 16, color: '#2c97d1'}" spinner-on="showSpinnerFotos"></span>
+			      		</div>
+
+			      		<div class="container-fluid p-t-s p-b-s p-l-s p-r-s" ng-if="erroListarFotos">
+							<div class="alert alert-warning">
+								<p>
+									<span>Erro ao listar imagens.</span>
+									<strong class="pointer" ng-click="listarFotos(viewPaciente.nome, viewPaciente.cpf, atendimentosNums[tabAtendimento])">Clique aqui para tentar novamente.</strong>
+								</p>
+							</div>
+						</div>
+
+						<div class="container-fluid p-t-s p-b-s p-l-s p-r-s" ng-if="qtdFotosAtend == 0 && !showSpinnerFotos">
+							<div class="alert alert-warning">
+								<p>
+									<span>Este atendimento não possui imagens</span>
+								</p>
+							</div>
+						</div>
+			        </div>
 		    	</div>
 	    
 			    <div class="modal-footer">

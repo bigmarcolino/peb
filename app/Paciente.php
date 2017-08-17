@@ -29,11 +29,6 @@ class Paciente extends Model
         return $this->hasOne('App\Responsavel', 'cpf_paciente');
     }
 
-    public function foto_paciente()
-    {
-        return $this->hasMany('App\FotoPaciente', 'cpf_paciente');
-    }
-
     public function atendimento()
     {
         return $this->hasMany('App\Atendimento', 'cpf_paciente');

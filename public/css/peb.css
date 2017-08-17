@@ -396,3 +396,20 @@ body {
 .table-atendimentos tbody * {
     background-color: #fff !important;
 }
+
+.modal-fs {
+    width: 95%;
+}
+
+#modalFotoAtendimento {
+    padding-right: 0 !important;
+}
+
+#modalFotoAtendimento .modal-body{
+    height: 80vh !important;
+    overflow-y: auto;
+}
+
+.fotos-atend {
+    padding: 30px 15px 15px 15px;
+}

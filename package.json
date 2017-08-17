@@ -12,7 +12,7 @@
   "devDependencies": {
     "axios": "^0.16.2",
     "bootstrap-sass": "^3.3.7",
-    "cross-env": "^5.0.4",
+    "cross-env": "^5.0.5",
     "jquery": "^3.1.1",
     "laravel-mix": "^1.4.2",
     "lodash": "^4.17.4",
@@ -32,11 +32,12 @@
     "font-awesome": "^4.7.0",
     "loader-utils": "^1.1.0",
     "moment": "^2.18.1",
+    "ng-image-gallery": "^2.1.2",
     "postcss-loader": "^2.0.6",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
     "vue-loader": "^13.0.4",
     "vue-template-compiler": "^2.4.2",
-    "webpack": "^3.4.1"
+    "webpack": "^3.5.5"
   }
 }

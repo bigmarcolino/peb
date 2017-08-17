@@ -18,7 +18,7 @@ class Atendimento extends Model
     ];
 
     protected $hidden = [
-        'updated_at', 'id', 'cpf_paciente'
+        'updated_at', 'cpf_paciente'
     ];
 
     public function medidas()

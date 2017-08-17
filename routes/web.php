@@ -43,4 +43,7 @@ Route::group(['prefix' => 'usuario'], function () {
 
   Route::post('/addAtendimento/{cpf}', 'AtendimentoApi\AtendimentoApiController@addAtendimento');
   Route::get('/getAtendimentos/{cpf}/{offset}', 'AtendimentoApi\AtendimentoApiController@getAtendimentos');
+  Route::post('/uploadFotos/{nome}/{cpf}/{num}', 'AtendimentoApi\AtendimentoApiController@uploadFotos');
+  Route::get('/listarFotos/{nome}/{cpf}/{num}', 'AtendimentoApi\AtendimentoApiController@listarFotos');
+  Route::get('/getQtdFotosAtend/{nome}/{cpf}/{num}', 'AtendimentoApi\AtendimentoApiController@getQtdFotosAtend');
 });

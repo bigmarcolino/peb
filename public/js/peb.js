@@ -1,9 +1,15 @@
 'use strict';
-var app = angular.module('peb', ['angularSpinner', '720kb.tooltips', 'ae-datetimepicker', 'ngAnimate', 'ui.bootstrap'], function($interpolateProvider, $qProvider) {
-  $interpolateProvider.startSymbol('[[');
-  $interpolateProvider.endSymbol(']]');
-  $qProvider.errorOnUnhandledRejections(false);
+var app = angular.module('peb', ['angularSpinner', '720kb.tooltips', 'ae-datetimepicker', 'ngAnimate', 'ui.bootstrap', 'thatisuday.ng-image-gallery'], function($interpolateProvider, $qProvider) {
+    $interpolateProvider.startSymbol('[[');
+    $interpolateProvider.endSymbol(']]');
+    $qProvider.errorOnUnhandledRejections(false);
 });
+
+app.config(['ngImageGalleryOptsProvider', function(ngImageGalleryOptsProvider){
+    ngImageGalleryOptsProvider.setOpts({
+        thumbSize : 150
+    });
+}])
 
 app.directive('numbersOnly', function () {
     return {
@@ -26,11 +32,23 @@ app.directive('numbersOnly', function () {
     };
 });
 
+app.directive('ngFiles', ['$parse', function ($parse) {
+    function file_links(scope, element, attrs) {
+        var onChange = $parse(attrs.ngFiles);
+        element.on('change', function (event) {
+            onChange(scope, {$files: event.target.files});
+        });
+    }
+
+    return {
+        link: file_links
+    }
+}]);
+
 app.directive("floatingNumberOnly", function() {
     return {
         require: 'ngModel',
         link: function(scope, ele, attr, ctrl) {
-
             ctrl.$parsers.push(function(inputValue) {
                 var pattern = new RegExp("(^[0-9]{1,9})+(\.[0-9]{1,4})?$", "g");
                 
@@ -243,11 +261,19 @@ app.factory('apiService', function($http) {
 
         getAtendimentos: function(cpf, offset) {
             return $http.get('/usuario/getAtendimentos/' + cpf + '/' + offset);
+        },
+
+        listarFotos: function(nome, cpf, num) {
+            return $http.get('/usuario/listarFotos/' + nome + '/' + cpf + '/' + num);
+        },
+
+        getQtdFotosAtend: function(nome, cpf, num) {
+            return $http.get('/usuario/getQtdFotosAtend/' + nome + '/' + cpf + '/' + num);
         }
 	}
 });
  
-app.controller('pebController', function($scope, apiService, $filter, $timeout) {
+app.controller('pebController', function($scope, apiService, $filter, $timeout, $http) {
 	$scope.registerCpf;
 
 	$scope.defaultSelectColor = true;
@@ -821,13 +847,23 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
         }
     }
 
-    $scope.checkNomePaciente = function() {
-        if($scope.novoPaciente.nome == '') {
-            $scope.nomeVazioPaciente = true;
+    $scope.checkNomePaciente = function(option) {
+        if(option == 'add') {
+            if($scope.novoPaciente.nome == '') {
+                $scope.nomeVazioPaciente = true;
+            }
+            else {
+                $scope.nomeVazioPaciente = false;
+            }
         }
-        else {
-            $scope.nomeVazioPaciente = false;
-        }
+        else if(option == 'edit') {
+            if($scope.pacienteEdit.nome == '') {
+                $scope.nomeVazioPaciente = true;
+            }
+            else {
+                $scope.nomeVazioPaciente = false;
+            }
+        } 
     }
 
     $scope.checkCpfPaciente = function() {
@@ -1236,7 +1272,15 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
             $scope.dataHoraAtendimento.mes = data.split("-")[1];
             $scope.dataHoraAtendimento.ano = data.split("-")[2];
             $scope.dataHoraAtendimento.mesExtenso = moment.monthsShort('-MMM-', $scope.dataHoraAtendimento.mes - 1);
+
+            $scope.getQtdFotosAtend();
         }
+    }
+
+    $scope.getQtdFotosAtend = function() {
+        apiService.getQtdFotosAtend($scope.viewPaciente.nome, $scope.viewPaciente.cpf, $scope.atendimentosNums[$scope.tabAtendimento]).then(function(response) {
+            $scope.qtdFotosAtend = response.data;
+        })
     }
 
     $scope.setDadosPaciente = function() {
@@ -1255,4 +1299,71 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout) 
             })
         }, 500 );
     }
+
+    var fotosData = new FormData();
+
+    $scope.uploadFotos = function (nome, cpf, num) {
+        var request = {
+            method: 'POST',
+            url: '/usuario/uploadFotos/' + nome + '/' + cpf + '/' + num,
+            data: fotosData,
+            headers: {
+                'Content-Type': undefined
+            }
+        };
+
+        $http(request).then(
+            function success(e) {
+                $scope.files = e.data.files;
+                $scope.errors = [];
+                angular.element('#image_file').val(null);
+                fotosData = new FormData();
+                $scope.listarFotos(nome, cpf, num);
+                $scope.getQtdFotosAtend();
+                $scope.erroListarFotos = false;
+            }, function error(e) {
+                $scope.errors = e.data.errors;
+            }
+        );
+    };
+
+    $scope.setTheFiles = function ($files) {
+        var num = 0;
+
+        angular.forEach($files, function (value, key) {
+            fotosData.append('image_file_' + num, value);
+            num = num + 1;
+        });
+    };
+
+    $scope.listarFotos = function (nome, cpf, num) {
+        $scope.showSpinnerFotos = true;
+        $scope.erroListarFotos = false;
+
+        $timeout( function() {
+            apiService.listarFotos(nome, cpf, num).then(function(response) {
+                $scope.showSpinnerFotos = false;
+
+                $scope.imagesAtend = [];
+
+                for(var i = 0; i < response.data.length; i++) {
+                    $scope.imagesAtend.push(
+                        {
+                            id: i,
+                            url: response.data[i],
+                            deletable: true
+                        }
+                    );
+                }
+            })
+            .catch(function(response) {
+                $scope.showSpinnerFotos = false;
+                $scope.erroListarFotos = true;
+            })
+        }, 500 );
+    }
+
+    $('#modalFotoAtendimento').on('hidden.bs.modal', function (e) {
+        $scope.imagesAtend = [];
+    })
 });

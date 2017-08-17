@@ -19,4 +19,5 @@ mix.js('resources/assets/js/app.js', 'public/js')
    .copy('node_modules/angular-spinner', 'public/node_modules/angular-spinner')
    .copy('node_modules/angular-tooltips', 'public/node_modules/angular-tooltips')
    .copy('node_modules/angular-eonasdan-datetimepicker', 'public/node_modules/angular-eonasdan-datetimepicker')
-   .copy('node_modules/angular-ui-bootstrap', 'public/node_modules/angular-ui-bootstrap');
+   .copy('node_modules/angular-ui-bootstrap', 'public/node_modules/angular-ui-bootstrap')
+   .copy('node_modules/ng-image-gallery', 'public/node_modules/ng-image-gallery');

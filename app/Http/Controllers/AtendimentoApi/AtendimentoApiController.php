@@ -17,6 +17,7 @@ use App\PlanoSagital;
 use App\Vertebra;
 use DB;
 use StdClass;
+use Illuminate\Support\Facades\Storage;
 
 class AtendimentoApiController extends Controller
 {
@@ -46,7 +47,19 @@ class AtendimentoApiController extends Controller
             $vertebra = $dados["vertebra"];
 
             $novoAtendimento = new Atendimento($atendimento);
-            $paciente->atendimento()->save($novoAtendimento);            
+            $paciente->atendimento()->save($novoAtendimento);
+
+            $qtd_atend = $paciente->atendimento()->count();
+            $qtd_alg = strlen((string) $qtd_atend);
+
+            if($qtd_alg == 1)
+                $num_atend = "00" . $qtd_atend;
+            else if($qtd_alg == 2)
+                $num_atend = "0" . $qtd_atend;
+            else if($qtd_alg == 3)
+                $num_atend = $qtd_atend;
+
+            Storage::makeDirectory("public/foto_atendimento/" . $paciente->nome . " - " . $paciente->cpf . "/" . $num_atend);            
 
             // Medidas
 
@@ -250,5 +263,61 @@ class AtendimentoApiController extends Controller
         }
 
         return ['quantidade' => $atendCount, 'atendimentos' => $atendimentosResponse, 'atendimentosNums' => $atendimentosNums];
-    } 
+    }
+
+    public function uploadFotos($nome, $cpf, $num, Request $request)
+    {
+        $qtd_alg = strlen((string) $num);
+
+        if($qtd_alg == 1)
+            $num_atend = "00" . $num;
+        else if($qtd_alg == 2)
+            $num_atend = "0" . $num;
+        else if($qtd_alg == 3)
+            $num_atend = $num;
+
+        $fotos = $request->allFiles();
+
+        foreach($fotos as $foto) {
+            $foto->store('public/foto_atendimento/' . $nome . " - " . $cpf . "/" . $num_atend);
+        }
+    }
+
+    public function listarFotos($nome, $cpf, $num)
+    {
+        $qtd_alg = strlen((string) $num);
+
+        if($qtd_alg == 1)
+            $num_atend = "00" . $num;
+        else if($qtd_alg == 2)
+            $num_atend = "0" . $num;
+        else if($qtd_alg == 3)
+            $num_atend = $num;
+
+        $pathPasta = 'public/foto_atendimento/' . $nome . " - " . $cpf . "/" . $num_atend;
+        $pathFotos = Storage::allFiles($pathPasta);
+        $fotos = array();
+        
+        foreach($pathFotos as $pathFoto) {
+            array_push($fotos, "../storage/" . explode("/", $pathFoto, 2)[1]);
+        }
+
+        return $fotos;
+    }
+
+    public function getQtdFotosAtend($nome, $cpf, $num)
+    {
+        $qtd_alg = strlen((string) $num);
+
+        if($qtd_alg == 1)
+            $num_atend = "00" . $num;
+        else if($qtd_alg == 2)
+            $num_atend = "0" . $num;
+        else if($qtd_alg == 3)
+            $num_atend = $num;
+
+        $pathPasta = 'public/foto_atendimento/' . $nome . " - " . $cpf . "/" . $num_atend;
+
+        return count(Storage::allFiles($pathPasta));
+    }
 }

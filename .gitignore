@@ -4,6 +4,7 @@
 /public/bower_components
 /public/node_modules
 /storage/*.key
+/storage/app/public/foto_atendimento/*
 /vendor
 /.idea
 Homestead.json
