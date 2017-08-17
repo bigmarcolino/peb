@@ -176,7 +176,7 @@ class AtendimentoApiController extends Controller
             }
             else {
                 for ($i = 1; $i <= $atendCount; $i++) {
-                    array_push($atendimentosNums, $atendCount);
+                    array_push($atendimentosNums, $i);
                 } 
             }
 

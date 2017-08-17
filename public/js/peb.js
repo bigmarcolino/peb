@@ -1323,6 +1323,8 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
                 $scope.erroListarFotos = false;
             }, function error(e) {
                 $scope.errors = e.data.errors;
+                angular.element('#image_file').val(null);
+                fotosData = new FormData();
             }
         );
     };
