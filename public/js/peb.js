@@ -1319,6 +1319,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
                 angular.element('#image_file').val(null);
                 fotosData = new FormData();
                 $scope.listarFotos(nome, cpf, num);
+                $scope.imagesAtend = [];
                 $scope.getQtdFotosAtend();
                 $scope.erroListarFotos = false;
             }, function error(e) {
@@ -1345,8 +1346,6 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
         $timeout( function() {
             apiService.listarFotos(nome, cpf, num).then(function(response) {
                 $scope.showSpinnerFotos = false;
-
-                $scope.imagesAtend = [];
 
                 for(var i = 0; i < response.data.length; i++) {
                     $scope.imagesAtend.push(
