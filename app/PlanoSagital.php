@@ -14,7 +14,7 @@ class PlanoSagital extends Model
      * @var array
      */
     protected $fillable = [
-        'localizacao', 'valor', 'diferenca'
+        'valor_cabeca', 'valor_cervical', 'valor_c7', 'valor_t5_t6', 'valor_t12', 'valor_l3', 'valor_s1', 'compensacao_cabeca', 'compensacao_cervical', 'compensacao_c7', 'compensacao_t5_t6', 'compensacao_t12', 'compensacao_l3', 'compensacao_s1'
     ];
 
     protected $hidden = [

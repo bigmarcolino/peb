@@ -14,7 +14,7 @@ class DiagnosticoPrognostico extends Model
      * @var array
      */
     protected $fillable = [
-        'diagnostico_clinico', 'tipo_escoliose', 'cifose', 'lordose', 'prescricao_medica', 'prescricao_fisioterapeutica', 'colete', 'colete_hs', 'etiologia', 'idade_aparecimento', 'topografia', 'calco', 'hpp'
+        'diagnostico_clinico', 'tipo', 'local_escoliose', 'cifose', 'lordose', 'prescricao_medica', 'prescricao_fisioterapeutica', 'colete', 'colete_hs', 'etiologia', 'idade_aparecimento', 'topografia', 'calco_utilizado_direito', 'calco_utilizado_esquerdo', 'tamanho_calco_direito', 'tamanho_calco_esquerdo', 'hpp'
     ];
 
     protected $hidden = [
@@ -23,16 +23,16 @@ class DiagnosticoPrognostico extends Model
 
     public function curva()
     {
-        return $this->hasOne('App\Curva');
+        return $this->hasMany('App\Curva');
     }
 
-    public function local_escoliose()
+    public function vertebra_apice()
     {
-        return $this->hasOne('App\LocalEscoliose');
+        return $this->hasOne('App\VertebraApice');
     }
 
-    public function vertebra()
+    public function vertebra_limite()
     {
-        return $this->hasOne('App\Vertebra');
+        return $this->hasOne('App\VertebraLimite');
     }
 }

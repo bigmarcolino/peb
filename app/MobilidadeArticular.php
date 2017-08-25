@@ -14,7 +14,7 @@ class MobilidadeArticular extends Model
      * @var array
      */
     protected $fillable = [
-        'lado', 'valor', 'inclinacao'
+        'valor_reto_direita', 'valor_reto_esquerda', 'valor_inclinado_direita', 'valor_inclinado_esquerda', 'diferenca_direita', 'diferenca_esquerda' 
     ];
 
     protected $hidden = [

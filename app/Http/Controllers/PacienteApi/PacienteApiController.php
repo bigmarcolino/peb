@@ -15,6 +15,7 @@ class PacienteApiController extends Controller
     { 
         $dados = sizeof($_POST) > 0 ? $_POST : json_decode($request->getContent(), true);
 
+
         DB::transaction(function() use ($request, $dados)
         {
             $paciente = $dados["paciente"];
@@ -23,32 +24,35 @@ class PacienteApiController extends Controller
             $novoPaciente = new Paciente($paciente);
             $novoPaciente->save();
 
-            Storage::makeDirectory("public/foto_atendimento/" . $novoPaciente->nome . " - " . $novoPaciente->cpf);
-
             if(isset($dados["responsavel"])) {
                 $responsavel = $dados["responsavel"];
                 $novoResponsavel = new Responsavel($responsavel);
                 $novoPaciente->responsavel()->save($novoResponsavel); 
             } 
         });
+
+        $id = DB::table('paciente')->latest()->first()->id;
+        return $id;
     }
 
     public function excluirPacientes(Request $request)
     {
-        $cpfs = sizeof($_POST) > 0 ? $_POST : json_decode($request->getContent(), true);
+        $ids = sizeof($_POST) > 0 ? $_POST : json_decode($request->getContent(), true);
 
-        foreach($cpfs as $cpf) {
-            $paciente = Paciente::where('cpf', $cpf)->first();
-            $res = Paciente::where('cpf', $cpf)->delete();
-            Storage::deleteDirectory("public/foto_atendimento/" . $paciente->nome . " - " . $paciente->cpf);
+        foreach($ids as $id) {
+            $paciente = Paciente::where('id', $id)->first();
+            $res = Paciente::where('id', $id)->delete();
+
+            if($paciente->cpf != null)
+                Storage::deleteDirectory("public/foto_atendimento/" . $paciente->nome . " - " . $paciente->cpf);
         }
 
         return ["status" => ($res) ? 'ok' : 'erro'];        
     }
 
-    public function getPacienteEdit($cpf)
+    public function getPacienteEdit($id)
     { 
-        $paciente = Paciente::where('cpf', $cpf)->first();
+        $paciente = Paciente::where('id', $id)->first();
         $responsavel = $paciente->responsavel();
 
         if($responsavel->count() == 1)
@@ -64,19 +68,22 @@ class PacienteApiController extends Controller
         DB::transaction(function() use ($request, $dados)
         {
             $paciente = $dados["paciente"];
-            $cpf = $paciente['cpf'];
+            $id = $paciente['id'];
             $paciente["data_nasc"] = explode("T", $paciente["data_nasc"])[0];
 
-            $pacienteAntigo = Paciente::where('cpf', $cpf)->first();
+            $pacienteAntigo = Paciente::where('id', $id)->first();
             $pasta_antiga = "public/foto_atendimento/" . $pacienteAntigo->nome . " - " . $pacienteAntigo->cpf;
+            $pasta_nova = "public/foto_atendimento/" . $paciente["nome"] . " - " . $paciente["cpf"];
 
-            Paciente::where('cpf', $cpf)->update($paciente);
+            Paciente::where('id', $id)->update($paciente);
 
-            Storage::move($pasta_antiga, "public/foto_atendimento/" . $paciente["nome"] . " - " . $paciente["cpf"]);
+            if($pacienteAntigo->cpf == $paciente["cpf"] && $pacienteAntigo->nome != $paciente["nome"] && Storage::disk('public')->exists("foto_atendimento/" . $pacienteAntigo->nome . " - " . $pacienteAntigo->cpf)) {
+                Storage::move($pasta_antiga, $pasta_nova);
+            }
 
             if(isset($dados["responsavel"])) {
                 $responsavel = $dados["responsavel"];
-                Paciente::where('cpf', $cpf)->first()->responsavel()->update($responsavel);
+                Paciente::where('id', $id)->first()->responsavel()->update($responsavel);
             } 
         });
     }

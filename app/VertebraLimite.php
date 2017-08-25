@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Curva extends Model
-{   
-    protected $table = 'curva';
+class VertebraLimite extends Model
+{
+    protected $table = 'vertebra_limite';
 
     /**
      * The attributes that are mass assignable.
@@ -14,7 +14,7 @@ class Curva extends Model
      * @var array
      */
     protected $fillable = [
-        'ordenacao', 'observacao', 'angulo_cobb', 'angulo_ferguson', 'grau_rotacao'
+        'tipo_escoliose', 'vertebra_superior', 'vertebra_inferior'
     ];
 
     protected $hidden = [

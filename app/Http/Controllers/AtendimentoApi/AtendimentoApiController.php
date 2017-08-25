@@ -7,21 +7,23 @@ use Illuminate\Http\Request;
 use App\Atendimento;
 use App\Curva;
 use App\DiagnosticoPrognostico;
-use App\LocalEscoliose;
 use App\Medidas;
 use App\MobilidadeArticular;
 use App\Paciente;
 use App\PlanoFrontal;
-use App\PlanoHorizontal;
+use App\PlanoHorizontalMilimetros;
+use App\PlanoHorizontalGraus;
 use App\PlanoSagital;
-use App\Vertebra;
+use App\VertebraApice;
+use App\VertebraLimite;
 use DB;
 use StdClass;
 use Illuminate\Support\Facades\Storage;
+use DateTime;
 
 class AtendimentoApiController extends Controller
 {
-    public function addAtendimento($cpf, Request $request)
+    public function addAtendimento($id, Request $request)
     { 
         $dados = sizeof($_POST) > 0 ? $_POST : json_decode($request->getContent(), true);
 
@@ -31,20 +33,21 @@ class AtendimentoApiController extends Controller
         if(isset($dados['atendimento']['data_raio_x']))
             $dados['atendimento']['data_raio_x'] = explode("T", $dados['atendimento']['data_raio_x'])[0];
 
-        DB::transaction(function() use ($cpf, $request, $dados)
+        DB::transaction(function() use ($id, $request, $dados)
         {
-            $paciente = Paciente::where('cpf', $cpf)->first();
+            $paciente = Paciente::where('id', $id)->first();
 
             $atendimento = $dados["atendimento"];
             $curva = $dados["curva"];
             $diag_prog = $dados["diag_prog"];
-            $local_escoliose = $dados["local_escoliose"];
             $medidas = $dados["medidas"];
             $mobilidade_articular = $dados["mobilidade_articular"];
             $plano_frontal = $dados["plano_frontal"];
-            $plano_horizontal = $dados["plano_horizontal"];
+            $plano_horizontal_milimetros = $dados["plano_horizontal_milimetros"];
+            $plano_horizontal_graus = $dados["plano_horizontal_graus"];
             $plano_sagital = $dados["plano_sagital"];
-            $vertebra = $dados["vertebra"];
+            $vertebra_apice = $dados["vertebra_apice"];
+            $vertebra_limite = $dados["vertebra_limite"];
 
             $novoAtendimento = new Atendimento($atendimento);
             $paciente->atendimento()->save($novoAtendimento);
@@ -57,14 +60,13 @@ class AtendimentoApiController extends Controller
             else if($qtd_alg == 2)
                 $num_atend = "0" . $qtd_atend;
             else if($qtd_alg == 3)
-                $num_atend = $qtd_atend;
-
-            Storage::makeDirectory("public/foto_atendimento/" . $paciente->nome . " - " . $paciente->cpf . "/" . $num_atend);            
+                $num_atend = $qtd_atend;            
 
             // Medidas
 
             $novoPlanoFrontal = null;
-            $novoPlanoHorizontal = null;
+            $novoPlanoHorizontalMilimetros = null;
+            $novoPlanoHorizontalGraus = null;
             $novoPlanoSagital = null;
             $novoMobilidadeArticular = null;
             $salvarMedidas = false;
@@ -74,8 +76,13 @@ class AtendimentoApiController extends Controller
                 $salvarMedidas = true;
             }
 
-            if(!empty($plano_horizontal)) {
-                $novoPlanoHorizontal = new PlanoHorizontal($plano_horizontal);
+            if(!empty($plano_horizontal_milimetros)) {
+                $novoPlanoHorizontalMilimetros = new PlanoHorizontalMilimetros($plano_horizontal_milimetros);
+                $salvarMedidas = true;
+            }
+
+            if(!empty($plano_horizontal_graus)) {
+                $novoPlanoHorizontalGraus = new PlanoHorizontalGraus($plano_horizontal_graus);
                 $salvarMedidas = true;
             }
 
@@ -96,8 +103,11 @@ class AtendimentoApiController extends Controller
                 if(!empty($plano_frontal))
                     $novoMedidas->plano_frontal()->save($novoPlanoFrontal);
 
-                if(!empty($plano_horizontal))
-                    $novoMedidas->plano_horizontal()->save($novoPlanoHorizontal);
+                if(!empty($plano_horizontal_milimetros))
+                    $novoMedidas->plano_horizontal_milimetros()->save($novoPlanoHorizontalMilimetros);
+
+                if(!empty($plano_horizontal_graus))
+                    $novoMedidas->plano_horizontal_graus()->save($novoPlanoHorizontalGraus);
 
                 if(!empty($plano_sagital))
                     $novoMedidas->plano_sagital()->save($novoPlanoSagital);
@@ -113,22 +123,20 @@ class AtendimentoApiController extends Controller
             // Diagnóstico Prognóstico
 
             $novoCurva = null;
-            $novoLocalEscoliose = null;
-            $novoVertebra = null;
+            $novoVertebraApice = null;
+            $novoVertebraLimite = null;
             $salvarDiagProg = false;
 
-            if(!empty($curva)) {
-                $novoCurva = new Curva($curva);
+            if(!empty($curva))
+                $salvarDiagProg = true;
+
+            if(!empty($vertebra_apice)) {
+                $novoVertebraApice = new VertebraApice($vertebra_apice);
                 $salvarDiagProg = true;
             }
 
-            if(!empty($local_escoliose)) {
-                $novoLocalEscoliose = new LocalEscoliose($local_escoliose);
-                $salvarDiagProg = true;
-            }
-
-            if(!empty($vertebra)) {
-                $novoVertebra = new Vertebra($vertebra);
+            if(!empty($vertebra_limite)) {
+                $novoVertebraLimite = new VertebraLimite($vertebra_limite);
                 $salvarDiagProg = true;
             }
 
@@ -136,14 +144,25 @@ class AtendimentoApiController extends Controller
                 $novoDiagProg = new DiagnosticoPrognostico($diag_prog);
                 $novoAtendimento->diag_prog()->save($novoDiagProg);
 
-                if(!empty($curva))
-                    $novoDiagProg->curva()->save($novoCurva);
+                if(!empty($curva)) {
+                    if(!empty($curva["curva1"]))
+                        $novoDiagProg->curva()->save(new Curva($curva["curva1"]));
 
-                if(!empty($local_escoliose))
-                    $novoDiagProg->local_escoliose()->save($novoLocalEscoliose);
+                    if(!empty($curva["curva2"]))
+                        $novoDiagProg->curva()->save(new Curva($curva["curva2"]));
 
-                if(!empty($vertebra))
-                    $novoDiagProg->vertebra()->save($novoVertebra);
+                    if(!empty($curva["curva3"]))
+                        $novoDiagProg->curva()->save(new Curva($curva["curva3"]));
+
+                    if(!empty($curva["curva4"]))
+                        $novoDiagProg->curva()->save(new Curva($curva["curva4"]));
+                }
+
+                if(!empty($vertebra_apice))
+                    $novoDiagProg->vertebra_apice()->save($novoVertebraApice);
+
+                if(!empty($vertebra_limite))
+                    $novoDiagProg->vertebra_limite()->save($novoVertebraLimite);
             }
             else if (!empty($diag_prog)){
                 $novoDiagProg = new DiagnosticoPrognostico($diag_prog);
@@ -152,9 +171,9 @@ class AtendimentoApiController extends Controller
         });
     }
 
-    public function getAtendimentos($cpf, $offset)
+    public function getAtendimentos($id, $offset)
     {
-        $paciente = Paciente::where('cpf', $cpf)->first();
+        $paciente = Paciente::where('id', $id)->first();
 
         $todosAtendimentos = $paciente->atendimento();
         $atendCount = $todosAtendimentos->count();
@@ -229,9 +248,13 @@ class AtendimentoApiController extends Controller
                 if($plano_frontal->count() == 1)
                     $var->plano_frontal = $plano_frontal->getResults();
 
-                $plano_horizontal = $medidas->plano_horizontal();
-                if($plano_horizontal->count() == 1)
-                    $var->plano_horizontal = $plano_horizontal->getResults();
+                $plano_horizontal_milimetros = $medidas->plano_horizontal_milimetros();
+                if($plano_horizontal_milimetros->count() == 1)
+                    $var->plano_horizontal_milimetros = $plano_horizontal_milimetros->getResults();
+
+                $plano_horizontal_graus = $medidas->plano_horizontal_graus();
+                if($plano_horizontal_graus->count() == 1)
+                    $var->plano_horizontal_graus = $plano_horizontal_graus->getResults();
 
                 $plano_sagital = $medidas->plano_sagital();
                 if($plano_sagital->count() == 1)
@@ -247,22 +270,42 @@ class AtendimentoApiController extends Controller
                 $var->diag_prog = $diag_prog;
 
                 $curva = $diag_prog->curva();
-                if($curva->count() == 1)
+                if($curva->count() >= 1)
                     $var->curva = $curva->getResults();
 
-                $local_escoliose = $diag_prog->local_escoliose();
-                if($local_escoliose->count() == 1)
-                    $var->local_escoliose = $local_escoliose->getResults();
+                $vertebra_apice = $diag_prog->vertebra_apice();
+                if($vertebra_apice->count() == 1)
+                    $var->vertebra_apice = $vertebra_apice->getResults();
 
-                $vertebra = $diag_prog->vertebra();
-                if($vertebra->count() == 1)
-                    $var->vertebra = $vertebra->getResults();
+                $vertebra_limite = $diag_prog->vertebra_limite();
+                if($vertebra_limite->count() == 1)
+                    $var->vertebra_limite = $vertebra_limite->getResults();
             }
 
             array_push($atendimentosResponse, $var);
         }
 
         return ['quantidade' => $atendCount, 'atendimentos' => $atendimentosResponse, 'atendimentosNums' => $atendimentosNums];
+    }
+
+    public function getIdadeAparecimento($id)
+    {
+        $paciente = Paciente::where('id', $id)->first();
+        $qtd_atend = $paciente->atendimento()->count();
+
+        if($qtd_atend == 0)
+            return "";
+        else {
+            $lastAtend = Atendimento::where('paciente_id', $id)->orderBy('id', 'DESC')->first();
+            $diag_prog = $lastAtend->diag_prog();
+
+            if($diag_prog->count() == 1 && $diag_prog->getResults()->idade_aparecimento != null) {
+                return $diag_prog->getResults()->idade_aparecimento;
+            }
+            else {
+                return "";
+            }
+        } 
     }
 
     public function uploadFotos($nome, $cpf, $num, Request $request)
@@ -279,11 +322,16 @@ class AtendimentoApiController extends Controller
         $fotos = $request->allFiles();
 
         foreach($fotos as $foto) {
-            $foto->store('public/foto_atendimento/' . $nome . " - " . $cpf . "/" . $num_atend);
+            $t = microtime(true);
+            $micro = sprintf("%06d",($t - floor($t)) * 1000000);
+            $d = new DateTime( date('Y-m-d H:i:s.' . $micro, $t) );
+            $chars = array(".", ":");
+
+            $foto->storeAs('public/foto_atendimento/' . $nome . " - " . $cpf . "/" . $num_atend, str_replace($chars, "-", $d->format("Y-m-d H:i:s.u")) . "." . $foto->getClientOriginalExtension());
         }
     }
 
-    public function listarFotos($nome, $cpf, $num)
+    public function listarFotos($nome, $cpf, $num, $cpfUsuario)
     {
         $qtd_alg = strlen((string) $num);
 
@@ -302,7 +350,9 @@ class AtendimentoApiController extends Controller
             array_push($fotos, "../storage/" . explode("/", $pathFoto, 2)[1]);
         }
 
-        return $fotos;
+        $funcao = DB::table('usuario')->select('funcao')->where('cpf', $cpfUsuario)->first();
+
+        return ['fotos' => $fotos, 'funcao' => $funcao->funcao];
     }
 
     public function getQtdFotosAtend($nome, $cpf, $num)
@@ -319,5 +369,29 @@ class AtendimentoApiController extends Controller
         $pathPasta = 'public/foto_atendimento/' . $nome . " - " . $cpf . "/" . $num_atend;
 
         return count(Storage::allFiles($pathPasta));
+    }
+
+    public function deletarFotos(Request $request)
+    {
+        $fotos = sizeof($_POST) > 0 ? $_POST : json_decode($request->getContent(), true);
+
+        foreach($fotos as $foto) {
+            Storage::delete('public/' . explode("/", $foto["url"], 3)[2]);
+        }
+
+        $explode_nome_foto = explode("/", $foto["url"]);
+        $nome_foto = end($explode_nome_foto);
+
+        $pastaAtend = str_replace("/" . $nome_foto, "", 'public/' . explode("/", $foto["url"], 3)[2]);
+
+        if(count(Storage::allFiles($pastaAtend)) == 0)
+            Storage::deleteDirectory($pastaAtend);
+
+        $pastaPaciente = substr($pastaAtend, 0, -4);
+
+        if(count(Storage::directories($pastaPaciente)) == 0)
+            Storage::deleteDirectory($pastaPaciente);
+
+        return $pastaAtend;
     }
 }

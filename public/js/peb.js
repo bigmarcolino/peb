@@ -1,5 +1,5 @@
 'use strict';
-var app = angular.module('peb', ['angularSpinner', '720kb.tooltips', 'ae-datetimepicker', 'ngAnimate', 'ui.bootstrap', 'thatisuday.ng-image-gallery'], function($interpolateProvider, $qProvider) {
+var app = angular.module('peb', ['angularSpinner', '720kb.tooltips', 'ae-datetimepicker', 'ngAnimate', 'ui.bootstrap', 'thatisuday.ng-image-gallery', 'ngImageCompress'], function($interpolateProvider, $qProvider) {
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');
     $qProvider.errorOnUnhandledRejections(false);
@@ -31,19 +31,6 @@ app.directive('numbersOnly', function () {
         }
     };
 });
-
-app.directive('ngFiles', ['$parse', function ($parse) {
-    function file_links(scope, element, attrs) {
-        var onChange = $parse(attrs.ngFiles);
-        element.on('change', function (event) {
-            onChange(scope, {$files: event.target.files});
-        });
-    }
-
-    return {
-        link: file_links
-    }
-}]);
 
 app.directive("floatingNumberOnly", function() {
     return {
@@ -243,32 +230,40 @@ app.factory('apiService', function($http) {
             return $http.get('/usuario/checkExistenciaCpfResponsavel/' + cpf);
         },
 
-        excluirPacientes: function(cpfs) {
-            return $http.post('/usuario/excluirPacientes', cpfs);
+        excluirPacientes: function(ids) {
+            return $http.post('/usuario/excluirPacientes', ids);
         },
 
-        getPacienteEdit: function(cpf) {
-            return $http.get('/usuario/getPacienteEdit/' + cpf);
+        getPacienteEdit: function(id) {
+            return $http.get('/usuario/getPacienteEdit/' + id);
         },
 
         editarPaciente: function(paciente) {
             return $http.put('/usuario/editarPaciente', paciente);
         },
 
-        addAtendimento: function(cpf, dados) {
-            return $http.post('/usuario/addAtendimento/' + cpf, dados);
+        addAtendimento: function(id, dados) {
+            return $http.post('/usuario/addAtendimento/' + id, dados);
         },
 
-        getAtendimentos: function(cpf, offset) {
-            return $http.get('/usuario/getAtendimentos/' + cpf + '/' + offset);
+        getIdadeAparecimento: function(id) {
+            return $http.get('/usuario/getIdadeAparecimento/' + id);
         },
 
-        listarFotos: function(nome, cpf, num) {
-            return $http.get('/usuario/listarFotos/' + nome + '/' + cpf + '/' + num);
+        getAtendimentos: function(id, offset) {
+            return $http.get('/usuario/getAtendimentos/' + id + '/' + offset);
+        },
+
+        listarFotos: function(nome, cpf, num, cpfUsuario) {
+            return $http.get('/usuario/listarFotos/' + nome + '/' + cpf + '/' + num + '/' + cpfUsuario);
         },
 
         getQtdFotosAtend: function(nome, cpf, num) {
             return $http.get('/usuario/getQtdFotosAtend/' + nome + '/' + cpf + '/' + num);
+        },
+
+        deletarFotos: function(imgs) {
+            return $http.post('/usuario/deletarFotos', imgs);
         }
 	}
 });
@@ -352,7 +347,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
     }
 
 	$scope.sortTypeUser = 'funcao';
-	$scope.sortReverseUser = false;
+	$scope.sortReverseUser = true;
 	$scope.searchUser = '';
 
     $scope.showPacientes = true;
@@ -382,7 +377,6 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
             $scope.novoPaciente = {};
             $scope.dataVazioPaciente = undefined;
             $scope.nomeVazioPaciente = undefined;
-            $scope.cpfVazioPaciente = undefined;
 
             $scope.pacienteMenorIdade = false;
             $scope.novoResponsavel = {};
@@ -398,7 +392,6 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
 
             $scope.dataVazioPaciente = undefined;
             $scope.nomeVazioPaciente = undefined;
-            $scope.cpfVazioPaciente = undefined;
 
             $scope.pacienteMenorIdade = false;
             $scope.nomeVazioResponsavel = undefined;
@@ -617,10 +610,6 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
         if($scope.nomeVazioPaciente == undefined) {
             $scope.nomeVazioPaciente = true;
         }
-        
-        if($scope.cpfVazioPaciente == undefined) {
-            $scope.cpfVazioPaciente = true;
-        }
 
         if($scope.pacienteMenorIdade && $scope.cpfVazioResponsavel == undefined) {
             $scope.cpfVazioResponsavel = true;
@@ -630,7 +619,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
             $scope.nomeVazioResponsavel = true;
         }
 
-        if(!$scope.dataVazioPaciente && !$scope.nomeVazioPaciente && !$scope.cpfVazioPaciente && !$scope.nomeVazioResponsavel && !$scope.cpfVazioResponsavel) {
+        if(!$scope.dataVazioPaciente && !$scope.nomeVazioPaciente && !$scope.nomeVazioResponsavel && !$scope.cpfVazioResponsavel) {
             $scope.showSpinnerAddPaciente = true;
             $('#modalAddPaciente').modal('show');
 
@@ -650,6 +639,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
                     obj.checked = false;
                     obj.nome = $scope.novoPaciente.nome;
                     obj.cpf = $scope.novoPaciente.cpf;
+                    obj.id = response.data;
                     obj.data_nasc = $scope.novoPaciente.data_nasc.format("YYYY-MM-DD").toString();
                     obj.email = $scope.novoPaciente.email;
 
@@ -673,7 +663,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
     }
 
     $scope.sortTypePaciente = 'nome';
-    $scope.sortReversePaciente = false;
+    $scope.sortReversePaciente = true;
     $scope.searchPaciente = '';
 
     $scope.atualizarPagerPacientes = function(page) {
@@ -701,27 +691,27 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
         $scope.showSpinnerExcluirPacientes = true;
         $('#modalErroExcluirPacientes').modal('show');
 
-        var cpfs = [];
+        var ids = [];
 
         for(var i = 0; i < $scope.pacientesFiltrados.length; i++) {
             if($scope.pacientesFiltrados[i].checked) { 
-                cpfs.push($scope.pacientesFiltrados[i].cpf);
+                ids.push($scope.pacientesFiltrados[i].id);
             }
         }
 
-        var objCpfs = cpfs.reduce(function(acc, cur, i) {
+        var objIds = ids.reduce(function(acc, cur, i) {
           acc[i] = cur;
           return acc;
         }, {});
 
         $timeout( function() {
-            apiService.excluirPacientes(objCpfs).then(function(response) {
+            apiService.excluirPacientes(objIds).then(function(response) {
                 $('#modalErroExcluirPacientes').modal('hide');
 
                 $scope.checkboxSelecionarPacientes = false;
                 
-                cpfs.forEach(function(cpf) {
-                    var index = _.findIndex($scope.pacientes, function(o) { return o.cpf == cpf; });
+                ids.forEach(function(id) {
+                    var index = _.findIndex($scope.pacientes, function(o) { return o.id == id; });
                     $scope.pacientes.splice(index, 1);
                 });
 
@@ -866,26 +856,30 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
         } 
     }
 
-    $scope.checkCpfPaciente = function() {
-        if($scope.novoPaciente.cpf == '' || $scope.novoPaciente.cpf == undefined) {
-            $scope.cpfVazioPaciente = true;
-            $scope.cpfExistePaciente = false;
+    $scope.checkCpfExistenciaPaciente = function(option) {
+        if(option == 'add') {
+            if($scope.novoPaciente.cpf != '' && $scope.novoPaciente.cpf != undefined) {
+                apiService.checkExistenciaCpfPaciente($scope.novoPaciente.cpf).then(function(response) {
+                    if(response.data == 1){
+                        $scope.cpfExistePaciente = true;
+                    }
+                    else {
+                        $scope.cpfExistePaciente = false;
+                    }
+                })
+            }
         }
-        else {
-            $scope.cpfVazioPaciente = false;
-        }
-    }
-
-    $scope.checkCpfExistenciaPaciente = function() {
-        if($scope.novoPaciente.cpf != '' && $scope.novoPaciente.cpf != undefined) {
-            apiService.checkExistenciaCpfPaciente($scope.novoPaciente.cpf).then(function(response) {
-                if(response.data == 1){
-                    $scope.cpfExistePaciente = true;
-                }
-                else {
-                    $scope.cpfExistePaciente = false;
-                }
-            })
+        else if(option == 'edit') {
+            if($scope.pacienteEdit.cpf != '' && $scope.pacienteEdit.cpf != undefined) {
+                apiService.checkExistenciaCpfPaciente($scope.pacienteEdit.cpf).then(function(response) {
+                    if(response.data == 1){
+                        $scope.cpfExistePaciente = true;
+                    }
+                    else {
+                        $scope.cpfExistePaciente = false;
+                    }
+                })
+            }
         }
     }
 
@@ -895,7 +889,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
         $scope.togglePaginas('editPaciente');
 
         $timeout( function() {
-            apiService.getPacienteEdit(paciente.cpf).then(function(response) {
+            apiService.getPacienteEdit(paciente.id).then(function(response) {
                 $scope.pacienteEdit = angular.copy(response.data.paciente);
                 $scope.showSpinnerLoadPacienteEdit = false;
                 $scope.successLoadPacienteEdit = true;
@@ -930,9 +924,10 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
             apiService.editarPaciente(obj).then(function(response) {
                 $('#modalEditPaciente').modal('hide');
 
-                var index = _.findIndex($scope.pacientesFiltrados, function(o) { return o.cpf == $scope.pacienteEdit.cpf; });
+                var index = _.findIndex($scope.pacientesFiltrados, function(o) { return o.id == $scope.pacienteEdit.id; });
                 
                 $scope.pacientesFiltrados[index].nome = $scope.pacienteEdit.nome;
+                $scope.pacientesFiltrados[index].cpf = $scope.pacienteEdit.cpf;
                 $scope.pacientesFiltrados[index].email = $scope.pacienteEdit.email;
                 $scope.pacientesFiltrados[index].data_nasc = $scope.pacienteEdit.data_nasc.format("YYYY-MM-DD").toString();
 
@@ -958,7 +953,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
         var offsetAtend = -1;
 
         $timeout( function() {
-            apiService.getAtendimentos($scope.viewPaciente.cpf, offsetAtend).then(function(response) {
+            apiService.getAtendimentos($scope.viewPaciente.id, offsetAtend).then(function(response) {
                 $scope.showSpinnerGetAtendimento = false;
                 $scope.atendimentos = response.data.atendimentos;
                 $scope.qtdAtendimentos = response.data.quantidade;
@@ -973,9 +968,9 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
     }
 
     $scope.calcIdade = function(data) {
-        var years = moment().diff(moment(data), 'years'); // full years
-        var months = moment().diff(moment(data), 'months');
-        var days = moment().diff(moment(data), 'days');
+        var years = moment().diff(moment(data), 'years');
+        var months = moment().diff(moment(data).add(years, 'y'), 'months');
+        var days = moment().diff(moment(data).add(years, 'y').add(months, 'M'), 'days');
 
         return years + " anos, " + months + " meses, " + days + " dias";
     }
@@ -1046,13 +1041,18 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
         $scope.atendimento = {};
         $scope.medidas = {};
         $scope.plano_frontal = {};
-        $scope.plano_horizontal = {};
+        $scope.plano_horizontal_milimetros = {};
+        $scope.plano_horizontal_graus = {};
         $scope.plano_sagital = {};
         $scope.mobilidade_articular = {};
         $scope.diag_prog = {};
         $scope.curva = {};
-        $scope.local_escoliose = {};
-        $scope.vertebra = {};
+        $scope.curva1 = {};
+        $scope.curva2 = {};
+        $scope.curva3 = {};
+        $scope.curva4 = {};
+        $scope.vertebra_apice = {};
+        $scope.vertebra_limite = {};
     }
 
     $scope.resetAtendimento();
@@ -1078,22 +1078,33 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
         dados.atendimento = $scope.atendimento;
         dados.medidas = $scope.medidas;
         dados.plano_frontal = $scope.plano_frontal;
-        dados.plano_horizontal = $scope.plano_horizontal;
+        dados.plano_horizontal_milimetros = $scope.plano_horizontal_milimetros;
+        dados.plano_horizontal_graus = $scope.plano_horizontal_graus;
         dados.plano_sagital = $scope.plano_sagital;
         dados.mobilidade_articular = $scope.mobilidade_articular;
+        
+        if($scope.diag_prog.idade_aparecimento == "")
+            $scope.diag_prog.idade_aparecimento = undefined;
+
         dados.diag_prog = $scope.diag_prog;
+        
+        $scope.curva.curva1 = $scope.curva1;
+        $scope.curva.curva2 = $scope.curva2;
+        $scope.curva.curva3 = $scope.curva3;
+        $scope.curva.curva4 = $scope.curva4;
+
         dados.curva = $scope.curva;
-        dados.local_escoliose = $scope.local_escoliose;
-        dados.vertebra = $scope.vertebra;
+        dados.vertebra_apice = $scope.vertebra_apice;
+        dados.vertebra_limite = $scope.vertebra_limite;
 
         $timeout( function() {
             if(!atendimentoVazio(dados)) {
-                apiService.addAtendimento($scope.viewPaciente.cpf, dados).then(function(response) {
+                apiService.addAtendimento($scope.viewPaciente.id, dados).then(function(response) {
                     $('#modalErroAddAtendimento').modal('hide');
                     $scope.resetAtendimento();
                     $scope.toggleButtonAtendimento();
 
-                    apiService.getAtendimentos($scope.viewPaciente.cpf, -1).then(function(response) {
+                    apiService.getAtendimentos($scope.viewPaciente.id, -1).then(function(response) {
                         $scope.atendimentos = response.data.atendimentos;
                         $scope.qtdAtendimentos = response.data.quantidade;
                         $scope.atendimentosNums = response.data.atendimentosNums;
@@ -1122,8 +1133,8 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
         ['altura', 'Altura'],
         ['altura_sentada', 'Altura sentada'],
         ['peso', 'Peso'],
-        ['risser', 'Risser'],
-        ['data_raio_x', 'Data raio X']
+        ['data_raio_x', 'Data raio X'],
+        ['risser', 'Risser']
     ];
 
     $scope.medidasOneKeys = [
@@ -1134,9 +1145,12 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
     ];
 
     $scope.medidasTwoKeys = [                        
-        ['teste_fukuda_deslocamento', 'Teste Fukuda deslocamento'],
-        ['teste_fukuda_rotacao', 'Teste Fukuda rotação'],
-        ['teste_fukuda_desvio', 'Teste Fukuda desvio'],
+        ['teste_fukuda_deslocamento_direito', 'Teste Fukuda deslocamento direito'],
+        ['teste_fukuda_deslocamento_esquerdo', 'Teste Fukuda deslocamento esquerdo'],
+        ['teste_fukuda_rotacao_direito', 'Teste Fukuda rotação direito'],
+        ['teste_fukuda_rotacao_esquerdo', 'Teste Fukuda rotação esquerdo'],
+        ['teste_fukuda_desvio_direito', 'Teste Fukuda desvio direito'],
+        ['teste_fukuda_desvio_esquerdo', 'Teste Fukuda desvio esquerdo'],
         ['habilidade_ocular_direito', 'Habilidade ocular direito'],                             
         ['habilidade_ocular_esquerdo', 'Habilidade ocular esquerdo'],
         ['romberg_mono_direito', 'Romberg mono direito'],
@@ -1156,27 +1170,49 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
     ];
 
     $scope.planoFrontalKeys = [
-        ['calco', 'Calço'],
-        ['valor', 'Valor']
+        ['valor', 'Valor'],
+        ['calco_utilizado', 'Calço utilizado'],
+        ['tamanho_calco', 'Tamanho do calço']
     ];
 
-    $scope.planoHorizontalKeys = [
-        ['calco', 'Calço'],
+    $scope.planoHorizontalMilimetrosKeys = [
+        ['calco_utilizado', 'Calço utilizado'],
+        ['valor', 'Valor'],
+        ['tipo', 'Tipo'],
+        ['vertebra', 'Vértebra']
+    ];
+
+    $scope.planoHorizontalGrausKeys = [
+        ['calco_utilizado', 'Calço utilizado'],
         ['valor', 'Valor'],
         ['tipo', 'Tipo'],
         ['vertebra', 'Vértebra']
     ];
 
     $scope.planoSagitalKeys = [
-        ['localizacao', 'Localização'],
-        ['valor', 'Valor'],
-        ['diferenca', 'Diferença']
+        ['valor_cabeca', 'Cabeça'],
+        ['compensacao_cabeca', 'Compensação cabeça'],
+        ['valor_cervical', 'Cervical'],
+        ['compensacao_cervical', 'Compensação cervical'],
+        ['valor_c7', 'C7'],
+        ['compensacao_c7', 'Compensação C7'],
+        ['valor_t5_t6', 'T5-T6'],
+        ['compensacao_t5_t6', 'Compensação T5-T6'],
+        ['valor_t12', 'T12'],
+        ['compensacao_t12', 'Compensação T12'],
+        ['valor_l3', 'L3'],
+        ['compensação_l3', 'Compensação L3'],
+        ['valor_s1', 'S1'],        
+        ['compensacao_s1', 'Compensação S1']
     ];
 
     $scope.mobilidadeArticularKeys = [
-        ['lado', 'Lado'],
-        ['valor', 'Valor'],
-        ['inclinacao', 'Inclinação']
+        ['valor_reto_direita', 'Reto direita'],
+        ['valor_inclinado_direita', 'Inclinado direita'],
+        ['diferenca_direita', 'Diferença direita'],
+        ['valor_reto_esquerda', 'Reto esquerda'],
+        ['valor_inclinado_esquerda', 'Inclinado esquerda'],
+        ['diferenca_esquerda', 'Diferença esquerda']
     ];
 
     $scope.refreshTableAtend = function() {
@@ -1187,7 +1223,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
             $scope.showSpinnerTabelaAtendimentos = true;
 
             $timeout( function() {
-                apiService.getAtendimentos($scope.viewPaciente.cpf, $scope.atendOffset).then(function(response) {
+                apiService.getAtendimentos($scope.viewPaciente.id, $scope.atendOffset).then(function(response) {
                     $('#modalErroTabelaAtendimentos').modal('hide');
                     $scope.atendimentos = response.data.atendimentos;
                     $scope.atendimentosNums = response.data.atendimentosNums;
@@ -1263,7 +1299,6 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
             $scope.showAtendimento = true;
 
             var split = $scope.atendimentoFull.atendimento.data_hora.split(" ");
-
             var hora = split[1];
             $scope.dataHoraAtendimento.hora = hora.split(":")[0] + ":" + hora.split(":")[1];
 
@@ -1288,10 +1323,13 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
         $scope.erroDadosPaciente = undefined;
 
         $timeout( function() {
-            apiService.getPacienteEdit($scope.viewPaciente.cpf).then(function(response) {
+            apiService.getPacienteEdit($scope.viewPaciente.id).then(function(response) {
                 $scope.showSpinnerDadosPacientes = false;
                 $scope.erroDadosPaciente = false;
                 $scope.dadosPaciente = response.data;
+
+                var dataSplit = $scope.dadosPaciente.paciente.data_nasc.split("-");
+                $scope.dadosPaciente.paciente.data_nasc = dataSplit[2] + "-" + dataSplit[1] + "-" + dataSplit[0];
             })
             .catch(function(response) {
                 $scope.erroDadosPaciente = true;
@@ -1300,61 +1338,84 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
         }, 500 );
     }
 
+    function dataURLtoFile(dataurl, filename) {
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        
+        while(n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        
+        return new File([u8arr], filename, {type:mime});
+    }
+
     var fotosData = new FormData();
 
     $scope.uploadFotos = function (nome, cpf, num) {
-        var request = {
-            method: 'POST',
-            url: '/usuario/uploadFotos/' + nome + '/' + cpf + '/' + num,
-            data: fotosData,
-            headers: {
-                'Content-Type': undefined
-            }
-        };
+        if($scope.imageList.length > 0) {
+            var id = 0;
 
-        $http(request).then(
-            function success(e) {
-                $scope.files = e.data.files;
-                $scope.errors = [];
-                angular.element('#image_file').val(null);
-                fotosData = new FormData();
-                $scope.listarFotos(nome, cpf, num);
-                $scope.imagesAtend = [];
-                $scope.getQtdFotosAtend();
-                $scope.erroListarFotos = false;
-            }, function error(e) {
-                $scope.errors = e.data.errors;
-                angular.element('#image_file').val(null);
-                fotosData = new FormData();
-            }
-        );
+            angular.forEach($scope.imageList, function (value, key) {
+                fotosData.append('image_file_' + id, dataURLtoFile(value.compressed.dataURL, value.file.name));
+                id = id + 1;
+            });
+
+            var request = {
+                method: 'POST',
+                url: '/usuario/uploadFotos/' + nome + '/' + cpf + '/' + num,
+                data: fotosData,
+                headers: {
+                    'Content-Type': undefined
+                }
+            };
+
+            $http(request).then(
+                function success(e) {
+                    angular.element('#image_file').val(null);
+                    fotosData = new FormData();
+                    $scope.imagesAtend = [];
+                    $scope.imageList = [];
+                    $scope.listarFotos(nome, cpf, num, $scope.cpfLogged());
+                    $scope.getQtdFotosAtend();
+                    $scope.erroListarFotos = false;
+                }, function error(e) {
+                    angular.element('#image_file').val(null);
+                    fotosData = new FormData();
+                    $scope.imageList = [];
+                }
+            );
+        }
     };
 
-    $scope.setTheFiles = function ($files) {
-        var num = 0;
-
-        angular.forEach($files, function (value, key) {
-            fotosData.append('image_file_' + num, value);
-            num = num + 1;
-        });
-    };
+    $scope.imageList = [];
 
     $scope.listarFotos = function (nome, cpf, num) {
         $scope.showSpinnerFotos = true;
         $scope.erroListarFotos = false;
 
         $timeout( function() {
-            apiService.listarFotos(nome, cpf, num).then(function(response) {
+            apiService.listarFotos(nome, cpf, num, $scope.cpfLogged()).then(function(response) {
                 $scope.showSpinnerFotos = false;
 
-                for(var i = 0; i < response.data.length; i++) {
-                    $scope.imagesAtend.push(
-                        {
-                            id: i,
-                            url: response.data[i],
-                            deletable: true
-                        }
-                    );
+                if(response.data.funcao != "Analista") {
+                    for(var i = 0; i < response.data.fotos.length; i++) {
+                        $scope.imagesAtend.push(
+                            {
+                                id: i,
+                                url: response.data.fotos[i],
+                                deletable: true
+                            }
+                        );
+                    }
+                }
+                else {
+                    for(var i = 0; i < response.data.fotos.length; i++) {
+                        $scope.imagesAtend.push(
+                            {
+                                id: i,
+                                url: response.data.fotos[i]
+                            }
+                        );
+                    }
                 }
             })
             .catch(function(response) {
@@ -1366,5 +1427,91 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
 
     $('#modalFotoAtendimento').on('hidden.bs.modal', function (e) {
         $scope.imagesAtend = [];
+        $scope.imageList = [];
     })
+
+    $scope.deleteImage = function(img, cb) {
+        cb();
+
+        var image = [];
+        image.push(img);
+
+        apiService.deletarFotos(image).then(function(response){
+            $scope.getQtdFotosAtend();
+        })
+    }
+
+    $scope.deletarFotos = function() {
+        apiService.deletarFotos($scope.imagesAtend).then(function(response){
+            $scope.imagesAtend = [];
+            $scope.getQtdFotosAtend();
+        })
+    }
+
+    $scope.showTamanhoCalco = function(option) {
+        if(option == "frontal") {
+            if($scope.plano_frontal.calco_utilizado != undefined && $scope.plano_frontal.calco_utilizado == "Sim") {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else if(option == "diag_prog_direito") {
+            if($scope.diag_prog.calco_utilizado_direito != undefined && $scope.diag_prog.calco_utilizado_direito == "Sim") {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else if(option == "diag_prog_esquerdo") {
+            if($scope.diag_prog.calco_utilizado_esquerdo != undefined && $scope.diag_prog.calco_utilizado_esquerdo == "Sim") {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    }
+
+    var removerLastZeros = function(number) {
+        var num = number.toString();
+
+        for (var i = num.length - 1; i > 0; i--) {
+            if(num[i] == "0")
+                num = num.slice(0, i);
+            else if(num[i] == ".") {
+                num = num.slice(0, i);
+                break;
+            }
+            else
+                break;
+        }
+
+        num = num.slice(0, 6);
+
+        return num;
+    }
+
+    $scope.diferencaMobiArt = function(lado) {
+        if(lado == "direita") {
+            if($scope.mobilidade_articular.valor_reto_direita != undefined && $scope.mobilidade_articular.valor_reto_direita != ""
+               && $scope.mobilidade_articular.valor_inclinado_direita != undefined && $scope.mobilidade_articular.valor_inclinado_direita != "") {
+                $scope.mobilidade_articular.diferenca_direita = removerLastZeros(Math.abs($scope.mobilidade_articular.valor_reto_direita - $scope.mobilidade_articular.valor_inclinado_direita).toFixed(4));
+            }
+        }
+        else if(lado == "esquerda") {
+            if($scope.mobilidade_articular.valor_reto_esquerda != undefined && $scope.mobilidade_articular.valor_reto_esquerda != ""
+               && $scope.mobilidade_articular.valor_inclinado_esquerda != undefined && $scope.mobilidade_articular.valor_inclinado_esquerda != "") {
+                $scope.mobilidade_articular.diferenca_esquerda = removerLastZeros(Math.abs($scope.mobilidade_articular.valor_reto_esquerda - $scope.mobilidade_articular.valor_inclinado_esquerda).toFixed(4));
+            }
+        }
+    }
+
+    $scope.getIdadeAparecimento = function() {
+        apiService.getIdadeAparecimento($scope.viewPaciente.id).then(function(response) {
+            $scope.diag_prog.idade_aparecimento = response.data;
+        })
+    }
 });

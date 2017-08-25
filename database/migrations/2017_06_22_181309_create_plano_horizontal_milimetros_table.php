@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePlanoFrontalTable extends Migration
+class CreatePlanoHorizontalMilimetrosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreatePlanoFrontalTable extends Migration
      */
     public function up()
     {
-        Schema::create('plano_frontal', function (Blueprint $table) {
+        Schema::create('plano_horizontal_milimetros', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('valor')->nullable();
+            $table->integer('tipo')->nullable();
             $table->string('calco_utilizado')->nullable();
-            $table->integer('tamanho_calco')->nullable();
+            $table->string('vertebra')->nullable();
             $table->integer('medidas_id')->unsigned()->nullable();
             $table->foreign('medidas_id')->references('id')->on('medidas')->onDelete('cascade');
             $table->timestamps();
@@ -31,6 +32,6 @@ class CreatePlanoFrontalTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('plano_frontal');
+        Schema::dropIfExists('plano_horizontal_milimetros');
     }
 }

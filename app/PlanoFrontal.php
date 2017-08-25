@@ -14,7 +14,7 @@ class PlanoFrontal extends Model
      * @var array
      */
     protected $fillable = [
-        'calco', 'valor'
+        'calco_utilizado', 'tamanho_calco', 'valor'
     ];
 
     protected $hidden = [

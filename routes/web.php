@@ -38,12 +38,14 @@ Route::group(['prefix' => 'usuario'], function () {
   Route::post('/excluirPacientes', 'PacienteApi\PacienteApiController@excluirPacientes');
   Route::get('/checkExistenciaCpfPaciente/{cpf}', 'PacienteApi\PacienteApiController@checkExistenciaCpfPaciente');
   Route::get('/checkExistenciaCpfResponsavel/{cpf}', 'PacienteApi\PacienteApiController@checkExistenciaCpfResponsavel');
-  Route::get('/getPacienteEdit/{cpf}', 'PacienteApi\PacienteApiController@getPacienteEdit');
+  Route::get('/getPacienteEdit/{id}', 'PacienteApi\PacienteApiController@getPacienteEdit');
   Route::put('/editarPaciente', 'PacienteApi\PacienteApiController@editarPaciente');
 
-  Route::post('/addAtendimento/{cpf}', 'AtendimentoApi\AtendimentoApiController@addAtendimento');
-  Route::get('/getAtendimentos/{cpf}/{offset}', 'AtendimentoApi\AtendimentoApiController@getAtendimentos');
+  Route::post('/addAtendimento/{id}', 'AtendimentoApi\AtendimentoApiController@addAtendimento');
+  Route::get('/getAtendimentos/{id}/{offset}', 'AtendimentoApi\AtendimentoApiController@getAtendimentos');
+  Route::get('/getIdadeAparecimento/{id}', 'AtendimentoApi\AtendimentoApiController@getIdadeAparecimento');
   Route::post('/uploadFotos/{nome}/{cpf}/{num}', 'AtendimentoApi\AtendimentoApiController@uploadFotos');
-  Route::get('/listarFotos/{nome}/{cpf}/{num}', 'AtendimentoApi\AtendimentoApiController@listarFotos');
+  Route::get('/listarFotos/{nome}/{cpf}/{num}/{cpfUsuario}', 'AtendimentoApi\AtendimentoApiController@listarFotos');
   Route::get('/getQtdFotosAtend/{nome}/{cpf}/{num}', 'AtendimentoApi\AtendimentoApiController@getQtdFotosAtend');
+  Route::post('/deletarFotos', 'AtendimentoApi\AtendimentoApiController@deletarFotos');
 });

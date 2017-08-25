@@ -16,7 +16,7 @@ class CreateCurvaTable extends Migration
         Schema::create('curva', function (Blueprint $table) {
             $table->increments('id');
             $table->string('ordenacao')->nullable();
-            $table->string('tipo')->nullable();
+            $table->string('observacao')->nullable();
             $table->integer('angulo_cobb')->nullable();
             $table->integer('angulo_ferguson')->nullable();
             $table->integer('grau_rotacao')->nullable();

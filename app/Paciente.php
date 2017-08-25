@@ -7,9 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Paciente extends Model
 {
     protected $table = 'paciente';
-    
-    protected $primaryKey = 'cpf';
-    public $incrementing = false;
 
     /**
      * The attributes that are mass assignable.
@@ -26,11 +23,11 @@ class Paciente extends Model
 
     public function responsavel()
     {
-        return $this->hasOne('App\Responsavel', 'cpf_paciente');
+        return $this->hasOne('App\Responsavel');
     }
 
     public function atendimento()
     {
-        return $this->hasMany('App\Atendimento', 'cpf_paciente');
+        return $this->hasMany('App\Atendimento');
     }
 }

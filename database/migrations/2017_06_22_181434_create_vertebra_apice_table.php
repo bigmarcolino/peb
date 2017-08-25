@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLocalEscolioseTable extends Migration
+class CreateVertebraApiceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateLocalEscolioseTable extends Migration
      */
     public function up()
     {
-        Schema::create('local_escoliose', function (Blueprint $table) {
+        Schema::create('vertebra_apice', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('local')->nullable();
-            $table->string('lado')->nullable();
+            $table->string('tipo_escoliose')->nullable();
+            $table->string('vertebra_nome')->nullable();
             $table->integer('diagnostico_prognostico_id')->unsigned()->nullable();
             $table->foreign('diagnostico_prognostico_id')->references('id')->on('diagnostico_prognostico')->onDelete('cascade');
             $table->timestamps();
@@ -30,6 +30,6 @@ class CreateLocalEscolioseTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('local_escoliose');
+        Schema::dropIfExists('vertebra_apice');
     }
 }

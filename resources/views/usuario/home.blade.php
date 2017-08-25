@@ -46,12 +46,12 @@
 	    					<a href="#" title="Atendimento">Atendimento</a>
 	    				</li>
 
-	    				<li ng-class="{'active' : viewMedidas}" ng-click="toggleAtendimento('medidas')" ng-if="showFinalizarAtendimento">
-	    					<a href="#" title="Medidas">Medidas</a>
+	    				<li ng-class="{'active' : viewDiagProg}" ng-click="toggleAtendimento('diagprog'); getIdadeAparecimento()" ng-if="showFinalizarAtendimento">
+	    					<a href="#" title="Diagnóstico Prognóstico">Diagnóstico Prognóstico</a>
 	    				</li>
 
-	    				<li ng-class="{'active' : viewDiagProg}" ng-click="toggleAtendimento('diagprog')" ng-if="showFinalizarAtendimento">
-	    					<a href="#" title="Diagnóstico Prognóstico">Diagnóstico Prognóstico</a>
+	    				<li ng-class="{'active' : viewMedidas}" ng-click="toggleAtendimento('medidas')" ng-if="showFinalizarAtendimento">
+	    					<a href="#" title="Medidas">Medidas</a>
 	    				</li>
 	    			</ul>
 	    		</div>
@@ -243,7 +243,7 @@
 
 		      	<div class="modal-body">
 		      		<span ng-if="!showSpinnerExcluirUsuarios">
-		      			Erro ao excluir todos os usuários. Verifique sua conexão com a internet e tente novamente.
+		      			Erro ao excluir os usuários. Verifique sua conexão com a internet e tente novamente.
 		      		</span>
 
 		      		<div style="min-height: 25px">
@@ -335,7 +335,7 @@
 
 	                    <div class="form-group">
 	                    	<div class="input-group">
-		                    	<input class="form-control" type="text" name="data_nasc" placeholder="Data de Nascimento:" ng-model="usuarioEdit.data_nasc" options="dpEditarUsuarioOptions" datetimepicker readonly maxlength="254">
+		                    	<input class="form-control" type="text" name="data_nasc" placeholder="Data de Nascimento:" ng-model="usuarioEdit.data_nasc" options="dpEditarUsuarioOptions" datetimepicker readonly>
 							    <span class="input-group-addon" id="data_nasc">
 							        <span class="glyphicon glyphicon-calendar"></span>
 							    </span>
@@ -484,7 +484,7 @@
 				        	</a>
 				        </td>
 				        <td class="hidden-xs">[[ paciente.email | tracos ]]</td>
-				        <td class="hidden-sm hidden-xs">[[ paciente.cpf ]]</td>
+				        <td class="hidden-sm hidden-xs">[[ paciente.cpf | tracos ]]</td>
 				        <td class="hidden-sm hidden-xs">[[ paciente.data_nasc | dateBr]]</td>
 
 				        @if (Auth::user()->funcao != "Analista")
@@ -559,7 +559,7 @@
 
 		      	<div class="modal-body">
 		      		<span ng-if="!showSpinnerExcluirPacientes">
-		      			Erro ao excluir todos os usuários. Verifique sua conexão com a internet e tente novamente.
+		      			Erro ao excluir os pacientes. Verifique sua conexão com a internet e tente novamente.
 		      		</span>
 
 		      		<div style="min-height: 25px">
@@ -599,16 +599,12 @@
                             </div>
                         </div>
                         <div>
-                            <label class="col-sm-1 control-label">CPF*</label>
-                            <div class="col-sm-2" ng-class="{'has-error': cpfVazioPaciente || cpfExistePaciente}">
-                                <input type="text" class="form-control" ng-model="novoPaciente.cpf" numbers-only ng-change="checkCpfPaciente()" ng-blur="checkCpfExistenciaPaciente()" maxlength="254">
+                            <label class="col-sm-1 control-label">CPF</label>
+                            <div class="col-sm-2" ng-class="{'has-error': cpfExistePaciente}">
+                                <input type="text" class="form-control" ng-model="novoPaciente.cpf" numbers-only ng-blur="checkCpfExistenciaPaciente('add')" maxlength="254">
 
                                 <span class="help-block" ng-if="cpfExistePaciente">
 	                                <strong>O CPF já existe</strong>
-	                            </span>
-
-                                <span class="help-block" ng-if="cpfVazioPaciente">
-	                                <strong>O campo CPF é obrigatório</strong>
 	                            </span>
                             </div>
                         </div>
@@ -808,11 +804,11 @@
 
 				<div class="bg-white-light p-s text-right bd-t bd-gray clearfix submit-row">
 				    <div class="clearfix pull-right">
-				        <button type="button" class="btn btn-green upper pull-right btn-loading" id="form-submit-button" ng-click="addPaciente()" ng-disabled="ataVazioPaciente || nomeVazioPaciente || cpfVazioPaciente || cpfExistePaciente || (pacienteMenorIdade && nomeVazioResponsavel) || (pacienteMenorIdade && cpfVazioResponsavel) || (pacienteMenorIdade && cpfExisteResponsavel)">
+				        <button type="button" class="btn btn-green upper pull-right btn-loading" id="form-submit-button" ng-click="addPaciente()" ng-disabled="dataVazioPaciente || nomeVazioPaciente || cpfExistePaciente || (pacienteMenorIdade && nomeVazioResponsavel) || (pacienteMenorIdade && cpfVazioResponsavel) || (pacienteMenorIdade && cpfExisteResponsavel)">
 				        	<span class="btn-loading-text">Salvar</span>			            	
 			            </button>
 
-			            <button type="button" class="btn btn-default upper m-r-es pull-left btn-loading" ng-click="addPaciente(true)" ng-disabled="dataVazioPaciente || nomeVazioPaciente || cpfVazioPaciente || cpfExistePaciente || (pacienteMenorIdade && nomeVazioResponsavel) || (pacienteMenorIdade && cpfVazioResponsavel) || (pacienteMenorIdade && cpfExisteResponsavel)">
+			            <button type="button" class="btn btn-default upper m-r-es pull-left btn-loading" ng-click="addPaciente(true)" ng-disabled="dataVazioPaciente || nomeVazioPaciente || cpfExistePaciente || (pacienteMenorIdade && nomeVazioResponsavel) || (pacienteMenorIdade && cpfVazioResponsavel) || (pacienteMenorIdade && cpfExisteResponsavel)">
 			            	<span class="btn-loading-text">Salvar e adicionar outro</span>
 			            </button>	
 				    </div>
@@ -854,7 +850,7 @@
 	<div ng-if="showEditPacientes" class="peb-containers">
 		<h2 class="title-lg patient-name" ng-if="successLoadPacienteEdit">[[ pacienteEdit.nome | tracos ]]</h2>
 
-		<div class="form-patients-update m-b-s bg-white bd bd-gray bd-radius content-settings form-horizontal form-label tab-content" id="patient-update-form" ng-if="successLoadPacienteEdit">
+		<div class="form-patients-update m-b-s bg-white bd bd-gray bd-radius content-settings form-horizontal form-label tab-content" id="patient-update-form" ng-if="successLoadPacienteEdit" ng-init="pacEditCpf = pacienteEdit.cpf">
 			<div class="tab-pane fade in active tab-main-info" id="main-info">
                 <div class="p-s container-form">
                     <h3 class="title-form text-medium semi-bold p-b-s c-ic-blue upper">Geral</h3>
@@ -876,6 +872,16 @@
 	                                <input type="text" class="form-control" ng-model="pacienteEdit.nome" maxlength="254">
 	                            </div>
 	                        @endif
+                        </div>
+                        <div ng-if="pacEditCpf == '' || pacEditCpf == undefined">
+                            <label class="col-sm-1 control-label">CPF</label>
+                            <div class="col-sm-2" ng-class="{'has-error': cpfExistePaciente}">
+                                <input type="text" class="form-control" ng-model="pacienteEdit.cpf" numbers-only ng-blur="checkCpfExistenciaPaciente('edit')" maxlength="254">
+
+                                <span class="help-block" ng-if="cpfExistePaciente">
+	                                <strong>O CPF já existe</strong>
+	                            </span>
+                            </div>
                         </div>
                         <div>
                             <label class="col-sm-1 control-label">Identidade</label>
@@ -1061,11 +1067,11 @@
                 @if (Auth::user()->funcao != "Analista")
 					<div class="bg-white-light p-s text-right bd-t bd-gray clearfix submit-row">
 					    <div class="clearfix pull-right">
-					        <button type="button" class="btn btn-green upper pull-right btn-loading" id="form-submit-button" ng-click="editarPaciente()" ng-disabled="nomeVazioPaciente || (pacienteMenorIdade && nomeVazioResponsavel)">
+					        <button type="button" class="btn btn-green upper pull-right btn-loading" id="form-submit-button" ng-click="editarPaciente()" ng-disabled="nomeVazioPaciente || cpfExistePaciente || (pacienteMenorIdade && nomeVazioResponsavel)">
 					        	<span class="btn-loading-text">Salvar</span>			            	
 				            </button>
 
-				            <button type="button" class="btn btn-default upper m-r-es pull-left btn-loading" ng-click="editarPaciente(true)" ng-disabled="nomeVazioPaciente || (pacienteMenorIdade && nomeVazioResponsavel)">
+				            <button type="button" class="btn btn-default upper m-r-es pull-left btn-loading" ng-click="editarPaciente(true)" ng-disabled="nomeVazioPaciente || cpfExistePaciente || (pacienteMenorIdade && nomeVazioResponsavel)">
 				            	<span class="btn-loading-text">Salvar e continuar editando</span>
 				            </button>	
 					    </div>
@@ -1220,14 +1226,25 @@
 										      	</td>
 										    </tr>
 
-										    <th rowspan='[[countShowAtendKey(planoHorizontalKeys, "plano_horizontal") + 1]]' ng-if="countShowAtendKey(planoHorizontalKeys, 'plano_horizontal') > 0">
-									    		Plano Horizontal
+										    <th rowspan='[[countShowAtendKey(planoHorizontalMilimetrosKeys, "plano_horizontal_milimetros") + 1]]' ng-if="countShowAtendKey(planoHorizontalMilimetrosKeys, 'plano_horizontal_milimetros') > 0">
+									    		Plano Horizontal Milímetros
 									    	</th>
 
-										    <tr ng-repeat="key in planoHorizontalKeys | filter : showAtendKey('plano_horizontal')">
+										    <tr ng-repeat="key in planoHorizontalMilimetrosKeys | filter : showAtendKey('plano_horizontal_milimetros')">
 										      	<th>[[ key[1] ]]</th>
 										      	<td ng-repeat="obj in atendimentos">
-										        	[[ obj.plano_horizontal[ key[0] ] ]]
+										        	[[ obj.plano_horizontal_milimetros[ key[0] ] ]]
+										      	</td>
+										    </tr>
+
+										    <th rowspan='[[countShowAtendKey(planoHorizontalGrausKeys, "plano_horizontal_graus") + 1]]' ng-if="countShowAtendKey(planoHorizontalGrausKeys, 'plano_horizontal_graus') > 0">
+									    		Plano Horizontal Graus
+									    	</th>
+
+										    <tr ng-repeat="key in planoHorizontalGrausKeys | filter : showAtendKey('plano_horizontal_graus')">
+										      	<th>[[ key[1] ]]</th>
+										      	<td ng-repeat="obj in atendimentos">
+										        	[[ obj.plano_horizontal_graus[ key[0] ] ]]
 										      	</td>
 										    </tr>
 
@@ -1345,15 +1362,296 @@
 													        </div>
 
 													        <div class="col-md-3 col-sm-3 col-xs-6">
-													        	<label>Risser:</label>
-																<p class="form-control-static">[[ atendimentoFull.atendimento.risser ]]</p>
-													        </div>
-
-													        <div class="col-md-3 col-sm-3 col-xs-6">
 													        	<label>Data do raio X:</label>
 																<p class="form-control-static">[[ atendimentoFull.atendimento.data_raio_x ]]</p>
 													        </div>
+
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Risser:</label>
+																<p class="form-control-static">[[ atendimentoFull.atendimento.risser ]]</p>
+													        </div>
 													    </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Diagnóstico Prognóstico</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+													        <div class="padding-full-input">
+													        	<label>Diagnóstico clínico:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.diagnostico_clinico ]]</p>
+													        </div>
+													    </div>
+
+													    <div class="form-group row">
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Tipo:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.tipo ]]</p>
+													        </div>
+
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Local escoliose:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.local_escoliose ]]</p>
+													        </div>
+
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Cifose:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.cifose ]]</p>
+													        </div>
+
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Lordose:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.lordose ]]</p>
+													        </div>
+													    </div>
+
+													    <div class="form-group row">
+													        <div class="padding-full-input">
+													        	<label>Prescrição médica:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.prescricao_medica ]]</p>
+													        </div>
+													    </div>
+
+													    <div class="form-group row">
+													        <div class="padding-full-input">
+													        	<label>Prescrição fisioterapêutica:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.prescricao_fisioterapeutica ]]</p>
+													        </div>
+													    </div>
+
+													    <div class="form-group row">
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Colete:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.colete ]]</p>
+													        </div>
+
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Colete HS:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.colete_hs ]]</p>
+													        </div>
+
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Idade do aparecimento:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.idade_aparecimento ]]</p>
+													        </div>
+													    </div>
+
+													    <div class="form-group row">
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Calço direito:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.calco_utilizado_direito ]]</p>
+													        </div>
+
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Tamanho calço direito (mm):</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.tamanho_calco_direito ]]</p>
+													        </div>
+
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Calço esquerdo:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.calco_utilizado_esquerdo ]]</p>
+													        </div>
+
+													        <div class="col-md-3 col-sm-3 col-xs-6">
+													        	<label>Tamanho calço esquerdo (mm):</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.tamanho_calco_esquerdo ]]</p>
+													        </div>
+													    </div>
+
+													    <div class="form-group row">
+													        <div class="col-md-6 col-sm-6 col-xs-6">
+													        	<label>Etiologia:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.etiologia ]]</p>
+													        </div>
+
+													        <div class="col-md-6 col-sm-6 col-xs-6">
+													        	<label>Topografia:</label>
+																<p class="form-control-static">[[ atendimentoFull.diag_prog.topografia ]]</p>
+													        </div>
+													    </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Curva</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row" ng-if="atendimentoFull.curva.length >= 1">
+												        	<div class="col-md-2 col-sm-2 col-xs-2">
+												        		<label>Ordenação:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva[0].ordenacao ]]</p>
+												        	</div>
+
+												        	<div class="col-md-2 col-sm-2 col-xs-2">
+												        		<label>Ângulo de COBB:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva[0].angulo_cobb ]]</p>
+												        	</div>
+
+												        	<div class="col-md-2 col-sm-2 col-xs-2">
+												        		<label>Ângulo Ferguson:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva[0].angulo_ferguson ]]</p>
+												        	</div>
+
+												        	<div class="col-md-2 col-sm-2 col-xs-2">
+												        		<label>Grau de rotação:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva[0].grau_rotacao ]]</p>
+												        	</div>
+
+												        	<div class="col-md-4 col-sm-4 col-xs-4">
+												        		<label>Observação:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva[0].observacao ]]</p>
+												        	</div>
+												        </div>
+
+												        <div class="form-group row" ng-if="atendimentoFull.curva.length >= 2">
+												        	<div class="col-md-2 col-sm-2 col-xs-2">
+												        		<label>Ordenação:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva[1].ordenacao ]]</p>
+												        	</div>
+
+												        	<div class="col-md-2 col-sm-2 col-xs-2">
+												        		<label>Ângulo de COBB:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva[1].angulo_cobb ]]</p>
+												        	</div>
+
+												        	<div class="col-md-2 col-sm-2 col-xs-2">
+												        		<label>Ângulo Ferguson:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva[1].angulo_ferguson ]]</p>
+												        	</div>
+
+												        	<div class="col-md-2 col-sm-2 col-xs-2">
+												        		<label>Grau de rotação:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva[1].grau_rotacao ]]</p>
+												        	</div>
+
+												        	<div class="col-md-4 col-sm-4 col-xs-4">
+												        		<label>Observação:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva[1].observacao ]]</p>
+												        	</div>
+												        </div>
+
+												        <div class="form-group row" ng-if="atendimentoFull.curva.length >= 3">
+												        	<div class="col-md-2 col-sm-2 col-xs-2">
+												        		<label>Ordenação:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva[2].ordenacao ]]</p>
+												        	</div>
+
+												        	<div class="col-md-2 col-sm-2 col-xs-2">
+												        		<label>Ângulo de COBB:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva[2].angulo_cobb ]]</p>
+												        	</div>
+
+												        	<div class="col-md-2 col-sm-2 col-xs-2">
+												        		<label>Ângulo Ferguson:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva[2].angulo_ferguson ]]</p>
+												        	</div>
+
+												        	<div class="col-md-2 col-sm-2 col-xs-2">
+												        		<label>Grau de rotação:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva[2].grau_rotacao ]]</p>
+												        	</div>
+
+												        	<div class="col-md-4 col-sm-4 col-xs-4">
+												        		<label>Observação:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva[2].observacao ]]</p>
+												        	</div>
+												        </div>
+
+												        <div class="form-group row" ng-if="atendimentoFull.curva.length >= 4">
+												        	<div class="col-md-2 col-sm-2 col-xs-2">
+												        		<label>Ordenação:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva[3].ordenacao ]]</p>
+												        	</div>
+
+												        	<div class="col-md-2 col-sm-2 col-xs-2">
+												        		<label>Ângulo de COBB:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva[3].angulo_cobb ]]</p>
+												        	</div>
+
+												        	<div class="col-md-2 col-sm-2 col-xs-2">
+												        		<label>Ângulo Ferguson:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva[3].angulo_ferguson ]]</p>
+												        	</div>
+
+												        	<div class="col-md-2 col-sm-2 col-xs-2">
+												        		<label>Grau de rotação:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva[3].grau_rotacao ]]</p>
+												        	</div>
+
+												        	<div class="col-md-4 col-sm-4 col-xs-4">
+												        		<label>Observação:</label>
+																<p class="form-control-static">[[ atendimentoFull.curva[3].observacao ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Vértebra Ápice</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Tipo escoliose</label>
+																<p class="form-control-static">[[ atendimentoFull.vertebra_apice.tipo_escoliose ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Nome da vértebra:</label>
+																<p class="form-control-static">[[ atendimentoFull.vertebra_apice.vertebra_nome ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Vértebra Limite</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Tipo escoliose</label>
+																<p class="form-control-static">[[ atendimentoFull.vertebra_limite.tipo_escoliose ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Vértebra superior:</label>
+																<p class="form-control-static">[[ atendimentoFull.vertebra_limite.vertebra_superior ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Vértebra inferior:</label>
+																<p class="form-control-static">[[ atendimentoFull.vertebra_limite.vertebra_inferior ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">HPP</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="padding-full-input">
+															<label>HPP:</label>
+															<p class="form-control-static">[[ atendimentoFull.diag_prog.hpp ]]</p>
+														</div>
 													</div>
 												</div>
 
@@ -1371,8 +1669,13 @@
 												        	</div>
 
 												        	<div class="col-md-3 col-sm-3 col-xs-6">
-												        		<label>Calço:</label>
-																<p class="form-control-static">[[ atendimentoFull.plano_frontal.calco ]]</p>
+												        		<label>Calço utilizado (mm):</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_frontal.calco_utilizado ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Tamanho do calço (mm):</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_frontal.tamanho_calco ]]</p>
 												        	</div>
 												        </div>
 													</div>
@@ -1380,7 +1683,7 @@
 
 												<div class="item-description bd-t bd-gray">
 													<h2 class="item-title p-s bd-b bd-gray clearfix">
-														<span class="c-ic-blue semi-bold pull-left">Plano Horizontal</span>
+														<span class="c-ic-blue semi-bold pull-left">Plano Horizontal Milímetros</span>
 														<span></span>
 													</h2>
 
@@ -1388,22 +1691,53 @@
 														<div class="form-group row">
 												        	<div class="col-md-3 col-sm-3 col-xs-6">
 												        		<label>Valor:</label>
-																<p class="form-control-static">[[ atendimentoFull.plano_horizontal.valor ]]</p>
+																<p class="form-control-static">[[ atendimentoFull.plano_horizontal_milimetros.valor ]]</p>
 												        	</div>
 
 												        	<div class="col-md-3 col-sm-3 col-xs-6">
 												        		<label>Tipo:</label>
-																<p class="form-control-static">[[ atendimentoFull.plano_horizontal.tipo ]]</p>
+																<p class="form-control-static">[[ atendimentoFull.plano_horizontal_milimetros.tipo ]]</p>
 												        	</div>
 
 												        	<div class="col-md-3 col-sm-3 col-xs-6">
-												        		<label>Calço:</label>
-																<p class="form-control-static">[[ atendimentoFull.plano_horizontal.calco ]]</p>
+												        		<label>Calço utilizado:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_horizontal_milimetros.calco_utilizado ]]</p>
 												        	</div>
 
 												        	<div class="col-md-3 col-sm-3 col-xs-6">
 												        		<label>Vértebra:</label>
-																<p class="form-control-static">[[ atendimentoFull.plano_horizontal.vertebra ]]</p>
+																<p class="form-control-static">[[ atendimentoFull.plano_horizontal_milimetros.vertebra ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Plano Horizontal Graus</span>
+														<span></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Valor:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_horizontal_graus.valor ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Tipo:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_horizontal_graus.tipo ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Calço utilizado:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_horizontal_graus.calco_utilizado ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Vértebra:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_horizontal_graus.vertebra ]]</p>
 												        	</div>
 												        </div>
 													</div>
@@ -1417,19 +1751,80 @@
 
 													<div class="item-text p-s">
 														<div class="form-group row">
-												        	<div class="col-md-3 col-sm-3 col-xs-6">
-												        		<label>Valor:</label>
-																<p class="form-control-static">[[ atendimentoFull.plano_sagital.valor ]]</p>
+												        	<div class="col-md-3 col-sm-3 col-xs-3">
+												        		<label>Cabeça:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_sagital.valor_cabeca ]]</p>
 												        	</div>
 
-												        	<div class="col-md-3 col-sm-3 col-xs-6">
-												        		<label>Diferença:</label>
-																<p class="form-control-static">[[ atendimentoFull.plano_sagital.diferenca ]]</p>
+												        	<div class="col-md-3 col-sm-3 col-xs-3">
+												        		<label>Compensação cabeca:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_sagital.compensacao_cabeca ]]</p>
 												        	</div>
 
-												        	<div class="col-md-3 col-sm-3 col-xs-6">
-												        		<label>Localização:</label>
-																<p class="form-control-static">[[ atendimentoFull.plano_sagital.localizacao ]]</p>
+												        	<div class="col-md-3 col-sm-3 col-xs-3">
+												        		<label>Cervical:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_sagital.valor_cervical ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-3">
+												        		<label>Compensação cervical:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_sagital.compensacao_cervical ]]</p>
+												        	</div>
+												        </div>
+
+												        <div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-3">
+												        		<label>C7:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_sagital.valor_c7 ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-3">
+												        		<label>Compensação C7:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_sagital.compensacao_c7 ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-3">
+												        		<label>T5-T6:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_sagital.valor_t5_t6 ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-3">
+												        		<label>Compensação T5-T6:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_sagital.compensacao_t5_t6 ]]</p>
+												        	</div>
+												        </div>
+
+												        <div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-3">
+												        		<label>T12:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_sagital.valor_t12 ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-3">
+												        		<label>Compensação T12:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_sagital.compensacao_t12 ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-3">
+												        		<label>L3:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_sagital.valor_l3 ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-3">
+												        		<label>Compensação L3:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_sagital.compensacao_l3 ]]</p>
+												        	</div>
+												        </div>
+
+												        <div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-3">
+												        		<label>S1:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_sagital.valor_s1 ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-3">
+												        		<label>Compensação S1:</label>
+																<p class="form-control-static">[[ atendimentoFull.plano_sagital.compensacao_s1 ]]</p>
 												        	</div>
 												        </div>
 													</div>
@@ -1497,18 +1892,35 @@
 													<div class="item-text p-s">
 														<div class="form-group row">
 												        	<div class="col-md-3 col-sm-3 col-xs-6">
-												        		<label>Valor:</label>
-																<p class="form-control-static">[[ atendimentoFull.mobilidade_articular.valor ]]</p>
+												        		<label>Reto direita:</label>
+																<p class="form-control-static">[[ atendimentoFull.mobilidade_articular.valor_reto_direita ]]</p>
 												        	</div>
 
 												        	<div class="col-md-3 col-sm-3 col-xs-6">
-												        		<label>Inclinação:</label>
-																<p class="form-control-static">[[ atendimentoFull.mobilidade_articular.inclinacao ]]</p>
+												        		<label>Inclinado direita:</label>
+																<p class="form-control-static">[[ atendimentoFull.mobilidade_articular.valor_inclinado_direita ]]</p>
 												        	</div>
 
 												        	<div class="col-md-3 col-sm-3 col-xs-6">
-												        		<label>Lado:</label>
-																<p class="form-control-static">[[ atendimentoFull.mobilidade_articular.lado ]]</p>
+												        		<label>Diferença direita:</label>
+																<p class="form-control-static">[[ atendimentoFull.mobilidade_articular.diferenca_direita ]]</p>
+												        	</div>
+												        </div>
+
+												        <div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Reto esquerda:</label>
+																<p class="form-control-static">[[ atendimentoFull.mobilidade_articular.valor_reto_esquerda ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Inclinado esquerda:</label>
+																<p class="form-control-static">[[ atendimentoFull.mobilidade_articular.valor_inclinado_esquerda ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Diferença esquerda:</label>
+																<p class="form-control-static">[[ atendimentoFull.mobilidade_articular.diferenca_esquerda ]]</p>
 												        	</div>
 												        </div>
 													</div>
@@ -1523,18 +1935,35 @@
 													<div class="item-text p-s">
 														<div class="form-group row">
 												        	<div class="col-md-3 col-sm-3 col-xs-6">
-												        		<label>Deslocamento:</label>
-																<p class="form-control-static">[[ atendimentoFull.medidas.teste_fukuda_deslocamento ]]</p>
+												        		<label>Deslocamento Direito (cm):</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.teste_fukuda_deslocamento_direito ]]</p>
 												        	</div>
 
 												        	<div class="col-md-3 col-sm-3 col-xs-6">
-												        		<label>Rotação:</label>
-																<p class="form-control-static">[[ atendimentoFull.medidas.teste_fukuda_rotacao ]]</p>
+												        		<label>Rotação Direito (graus):</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.teste_fukuda_rotacao_direito ]]</p>
 												        	</div>
 
 												        	<div class="col-md-3 col-sm-3 col-xs-6">
-												        		<label>Desvio:</label>
-																<p class="form-control-static">[[ atendimentoFull.medidas.teste_fukuda_desvio ]]</p>
+												        		<label>Desvio Direito (cm):</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.teste_fukuda_desvio_direito ]]</p>
+												        	</div>
+												        </div>
+
+												        <div class="form-group row">
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Deslocamento Esquerdo (cm):</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.teste_fukuda_deslocamento_esquerdo ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Rotação Esquerdo (graus):</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.teste_fukuda_rotacao_esquerdo ]]</p>
+												        	</div>
+
+												        	<div class="col-md-3 col-sm-3 col-xs-6">
+												        		<label>Desvio Esquerdo (cm):</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.teste_fukuda_desvio_esquerdo ]]</p>
 												        	</div>
 												        </div>
 													</div>
@@ -1578,6 +2007,11 @@
 												        		<label>Esquerdo:</label>
 																<p class="form-control-static">[[ atendimentoFull.medidas.romberg_mono_esquerdo ]]</p>
 												        	</div>
+
+												        	<div class="col-md-6 col-sm-6 col-xs-12">
+												        		<label>Observação:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.romberg_mono_observacao ]]</p>
+												        	</div>
 												        </div>
 													</div>
 												</div>
@@ -1598,6 +2032,11 @@
 												        	<div class="col-md-3 col-sm-3 col-xs-6">
 												        		<label>Esquerdo:</label>
 																<p class="form-control-static">[[ atendimentoFull.medidas.romberg_sensibilizado_esquerdo ]]</p>
+												        	</div>
+
+												        	<div class="col-md-6 col-sm-6 col-xs-12">
+												        		<label>Observação:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.romberg_sensibilizado_observacao ]]</p>
 												        	</div>
 												        </div>
 													</div>
@@ -1620,6 +2059,11 @@
 												        		<label>Esquerdo:</label>
 																<p class="form-control-static">[[ atendimentoFull.medidas.balanco_esquerdo ]]</p>
 												        	</div>
+
+												        	<div class="col-md-6 col-sm-6 col-xs-12">
+												        		<label>Observação:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.balanco_observacao ]]</p>
+												        	</div>
 												        </div>
 													</div>
 												</div>
@@ -1635,6 +2079,11 @@
 												        	<div class="col-md-3 col-sm-3 col-xs-6">
 												        		<label>Retração posterior:</label>
 																<p class="form-control-static">[[ atendimentoFull.medidas.retracao_posterior ]]</p>
+												        	</div>
+
+												        	<div class="col-md-9 col-sm-9 col-xs-6">
+												        		<label>Observação:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.retracao_posterior_observacao ]]</p>
 												        	</div>
 												        </div>
 													</div>
@@ -1657,6 +2106,11 @@
 												        		<label>Esquerdo:</label>
 																<p class="form-control-static">[[ atendimentoFull.medidas.teste_thomas_esquerdo ]]</p>
 												        	</div>
+
+												        	<div class="col-md-6 col-sm-6 col-xs-12">
+												        		<label>Observação:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.teste_thomas_observacao ]]</p>
+												        	</div>
 												        </div>
 													</div>
 												</div>
@@ -1678,6 +2132,11 @@
 												        		<label>Esquerdo:</label>
 																<p class="form-control-static">[[ atendimentoFull.medidas.retracao_peitoral_esquerdo ]]</p>
 												        	</div>
+
+												        	<div class="col-md-6 col-sm-6 col-xs-12">
+												        		<label>Observação:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.retracao_peitoral_observacao ]]</p>
+												        	</div>
 												        </div>
 													</div>
 												</div>
@@ -1694,13 +2153,18 @@
 												        		<label>ABS:</label>
 																<p class="form-control-static">[[ atendimentoFull.medidas.forca_muscular_abs ]]</p>
 												        	</div>
+
+												        	<div class="col-md-9 col-sm-9 col-xs-6">
+												        		<label>Observação:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.forca_muscular_observacao ]]</p>
+												        	</div>
 												        </div>
 													</div>
 												</div>
 
 												<div class="item-description bd-t bd-gray">
 													<h2 class="item-title p-s bd-b bd-gray clearfix">
-														<span class="c-ic-blue semi-bold pull-left">Extensores Tronco</span>
+														<span class="c-ic-blue semi-bold pull-left">Extensores Tronco Força</span>
 														<span ></span>
 													</h2>
 
@@ -1711,194 +2175,32 @@
 																<p class="form-control-static">[[ atendimentoFull.medidas.forca_ext_tronco ]]</p>
 												        	</div>
 
+												        	<div class="col-md-9 col-sm-9 col-xs-6">
+												        		<label>Observação:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.forca_ext_tronco_observacao ]]</p>
+												        	</div>
+												        </div>
+													</div>
+												</div>
+
+												<div class="item-description bd-t bd-gray">
+													<h2 class="item-title p-s bd-b bd-gray clearfix">
+														<span class="c-ic-blue semi-bold pull-left">Extensores Tronco Resistência</span>
+														<span ></span>
+													</h2>
+
+													<div class="item-text p-s">
+														<div class="form-group row">
 												        	<div class="col-md-3 col-sm-3 col-xs-6">
 												        		<label>Resistência:</label>
 																<p class="form-control-static">[[ atendimentoFull.medidas.resistencia_extensores_tronco ]]</p>
 												        	</div>
-												        </div>
-													</div>
-												</div>
 
-												<div class="item-description bd-t bd-gray">
-													<h2 class="item-title p-s bd-b bd-gray clearfix">
-														<span class="c-ic-blue semi-bold pull-left">Diagnóstico Prognóstico</span>
-														<span ></span>
-													</h2>
-
-													<div class="item-text p-s">
-														<div class="form-group row">
-													        <div class="padding-full-input">
-													        	<label>Diagnóstico clínico:</label>
-																<p class="form-control-static">[[ atendimentoFull.diag_prog.diagnostico_clinico ]]</p>
-													        </div>
-													    </div>
-
-													    <div class="form-group row">
-													        <div class="col-md-3 col-sm-3 col-xs-6">
-													        	<label>Tipo escoliose:</label>
-																<p class="form-control-static">[[ atendimentoFull.diag_prog.tipo_escoliose ]]</p>
-													        </div>
-
-													        <div class="col-md-3 col-sm-3 col-xs-6">
-													        	<label>Cifose:</label>
-																<p class="form-control-static">[[ atendimentoFull.diag_prog.cifose ]]</p>
-													        </div>
-
-													        <div class="col-md-3 col-sm-3 col-xs-6">
-													        	<label>Lordose:</label>
-																<p class="form-control-static">[[ atendimentoFull.diag_prog.lordose ]]</p>
-													        </div>
-													    </div>
-
-													    <div class="form-group row">
-													        <div class="padding-full-input">
-													        	<label>Prescrição médica:</label>
-																<p class="form-control-static">[[ atendimentoFull.diag_prog.prescricao_medica ]]</p>
-													        </div>
-													    </div>
-
-													    <div class="form-group row">
-													        <div class="padding-full-input">
-													        	<label>Prescrição fisioterapêutica:</label>
-																<p class="form-control-static">[[ atendimentoFull.diag_prog.prescricao_fisioterapeutica ]]</p>
-													        </div>
-													    </div>
-
-													    <div class="form-group row">
-													        <div class="col-md-3 col-sm-3 col-xs-6">
-													        	<label>Colete:</label>
-																<p class="form-control-static">[[ atendimentoFull.diag_prog.colete ]]</p>
-													        </div>
-
-													        <div class="col-md-3 col-sm-3 col-xs-6">
-													        	<label>Colete HS:</label>
-																<p class="form-control-static">[[ atendimentoFull.diag_prog.colete_hs ]]</p>
-													        </div>
-
-													        <div class="col-md-3 col-sm-3 col-xs-6">
-													        	<label>Idade do aparecimento:</label>
-																<p class="form-control-static">[[ atendimentoFull.diag_prog.idade_aparecimento ]]</p>
-													        </div>
-
-													        <div class="col-md-3 col-sm-3 col-xs-6">
-													        	<label>Calço:</label>
-																<p class="form-control-static">[[ atendimentoFull.diag_prog.calco ]]</p>
-													        </div>
-													    </div>
-
-													    <div class="form-group row">
-													        <div class="col-md-6 col-sm-6 col-xs-6">
-													        	<label>Etiologia:</label>
-																<p class="form-control-static">[[ atendimentoFull.diag_prog.etiologia ]]</p>
-													        </div>
-
-													        <div class="col-md-6 col-sm-6 col-xs-6">
-													        	<label>Topografia:</label>
-																<p class="form-control-static">[[ atendimentoFull.diag_prog.topografia ]]</p>
-													        </div>
-													    </div>
-													</div>
-												</div>
-
-												<div class="item-description bd-t bd-gray">
-													<h2 class="item-title p-s bd-b bd-gray clearfix">
-														<span class="c-ic-blue semi-bold pull-left">Curva</span>
-														<span ></span>
-													</h2>
-
-													<div class="item-text p-s">
-														<div class="form-group row">
-												        	<div class="col-md-2 col-sm-3 col-xs-6">
-												        		<label>Ordenação:</label>
-																<p class="form-control-static">[[ atendimentoFull.curva.ordenacao ]]</p>
-												        	</div>
-
-												        	<div class="col-md-2 col-sm-3 col-xs-6">
-												        		<label>Tipo:</label>
-																<p class="form-control-static">[[ atendimentoFull.curva.tipo ]]</p>
-												        	</div>
-
-												        	<div class="col-md-2 col-sm-3 col-xs-6">
-												        		<label>Ângulo de COBB:</label>
-																<p class="form-control-static">[[ atendimentoFull.curva.angulo_cobb ]]</p>
-												        	</div>
-
-												        	<div class="col-md-2 col-sm-3 col-xs-6">
-												        		<label>Ângulo Ferguson:</label>
-																<p class="form-control-static">[[ atendimentoFull.curva.angulo_ferguson ]]</p>
-												        	</div>
-
-												        	<div class="col-md-2 col-sm-3 col-xs-6">
-												        		<label>Grau de rotação:</label>
-																<p class="form-control-static">[[ atendimentoFull.curva.grau_rotacao ]]</p>
+												        	<div class="col-md-9 col-sm-9 col-xs-6">
+												        		<label>Observação:</label>
+																<p class="form-control-static">[[ atendimentoFull.medidas.resistencia_extensores_tronco_observacao ]]</p>
 												        	</div>
 												        </div>
-													</div>
-												</div>
-
-												<div class="item-description bd-t bd-gray">
-													<h2 class="item-title p-s bd-b bd-gray clearfix">
-														<span class="c-ic-blue semi-bold pull-left">Local Escoliose</span>
-														<span ></span>
-													</h2>
-
-													<div class="item-text p-s">
-														<div class="form-group row">
-												        	<div class="col-md-3 col-sm-3 col-xs-6">
-												        		<label>Local:</label>
-																<p class="form-control-static">[[ atendimentoFull.local_escoliose.local ]]</p>
-												        	</div>
-
-												        	<div class="col-md-3 col-sm-3 col-xs-6">
-												        		<label>Lado:</label>
-																<p class="form-control-static">[[ atendimentoFull.local_escoliose.lado ]]</p>
-												        	</div>
-												        </div>
-													</div>
-												</div>
-
-												<div class="item-description bd-t bd-gray">
-													<h2 class="item-title p-s bd-b bd-gray clearfix">
-														<span class="c-ic-blue semi-bold pull-left">Vértebra</span>
-														<span ></span>
-													</h2>
-
-													<div class="item-text p-s">
-														<div class="form-group row">
-												        	<div class="col-md-3 col-sm-3 col-xs-6">
-												        		<label>Tipo</label>
-																<p class="form-control-static">[[ atendimentoFull.vertebra.tipo ]]</p>
-												        	</div>
-
-												        	<div class="col-md-3 col-sm-3 col-xs-6">
-												        		<label>Local:</label>
-																<p class="form-control-static">[[ atendimentoFull.vertebra.local ]]</p>
-												        	</div>
-
-												        	<div class="col-md-3 col-sm-3 col-xs-6">
-												        		<label>Altura:</label>
-																<p class="form-control-static">[[ atendimentoFull.vertebra.altura ]]</p>
-												        	</div>
-
-												        	<div class="col-md-3 col-sm-3 col-xs-6">
-												        		<label>Nome:</label>
-																<p class="form-control-static">[[ atendimentoFull.vertebra.vertebra_nome ]]</p>
-												        	</div>
-												        </div>
-													</div>
-												</div>
-
-												<div class="item-description bd-t bd-gray">
-													<h2 class="item-title p-s bd-b bd-gray clearfix">
-														<span class="c-ic-blue semi-bold pull-left">HPP</span>
-														<span ></span>
-													</h2>
-
-													<div class="item-text p-s">
-														<div class="padding-full-input">
-															<label>HPP:</label>
-															<p class="form-control-static">[[ atendimentoFull.diag_prog.hpp ]]</p>
-														</div>
 													</div>
 												</div>
 											</div>
@@ -1965,11 +2267,6 @@
 										        </div>
 
 										        <div class="col-md-3 col-sm-3 col-xs-6">
-										        	<label>Risser:</label>
-													<input class="form-control" type="text" ng-model="atendimento.risser" numbers-only maxlength="9">
-										        </div>
-
-										        <div class="col-md-3 col-sm-3 col-xs-6">
 										        	<label>Data do raio X:</label>
 
 													<div class="input-group">														
@@ -1979,6 +2276,11 @@
 													        <span class="glyphicon glyphicon-calendar"></span>
 													    </div>
 													</div>
+										        </div>
+
+										        <div class="col-md-3 col-sm-3 col-xs-6">
+										        	<label>Risser:</label>
+													<input class="form-control" type="text" ng-model="atendimento.risser" numbers-only maxlength="9">
 										        </div>
 										    </div>
 										</div>
@@ -2004,56 +2306,161 @@
 										    <div uib-accordion-group class="panel-default" heading="Plano Frontal" is-open="true">
 										    	<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
-										        		<label>Valor:</label>
+										        		<label>Valor (cm):</label>
 														<input class="form-control" type="text" ng-model="plano_frontal.valor" numbers-only maxlength="9">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
-										        		<label>Calço:</label>
-														<input class="form-control" type="text" ng-model="plano_frontal.calco" maxlength="254">
+										        		<label>Calço utilizado:</label>
+
+														<select class="select-picker form-control" ng-model="plano_frontal.calco_utilizado" maxlength="254">
+															<option value="" selected="selected"></option>
+															<option value="Sim">Sim</option>
+															<option value="Não">Não</option>
+														</select>
+										        	</div>
+
+										        	<div class="col-md-3 col-sm-3 col-xs-6" ng-if="showTamanhoCalco('frontal')">
+										        		<label>Tamanho do calço (mm):</label>
+														<input class="form-control" type="text" ng-model="plano_frontal.tamanho_calco" numbers-only maxlength="9">
 										        	</div>
 										        </div>
 										    </div>
 
-										    <div uib-accordion-group class="panel-default" heading="Plano Horizontal">
+										    <div uib-accordion-group class="panel-default" heading="Plano Horizontal Milímetros">
 										    	<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Valor:</label>
-														<input class="form-control" type="text" ng-model="plano_horizontal.valor" numbers-only maxlength="9">
+														<input class="form-control" type="text" ng-model="plano_horizontal_milimetros.valor" numbers-only maxlength="9">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Tipo:</label>
-														<input class="form-control" type="text" ng-model="plano_horizontal.tipo" numbers-only maxlength="9">
+														<input class="form-control" type="text" ng-model="plano_horizontal_milimetros.tipo" numbers-only maxlength="9">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
-										        		<label>Calço:</label>
-														<input class="form-control" type="text" ng-model="plano_horizontal.calco" maxlength="254">
+										        		<label>Calço utilizado:</label>
+
+														<select class="select-picker form-control" ng-model="plano_horizontal_milimetros.calco_utilizado" maxlength="254">
+															<option value="" selected="selected"></option>
+															<option value="Sim">Sim</option>
+															<option value="Não">Não</option>
+														</select>
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Vértebra:</label>
-														<input class="form-control" type="text" ng-model="plano_horizontal.vertebra" maxlength="254">
+														<input class="form-control" type="text" ng-model="plano_horizontal_milimetros.vertebra" maxlength="254">
+										        	</div>
+										        </div>
+										    </div>
+
+										    <div uib-accordion-group class="panel-default" heading="Plano Horizontal Graus">
+										    	<div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Valor:</label>
+														<input class="form-control" type="text" ng-model="plano_horizontal_graus.valor" numbers-only maxlength="9">
+										        	</div>
+
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Tipo:</label>
+														<input class="form-control" type="text" ng-model="plano_horizontal_graus.tipo" numbers-only maxlength="9">
+										        	</div>
+
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Calço utilizado:</label>
+
+										        		<select class="select-picker form-control" ng-model="plano_horizontal_graus.calco_utilizado" maxlength="254">
+															<option value="" selected="selected"></option>
+															<option value="Sim">Sim</option>
+															<option value="Não">Não</option>
+														</select>
+										        	</div>
+
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Vértebra:</label>
+														<input class="form-control" type="text" ng-model="plano_horizontal_graus.vertebra" maxlength="254">
 										        	</div>
 										        </div>
 										    </div>
 
 										    <div uib-accordion-group class="panel-default" heading="Plano Sagital">
 										    	<div class="form-group row forms-accordion">
-										        	<div class="col-md-3 col-sm-3 col-xs-6">
-										        		<label>Valor:</label>
-														<input class="form-control" type="text" ng-model="plano_sagital.valor" numbers-only maxlength="9">
+										        	<div class="col-md-3 col-sm-3 col-xs-3">
+										        		<label>Cabeça:</label>
+														<input class="form-control" type="text" ng-model="plano_sagital.valor_cabeca" numbers-only maxlength="9">
 										        	</div>
 
-										        	<div class="col-md-3 col-sm-3 col-xs-6">
-										        		<label>Diferença:</label>
-														<input class="form-control" type="text" ng-model="plano_sagital.diferenca" numbers-only maxlength="9">
+										        	<div class="col-md-3 col-sm-3 col-xs-3">
+										        		<label>Compensação cabeça:</label>
+														<input class="form-control" type="text" ng-model="plano_sagital.compensacao_cabeca" numbers-only maxlength="9">
 										        	</div>
 
-										        	<div class="col-md-3 col-sm-3 col-xs-6">
-										        		<label>Localização:</label>
-														<input class="form-control" type="text" ng-model="plano_sagital.localizacao" maxlength="254">
+										        	<div class="col-md-3 col-sm-3 col-xs-3">
+										        		<label>Cervical:</label>
+														<input class="form-control" type="text" ng-model="plano_sagital.valor_cervical" numbers-only maxlength="9">
+										        	</div>
+
+										        	<div class="col-md-3 col-sm-3 col-xs-3">
+										        		<label>Compensação cervical:</label>
+														<input class="form-control" type="text" ng-model="plano_sagital.compensacao_cervical" numbers-only maxlength="9">
+										        	</div>
+										        </div>
+
+										        <div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-3">
+										        		<label>C7:</label>
+														<input class="form-control" type="text" ng-model="plano_sagital.valor_c7" numbers-only maxlength="9">
+										        	</div>
+
+										        	<div class="col-md-3 col-sm-3 col-xs-3">
+										        		<label>Compensação C7:</label>
+														<input class="form-control" type="text" ng-model="plano_sagital.compensacao_c7" numbers-only maxlength="9">
+										        	</div>
+
+										        	<div class="col-md-3 col-sm-3 col-xs-3">
+										        		<label>T5-T6:</label>
+														<input class="form-control" type="text" ng-model="plano_sagital.valor_t5_t6" numbers-only maxlength="9">
+										        	</div>
+
+										        	<div class="col-md-3 col-sm-3 col-xs-3">
+										        		<label>Compensação T5-T6:</label>
+														<input class="form-control" type="text" ng-model="plano_sagital.compensacao_t5_t6" numbers-only maxlength="9">
+										        	</div>
+										        </div>
+
+										        <div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-3">
+										        		<label>T12:</label>
+														<input class="form-control" type="text" ng-model="plano_sagital.valor_t12" numbers-only maxlength="9">
+										        	</div>
+
+										        	<div class="col-md-3 col-sm-3 col-xs-3">
+										        		<label>Compensação T12:</label>
+														<input class="form-control" type="text" ng-model="plano_sagital.compensacao_t12" numbers-only maxlength="9">
+										        	</div>
+
+										        	<div class="col-md-3 col-sm-3 col-xs-3">
+										        		<label>L3:</label>
+														<input class="form-control" type="text" ng-model="plano_sagital.valor_l3" numbers-only maxlength="9">
+										        	</div>
+
+										        	<div class="col-md-3 col-sm-3 col-xs-3">
+										        		<label>Compensação L3:</label>
+														<input class="form-control" type="text" ng-model="plano_sagital.compensacao_l3" numbers-only maxlength="9">
+										        	</div>
+										        </div>
+
+										        <div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-3">
+										        		<label>S1:</label>
+														<input class="form-control" type="text" ng-model="plano_sagital.valor_s1" numbers-only maxlength="9">
+										        	</div>
+
+										        	<div class="col-md-3 col-sm-3 col-xs-3">
+										        		<label>Compensação S1:</label>
+														<input class="form-control" type="text" ng-model="plano_sagital.compensacao_s1" numbers-only maxlength="9">
 										        	</div>
 										        </div>
 											</div>
@@ -2062,12 +2469,23 @@
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Ombro:</label>
-														<input class="form-control" type="text" ng-model="medidas.assimetria_ombro" numbers-only maxlength="9">
+
+														<select class="select-picker form-control" ng-model="medidas.assimetria_ombro" maxlength="254">
+															<option value="" selected="selected"></option>
+															<option value="Leve">Leve</option>
+															<option value="Clara">Clara</option>
+															<option value="Importante">Importante</option>
+														</select>
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Escápulas:</label>
-														<input class="form-control" type="text" ng-model="medidas.assimetria_escapulas" numbers-only maxlength="9">
+
+														<select class="select-picker form-control" ng-model="medidas.assimetria_escapulas" maxlength="254">
+															<option value="" selected="selected"></option>
+															<option value="Leve">Leve</option>
+															<option value="Clara">Clara</option>
+														</select>
 										        	</div>
 										        </div>
 											</div>
@@ -2076,7 +2494,12 @@
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Hemi-Tórax:</label>
-														<input class="form-control" type="text" ng-model="medidas.hemi_torax" numbers-only maxlength="9">
+
+														<select class="select-picker form-control" ng-model="medidas.hemi_torax" maxlength="254">
+															<option value="" selected="selected"></option>
+															<option value="Protusão Leve">Protusão Leve</option>
+															<option value="Protusão Importante">Protusão Importante</option>
+														</select>
 										        	</div>
 										        </div>
 											</div>
@@ -2085,7 +2508,14 @@
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Cintura:</label>
-														<input class="form-control" type="text" ng-model="medidas.cintura" numbers-only maxlength="9">
+
+														<select class="select-picker form-control" ng-model="medidas.cintura" maxlength="254">
+															<option value="" selected="selected"></option>
+															<option value="Leve">Leve</option>
+															<option value="Clara">Clara</option>
+															<option value="Importante">Importante</option>
+															<option value="Muito Importante">Muito Importante</option>
+														</select>
 										        	</div>
 										        </div>
 											</div>
@@ -2093,18 +2523,35 @@
 											<div uib-accordion-group class="panel-default" heading="Mobilidade Articular">
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
-										        		<label>Valor:</label>
-														<input class="form-control" type="text" ng-model="mobilidade_articular.valor" floating-number-only maxlength="6">
+										        		<label>Reto direita:</label>
+														<input class="form-control" type="text" ng-model="mobilidade_articular.valor_reto_direita" floating-number-only maxlength="6" ng-change="diferencaMobiArt('direita')">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
-										        		<label>Inclinação:</label>
-														<input class="form-control" type="text" ng-model="mobilidade_articular.inclinacao" maxlength="254">
+										        		<label>Inclinado direita:</label>
+														<input class="form-control" type="text" ng-model="mobilidade_articular.valor_inclinado_direita" floating-number-only maxlength="6" ng-change="diferencaMobiArt('direita')">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
-										        		<label>Lado:</label>
-														<input class="form-control" type="text" ng-model="mobilidade_articular.lado" maxlength="254">
+										        		<label>Diferença direita:</label>
+														<input class="form-control" type="text" ng-model="mobilidade_articular.diferenca_direita" floating-number-only maxlength="6" disabled>
+										        	</div>
+										        </div>
+
+										        <div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Reto esquerda:</label>
+														<input class="form-control" type="text" ng-model="mobilidade_articular.valor_reto_esquerda" floating-number-only maxlength="6" ng-change="diferencaMobiArt('esquerda')">
+										        	</div>
+
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Inclinado esquerda:</label>
+														<input class="form-control" type="text" ng-model="mobilidade_articular.valor_inclinado_esquerda" floating-number-only maxlength="6" ng-change="diferencaMobiArt('esquerda')">
+										        	</div>
+
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Diferença esquerda:</label>
+														<input class="form-control" type="text" ng-model="mobilidade_articular.diferenca_esquerda" floating-number-only maxlength="6" disabled>
 										        	</div>
 										        </div>
 											</div>
@@ -2112,30 +2559,47 @@
 											<div uib-accordion-group class="panel-default" heading="Teste Fukuda">
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
-										        		<label>Deslocamento:</label>
-														<input class="form-control" type="text" ng-model="medidas.teste_fukuda_deslocamento" numbers-only maxlength="9">
+										        		<label>Deslocamento Direito (cm):</label>
+														<input class="form-control" type="text" ng-model="medidas.teste_fukuda_deslocamento_direito" numbers-only maxlength="9">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
-										        		<label>Rotação:</label>
-														<input class="form-control" type="text" ng-model="medidas.teste_fukuda_rotacao" numbers-only maxlength="9">
+										        		<label>Rotação Direito (graus):</label>
+														<input class="form-control" type="text" ng-model="medidas.teste_fukuda_rotacao_direito" numbers-only maxlength="9">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
-										        		<label>Desvio:</label>
-														<input class="form-control" type="text" ng-model="medidas.teste_fukuda_desvio" numbers-only maxlength="9">
+										        		<label>Desvio Direito (cm):</label>
+														<input class="form-control" type="text" ng-model="medidas.teste_fukuda_desvio_direito" numbers-only maxlength="9">
+										        	</div>
+										        </div>
+
+										        <div class="form-group row forms-accordion">
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Deslocamento Esquerdo (cm):</label>
+														<input class="form-control" type="text" ng-model="medidas.teste_fukuda_deslocamento_esquerdo" numbers-only maxlength="9">
+										        	</div>
+
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Rotação Esquerdo (graus):</label>
+														<input class="form-control" type="text" ng-model="medidas.teste_fukuda_rotacao_esquerdo" numbers-only maxlength="9">
+										        	</div>
+
+										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        		<label>Desvio Esquerdo (cm):</label>
+														<input class="form-control" type="text" ng-model="medidas.teste_fukuda_desvio_esquerdo" numbers-only maxlength="9">
 										        	</div>
 										        </div>
 											</div>
 
 											<div uib-accordion-group class="panel-default" heading="Habilidade Ocular">
 												<div class="form-group row forms-accordion">
-										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        	<div class="col-md-6 col-sm-6 col-xs-6">
 										        		<label>Direito:</label>
 														<input class="form-control" type="text" ng-model="medidas.habilidade_ocular_direito" maxlength="254">
 										        	</div>
 
-										        	<div class="col-md-3 col-sm-3 col-xs-6">
+										        	<div class="col-md-6 col-sm-6 col-xs-6">
 										        		<label>Esquerdo:</label>
 														<input class="form-control" type="text" ng-model="medidas.habilidade_ocular_esquerdo" maxlength="254">
 										        	</div>
@@ -2145,13 +2609,18 @@
 											<div uib-accordion-group class="panel-default" heading="Romberg Mono">
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
-										        		<label>Direito:</label>
+										        		<label>Direito (s):</label>
 														<input class="form-control" type="text" ng-model="medidas.romberg_mono_direito" numbers-only maxlength="9">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
-										        		<label>Esquerdo:</label>
+										        		<label>Esquerdo (s):</label>
 														<input class="form-control" type="text" ng-model="medidas.romberg_mono_esquerdo" numbers-only maxlength="9">
+										        	</div>
+
+										        	<div class="col-md-6 col-sm-6 col-xs-12">
+										        		<label>Observação:</label>
+														<input class="form-control" type="text" ng-model="medidas.romberg_mono_observacao" maxlength="254">
 										        	</div>
 										        </div>
 											</div>
@@ -2159,13 +2628,18 @@
 											<div uib-accordion-group class="panel-default" heading="Romberg Sensibilizado">
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
-										        		<label>Direito:</label>
+										        		<label>Direito (s):</label>
 														<input class="form-control" type="text" ng-model="medidas.romberg_sensibilizado_direito" numbers-only maxlength="9">
 										        	</div>
 
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
-										        		<label>Esquerdo:</label>
+										        		<label>Esquerdo (s):</label>
 														<input class="form-control" type="text" ng-model="medidas.romberg_sensibilizado_esquerdo" numbers-only maxlength="9">
+										        	</div>
+
+										        	<div class="col-md-6 col-sm-6 col-xs-12">
+										        		<label>Observação:</label>
+														<input class="form-control" type="text" ng-model="medidas.romberg_sensibilizado_observacao" maxlength="254">
 										        	</div>
 										        </div>
 											</div>
@@ -2181,6 +2655,11 @@
 										        		<label>Esquerdo:</label>
 														<input class="form-control" type="text" ng-model="medidas.balanco_esquerdo" maxlength="254">
 										        	</div>
+
+										        	<div class="col-md-6 col-sm-6 col-xs-12">
+										        		<label>Observação:</label>
+														<input class="form-control" type="text" ng-model="medidas.balanco_observacao" maxlength="254">
+										        	</div>
 										        </div>
 											</div>
 
@@ -2189,6 +2668,11 @@
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Retração posterior:</label>
 														<input class="form-control" type="text" ng-model="medidas.retracao_posterior" numbers-only maxlength="9">
+										        	</div>
+
+										        	<div class="col-md-9 col-sm-9 col-xs-6">
+										        		<label>Observação:</label>
+														<input class="form-control" type="text" ng-model="medidas.retracao_posterior_observacao" maxlength="254">
 										        	</div>
 										        </div>
 											</div>
@@ -2204,6 +2688,11 @@
 										        		<label>Esquerdo:</label>
 														<input class="form-control" type="text" ng-model="medidas.teste_thomas_esquerdo" numbers-only maxlength="9">
 										        	</div>
+
+										        	<div class="col-md-6 col-sm-6 col-xs-12">
+										        		<label>Observação:</label>
+														<input class="form-control" type="text" ng-model="medidas.teste_thomas_observacao" maxlength="254">
+										        	</div>
 										        </div>
 											</div>
 
@@ -2218,6 +2707,11 @@
 										        		<label>Esquerdo:</label>
 														<input class="form-control" type="text" ng-model="medidas.retracao_peitoral_esquerdo" numbers-only maxlength="9">
 										        	</div>
+
+										        	<div class="col-md-6 col-sm-6 col-xs-12">
+										        		<label>Observação:</label>
+														<input class="form-control" type="text" ng-model="medidas.retracao_peitoral_obervacao" maxlength="254">
+										        	</div>
 										        </div>
 											</div>
 
@@ -2227,19 +2721,38 @@
 										        		<label>ABS:</label>
 														<input class="form-control" type="text" ng-model="medidas.forca_muscular_abs" numbers-only maxlength="9">
 										        	</div>
+
+										        	<div class="col-md-9 col-sm-9 col-xs-6">
+										        		<label>Observação:</label>
+														<input class="form-control" type="text" ng-model="medidas.forca_muscular_observacao" maxlength="254">
+										        	</div>
 										        </div>
 											</div>
 
-											<div uib-accordion-group class="panel-default" heading="Extensores Tronco">
+											<div uib-accordion-group class="panel-default" heading="Extensores Tronco Força">
 												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Força:</label>
 														<input class="form-control" type="text" ng-model="medidas.forca_ext_tronco" numbers-only maxlength="9">
 										        	</div>
 
+										        	<div class="col-md-9 col-sm-9 col-xs-6">
+										        		<label>Observação:</label>
+														<input class="form-control" type="text" ng-model="medidas.forca_ext_tronco_observacao" maxlength="254">
+										        	</div>
+										        </div>
+											</div>
+
+											<div uib-accordion-group class="panel-default" heading="Extensores Tronco Resistência">
+												<div class="form-group row forms-accordion">
 										        	<div class="col-md-3 col-sm-3 col-xs-6">
 										        		<label>Resistência:</label>
 														<input class="form-control" type="text" ng-model="medidas.resistencia_extensores_tronco" numbers-only maxlength="9">
+										        	</div>
+
+										        	<div class="col-md-9 col-sm-9 col-xs-6">
+										        		<label>Observação:</label>
+														<input class="form-control" type="text" ng-model="medidas.resistencia_extensores_tronco_observacao" maxlength="254">
 										        	</div>
 										        </div>
 											</div>
@@ -2272,8 +2785,31 @@
 
 										    <div class="form-group row">
 										        <div class="col-md-3 col-sm-3 col-xs-6">
-										        	<label>Tipo escoliose:</label>
-													<input class="form-control" type="text" ng-model="diag_prog.tipo_escoliose" maxlength="254">
+										        	<label>Tipo:</label>
+
+													<select class="select-picker form-control" ng-model="diag_prog.tipo" maxlength="254">
+														<option value="" selected="selected"></option>
+														<option value="Atitude Escoliótica">Atitude Escoliótica</option>
+														<option value="Escoliose Estrutural">Escoliose Estrutural</option>
+														<option value="Cifose">Cifose</option>
+														<option value="Lordose">Lordose</option>
+													</select>
+										        </div>
+
+										        <div class="col-md-3 col-sm-3 col-xs-6">
+										        	<label>Local escoliose:</label>
+
+										        	<select class="select-picker form-control" ng-model="diag_prog.local_escoliose" maxlength="254">
+														<option value="" selected="selected"></option>
+														<option value="Torácica Direita">Torácica Direita</option>
+														<option value="Torácica Esquerda">Torácica Esquerda</option>
+														<option value="Tóraco-Lombar Direita">Tóraco-Lombar Direita</option>
+														<option value="Tóraco-Lombar Esquerda">Tóraco-Lombar Esquerda</option>
+														<option value="Lombar Direita">Lombar Direita</option>
+														<option value="Lombar Esquerda">Lombar Esquerda</option>
+														<option value="Cérvico-Torácica Direita">Cérvico-Torácica Direita</option>
+														<option value="Cérvico-Torácica Esquerda">Cérvico-Torácica Esquerda</option>
+													</select>
 										        </div>
 
 										        <div class="col-md-3 col-sm-3 col-xs-6">
@@ -2281,8 +2817,8 @@
 
 													<select class="select-picker form-control" ng-model="diag_prog.cifose" maxlength="254">
 														<option value="" selected="selected"></option>
-														<option value="1">Sim</option>
-														<option value="0">Não</option>
+														<option value="Sim">Sim</option>
+														<option value="Não">Não</option>
 													</select>
 										        </div>
 
@@ -2291,8 +2827,8 @@
 
 													<select class="select-picker form-control" ng-model="diag_prog.lordose" maxlength="254">
 														<option value="" selected="selected"></option>
-														<option value="1">Sim</option>
-														<option value="0">Não</option>
+														<option value="Sim">Sim</option>
+														<option value="Não">Não</option>
 													</select>
 										        </div>
 										    </div>
@@ -2326,10 +2862,37 @@
 										        	<label>Idade do aparecimento:</label>
 													<input class="form-control" type="text" ng-model="diag_prog.idade_aparecimento" numbers-only maxlength="9">
 										        </div>
+										    </div>
+
+										     <div class="form-group row">
+										        <div class="col-md-3 col-sm-3 col-xs-6">
+										        	<label>Calço direito:</label>
+
+													<select class="select-picker form-control" ng-model="diag_prog.calco_utilizado_direito" maxlength="254">
+														<option value="" selected="selected"></option>
+														<option value="Sim">Sim</option>
+														<option value="Não">Não</option>
+													</select>
+										        </div>
+
+										        <div class="col-md-3 col-sm-3 col-xs-6" ng-if="showTamanhoCalco('diag_prog_direito')">
+										        	<label>Tamanho do calço direito (mm):</label>
+													<input class="form-control" type="text" ng-model="diag_prog.tamanho_calco_direito" numbers-only maxlength="9">
+										        </div>
 
 										        <div class="col-md-3 col-sm-3 col-xs-6">
-										        	<label>Calço:</label>
-													<input class="form-control" type="text" ng-model="diag_prog.calco" maxlength="254">
+										        	<label>Calço esquerdo:</label>
+													
+													<select class="select-picker form-control" ng-model="diag_prog.calco_utilizado_esquerdo" maxlength="254">
+														<option value="" selected="selected"></option>
+														<option value="Sim">Sim</option>
+														<option value="Não">Não</option>
+													</select>
+										        </div>
+
+										        <div class="col-md-3 col-sm-3 col-xs-6" ng-if="showTamanhoCalco('diag_prog_esquerdo')">
+										        	<label>Tamanho do calço esquerdo (mm):</label>
+													<input class="form-control" type="text" ng-model="diag_prog.tamanho_calco_esquerdo" numbers-only maxlength="9">
 										        </div>
 										    </div>
 
@@ -2348,67 +2911,193 @@
 										    <uib-accordion>
 											    <div uib-accordion-group class="panel-default" heading="Curva">
 													<div class="form-group row forms-accordion">
-											        	<div class="col-md-2 col-sm-3 col-xs-6">
+											        	<div class="col-md-2 col-sm-2 col-xs-2">
 											        		<label>Ordenação:</label>
-															<input class="form-control" type="text" ng-model="curva.ordenacao" maxlength="254">
+
+															<select class="select-picker form-control" ng-model="curva1.ordenacao" maxlength="254">
+																<option value="" selected="selected"></option>
+																<option value="Principal">Principal</option>
+																<option value="Secundária">Secundária</option>
+																<option value="Terciária">Terciária</option>
+																<option value="Quaternária">Quaternária</option>
+															</select>
 											        	</div>
 
-											        	<div class="col-md-2 col-sm-3 col-xs-6">
-											        		<label>Tipo:</label>
-															<input class="form-control" type="text" ng-model="curva.tipo" maxlength="254">
-											        	</div>
-
-											        	<div class="col-md-2 col-sm-3 col-xs-6">
+											        	<div class="col-md-2 col-sm-2 col-xs-2">
 											        		<label>Ângulo de COBB:</label>
-															<input class="form-control" type="text" ng-model="curva.angulo_cobb" numbers-only maxlength="9">
+															<input class="form-control" type="text" ng-model="curva1.angulo_cobb" numbers-only maxlength="9">
 											        	</div>
 
-											        	<div class="col-md-2 col-sm-3 col-xs-6">
+											        	<div class="col-md-2 col-sm-2 col-xs-2">
 											        		<label>Ângulo Ferguson:</label>
-															<input class="form-control" type="text" ng-model="curva.angulo_ferguson" numbers-only maxlength="9">
+															<input class="form-control" type="text" ng-model="curva1.angulo_ferguson" numbers-only maxlength="9">
 											        	</div>
 
-											        	<div class="col-md-2 col-sm-3 col-xs-6">
+											        	<div class="col-md-2 col-sm-2 col-xs-2">
 											        		<label>Grau de rotação:</label>
-															<input class="form-control" type="text" ng-model="curva.grau_rotacao" numbers-only maxlength="9">
+															<input class="form-control" type="text" ng-model="curva1.grau_rotacao" numbers-only maxlength="9">
+											        	</div>
+
+											        	<div class="col-md-4 col-sm-4 col-xs-4">
+											        		<label>Observação:</label>
+															<input class="form-control" type="text" ng-model="curva1.observacao" maxlength="254">
+											        	</div>
+											        </div>
+
+											        <div class="form-group row forms-accordion">
+											        	<div class="col-md-2 col-sm-2 col-xs-2">
+											        		<label>Ordenação:</label>
+															
+															<select class="select-picker form-control" ng-model="curva2.ordenacao" maxlength="254">
+																<option value="" selected="selected"></option>
+																<option value="Principal">Principal</option>
+																<option value="Secundária">Secundária</option>
+																<option value="Terciária">Terciária</option>
+																<option value="Quaternária">Quaternária</option>
+															</select>
+											        	</div>
+
+											        	<div class="col-md-2 col-sm-2 col-xs-2">
+											        		<label>Ângulo de COBB:</label>
+															<input class="form-control" type="text" ng-model="curva2.angulo_cobb" numbers-only maxlength="9">
+											        	</div>
+
+											        	<div class="col-md-2 col-sm-2 col-xs-2">
+											        		<label>Ângulo Ferguson:</label>
+															<input class="form-control" type="text" ng-model="curva2.angulo_ferguson" numbers-only maxlength="9">
+											        	</div>
+
+											        	<div class="col-md-2 col-sm-2 col-xs-2">
+											        		<label>Grau de rotação:</label>
+															<input class="form-control" type="text" ng-model="curva2.grau_rotacao" numbers-only maxlength="9">
+											        	</div>
+
+											        	<div class="col-md-4 col-sm-4 col-xs-4">
+											        		<label>Observação:</label>
+															<input class="form-control" type="text" ng-model="curva2.observacao" maxlength="254">
+											        	</div>
+											        </div>
+
+											        <div class="form-group row forms-accordion">
+											        	<div class="col-md-2 col-sm-2 col-xs-2">
+											        		<label>Ordenação:</label>
+															
+															<select class="select-picker form-control" ng-model="curva3.ordenacao" maxlength="254">
+																<option value="" selected="selected"></option>
+																<option value="Principal">Principal</option>
+																<option value="Secundária">Secundária</option>
+																<option value="Terciária">Terciária</option>
+																<option value="Quaternária">Quaternária</option>
+															</select>
+											        	</div>
+
+											        	<div class="col-md-2 col-sm-2 col-xs-2">
+											        		<label>Ângulo de COBB:</label>
+															<input class="form-control" type="text" ng-model="curva3.angulo_cobb" numbers-only maxlength="9">
+											        	</div>
+
+											        	<div class="col-md-2 col-sm-2 col-xs-2">
+											        		<label>Ângulo Ferguson:</label>
+															<input class="form-control" type="text" ng-model="curva3.angulo_ferguson" numbers-only maxlength="9">
+											        	</div>
+
+											        	<div class="col-md-2 col-sm-2 col-xs-2">
+											        		<label>Grau de rotação:</label>
+															<input class="form-control" type="text" ng-model="curva3.grau_rotacao" numbers-only maxlength="9">
+											        	</div>
+
+											        	<div class="col-md-4 col-sm-4 col-xs-4">
+											        		<label>Observação:</label>
+															<input class="form-control" type="text" ng-model="curva3.observacao" maxlength="254">
+											        	</div>
+											        </div>
+
+											        <div class="form-group row forms-accordion">
+											        	<div class="col-md-2 col-sm-2 col-xs-2">
+											        		<label>Ordenação:</label>
+															
+															<select class="select-picker form-control" ng-model="curva4.ordenacao" maxlength="254">
+																<option value="" selected="selected"></option>
+																<option value="Principal">Principal</option>
+																<option value="Secundária">Secundária</option>
+																<option value="Terciária">Terciária</option>
+																<option value="Quaternária">Quaternária</option>
+															</select>
+											        	</div>
+
+											        	<div class="col-md-2 col-sm-2 col-xs-2">
+											        		<label>Ângulo de COBB:</label>
+															<input class="form-control" type="text" ng-model="curva4.angulo_cobb" numbers-only maxlength="9">
+											        	</div>
+
+											        	<div class="col-md-2 col-sm-2 col-xs-2">
+											        		<label>Ângulo Ferguson:</label>
+															<input class="form-control" type="text" ng-model="curva4.angulo_ferguson" numbers-only maxlength="9">
+											        	</div>
+
+											        	<div class="col-md-2 col-sm-2 col-xs-2">
+											        		<label>Grau de rotação:</label>
+															<input class="form-control" type="text" ng-model="curva4.grau_rotacao" numbers-only maxlength="9">
+											        	</div>
+
+											        	<div class="col-md-4 col-sm-4 col-xs-4">
+											        		<label>Observação:</label>
+															<input class="form-control" type="text" ng-model="curva4.observacao" maxlength="254">
 											        	</div>
 											        </div>
 												</div>
 
-												<div uib-accordion-group class="panel-default" heading="Local Escoliose">
+												<div uib-accordion-group class="panel-default" heading="Vértebra Ápice">
 													<div class="form-group row forms-accordion">
 											        	<div class="col-md-3 col-sm-3 col-xs-6">
-											        		<label>Local:</label>
-															<input class="form-control" type="text" ng-model="local_escoliose.local" maxlength="254">
+											        		<label>Tipo escoliose:</label>
+
+															<select class="select-picker form-control" ng-model="vertebra_apice.tipo_escoliose" maxlength="254">
+																<option value="" selected="selected"></option>
+																<option value="Torácica Direita">Torácica Direita</option>
+																<option value="Torácica Esquerda">Torácica Esquerda</option>
+																<option value="Tóraco-Lombar Direita">Tóraco-Lombar Direita</option>
+																<option value="Tóraco-Lombar Esquerda">Tóraco-Lombar Esquerda</option>
+																<option value="Lombar Direita">Lombar Direita</option>
+																<option value="Lombar Esquerda">Lombar Esquerda</option>
+																<option value="Cérvico-Torácica Direita">Cérvico-Torácica Direita</option>
+																<option value="Cérvico-Torácica Esquerda">Cérvico-Torácica Esquerda</option>
+															</select>
 											        	</div>
 
 											        	<div class="col-md-3 col-sm-3 col-xs-6">
-											        		<label>Lado:</label>
-															<input class="form-control" type="text" ng-model="local_escoliose.lado" maxlength="254">
+											        		<label>Nome da vértebra:</label>
+											        		<input class="form-control" type="text" ng-model="vertebra_apice.vertebra_nome" maxlength="254">
 											        	</div>
 											        </div>
 												</div>
 
-												<div uib-accordion-group class="panel-default" heading="Vértebra">
+												<div uib-accordion-group class="panel-default" heading="Vértebra Limite">
 													<div class="form-group row forms-accordion">
 											        	<div class="col-md-3 col-sm-3 col-xs-6">
-											        		<label>Tipo</label>
-															<input class="form-control" type="text" ng-model="vertebra.tipo" maxlength="254">
+											        		<label>Tipo escoliose:</label>
+
+															<select class="select-picker form-control" ng-model="vertebra_limite.tipo_escoliose" maxlength="254">
+																<option value="" selected="selected"></option>
+																<option value="Torácica Direita">Torácica Direita</option>
+																<option value="Torácica Esquerda">Torácica Esquerda</option>
+																<option value="Tóraco-Lombar Direita">Tóraco-Lombar Direita</option>
+																<option value="Tóraco-Lombar Esquerda">Tóraco-Lombar Esquerda</option>
+																<option value="Lombar Direita">Lombar Direita</option>
+																<option value="Lombar Esquerda">Lombar Esquerda</option>
+																<option value="Cérvico-Torácica Direita">Cérvico-Torácica Direita</option>
+																<option value="Cérvico-Torácica Esquerda">Cérvico-Torácica Esquerda</option>
+															</select>
 											        	</div>
 
 											        	<div class="col-md-3 col-sm-3 col-xs-6">
-											        		<label>Local:</label>
-															<input class="form-control" type="text" ng-model="vertebra.local" maxlength="254">
+											        		<label>Vértebra superior:</label>
+											        		<input class="form-control" type="text" ng-model="vertebra_limite.vertebra_superior" maxlength="254">
 											        	</div>
 
 											        	<div class="col-md-3 col-sm-3 col-xs-6">
-											        		<label>Altura:</label>
-															<input class="form-control" type="text" ng-model="vertebra.altura" maxlength="254">
-											        	</div>
-
-											        	<div class="col-md-3 col-sm-3 col-xs-6">
-											        		<label>Nome:</label>
-															<input class="form-control" type="text" ng-model="vertebra.vertebra_nome" maxlength="254">
+											        		<label>Vértebra inferior:</label>
+											        		<input class="form-control" type="text" ng-model="vertebra_limite.vertebra_inferior" maxlength="254">
 											        	</div>
 											        </div>
 												</div>
@@ -2556,7 +3245,7 @@
 
 		      	<div class="modal-body">
 		      		<span ng-if="!showSpinnerDadosPacientes && erroDadosPaciente">
-		      			Erro ao excluir todos os usuários. Verifique sua conexão com a internet e tente novamente.
+		      			Erro ao carregar os dados do paciente. Verifique sua conexão com a internet e tente novamente.
 		      		</span>
 
 		      		<div ng-if="!showSpinnerDadosPacientes && !erroDadosPaciente">
@@ -2708,24 +3397,33 @@
 		      	<div class="modal-body">
 		      		@if (Auth::user()->funcao != "Analista")
 			      		<div class="row">
-			                <div class="col-xs-5 col-sm-4">
-			                    <input type="file" ng-files="setTheFiles($files)" id="image_file" multiple accept="image/*" class="form-control pointer">
+			                <div class="col-xs-4 col-sm-4">
+			                    <input id="image_file" type="file" accept="image/*" ng-model="imageList" image="imageList" resize-max-height="1080" resize-max-width="1920" resize-quality="0.7" resize-type="image/jpg" multiple="multiple" ng-image-compress class="form-control pointer" ng-if="viewPaciente.cpf != undefined && viewPaciente.cpf != ''"/>
+
+			                    <span ng-if="viewPaciente.cpf == undefined || viewPaciente.cpf == ''">Insira um CPF no paciente para habilitar o envio de fotos</span>
 			                </div>
 			       
-			                <div class="col-xs-2 col-sm-2">
-			                    <span ng-click="uploadFotos(viewPaciente.nome, viewPaciente.cpf, atendimentosNums[tabAtendimento])" class="btn btn-primary">Enviar</span>
+			                <div class="col-xs-2 col-sm-2" ng-if="viewPaciente.cpf != undefined && viewPaciente.cpf != ''">
+			                    <button ng-click="uploadFotos(viewPaciente.nome, viewPaciente.cpf, atendimentosNums[tabAtendimento])" class="btn btn-primary" ng-disabled="imageList.length == 0">Enviar</button>
 			                </div>
 
-			                <div class="col-xs-5 col-sm-6" style="height: 36px; padding-top: 8px">
+			                <div class="col-xs-3 col-sm-3" style="height: 36px; padding-top: 8px">
 			                    <span>
 			                    	<strong>[[ qtdFotosAtend ]] foto<span ng-if="qtdFotosAtend != 1">s</span></strong>
+			                    </span>
+			                </div>
+
+			                <div class="col-xs-3 col-sm-3" ng-if="viewPaciente.cpf != undefined && viewPaciente.cpf != ''">
+			                    <span data-toggle="modal" data-target="#modalExcluirTodasFotos" class="btn btn-red">
+	    							<span class="text-small glyphicon glyphicon-trash"></span>
+	    							<span>Apagar tudo</span>
 			                    </span>
 			                </div>
 				        </div>
 				    @endif
 
 			        <div class="row fotos-atend">
-						<ng-image-gallery images="imagesAtend"></ng-image-gallery>
+						<ng-image-gallery images="imagesAtend" on-delete="deleteImage(img, cb)"></ng-image-gallery>
 
 						<div style="min-height: 150px" ng-if="showSpinnerFotos">
 			      			<span us-spinner="{radius: 30, width: 8, length: 16, color: '#2c97d1'}" spinner-on="showSpinnerFotos"></span>
@@ -2752,6 +3450,26 @@
 	    
 			    <div class="modal-footer">
 			        <button type="button" class="btn btn-link link-gray" data-dismiss="modal">Fechar</button>
+			    </div>
+	    	</div>
+	  	</div>
+	</div>
+
+	<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="modalExcluirTodasFotos">
+	  	<div class="modal-dialog modal-sm" role="document">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        		<h4 class="modal-title" id="gridSystemModalLabel">Atenção</h4>
+	      		</div>
+
+		      	<div class="modal-body">
+			        Deseja excluir todas as imagens?
+		    	</div>
+	    
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-link link-gray" data-dismiss="modal">Cancelar</button>
+			        <button type="button" class="btn btn-red upper btn-loading confirm-remove-btn btn-loading" data-dismiss="modal" ng-click="deletarFotos()">EXCLUIR</button>
 			    </div>
 	    	</div>
 	  	</div>

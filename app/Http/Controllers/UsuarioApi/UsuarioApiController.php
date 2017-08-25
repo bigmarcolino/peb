@@ -13,7 +13,7 @@ class UsuarioApiController extends Controller
     public function listarUsuariosPacientes()
     {
         $usuarios = Usuario::select('name', 'cpf', 'data_nasc', 'sexo', 'email', 'funcao', DB::raw('0 as checked'))->get();
-        $pacientes = Paciente::select('nome', 'cpf', 'data_nasc', 'email', DB::raw('0 as checked'))->get();
+        $pacientes = Paciente::select('id', 'nome', 'cpf', 'data_nasc', 'email', DB::raw('0 as checked'))->get();
 
         return ['usuarios' => $usuarios, 'pacientes' => $pacientes];
     }

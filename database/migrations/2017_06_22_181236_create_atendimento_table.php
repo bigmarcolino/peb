@@ -23,8 +23,8 @@ class CreateAtendimentoTable extends Migration
             $table->float('peso')->nullable();
             $table->integer('risser')->nullable();
             $table->date('data_raio_x')->nullable();
-            $table->string('cpf_paciente')->nullable();
-            $table->foreign('cpf_paciente')->references('cpf')->on('paciente')->onDelete('cascade');
+            $table->integer('paciente_id')->unsigned()->nullable();
+            $table->foreign('paciente_id')->references('id')->on('paciente')->onDelete('cascade');
             $table->timestamps();
         });
     }

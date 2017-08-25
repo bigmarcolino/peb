@@ -40,6 +40,7 @@
         <script src="/node_modules/moment/locale/pt-br.js" type="text/javascript"></script>
         <script src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
         <script src="/node_modules/angular-eonasdan-datetimepicker/dist/angular-eonasdan-datetimepicker.min.js" type="text/javascript"></script>
+        <script src="/node_modules/angular-image-compress/angular-image-compress.js" type="text/javascript"></script>
         <script src="/js/peb.js" type="text/javascript"></script>
     </head>
 

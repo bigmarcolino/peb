@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePlanoHorizontalTable extends Migration
+class CreatePlanoHorizontalGrausTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreatePlanoHorizontalTable extends Migration
      */
     public function up()
     {
-        Schema::create('plano_horizontal', function (Blueprint $table) {
+        Schema::create('plano_horizontal_graus', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('valor')->nullable();
             $table->integer('tipo')->nullable();
-            $table->string('calco')->nullable();
+            $table->string('calco_utilizado')->nullable();
             $table->string('vertebra')->nullable();
             $table->integer('medidas_id')->unsigned()->nullable();
             $table->foreign('medidas_id')->references('id')->on('medidas')->onDelete('cascade');
@@ -32,6 +32,6 @@ class CreatePlanoHorizontalTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('plano_horizontal');
+        Schema::dropIfExists('plano_horizontal_graus');
     }
 }
