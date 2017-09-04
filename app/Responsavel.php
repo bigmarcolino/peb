@@ -19,4 +19,9 @@ class Responsavel extends Model
     protected $fillable = [
         'cpf', 'nome', 'email', 'identidade', 'ocupacao', 'telefone'
     ];
+
+    public function paciente()
+    {
+        return $this->hasOne('App\Paciente');
+    }
 }

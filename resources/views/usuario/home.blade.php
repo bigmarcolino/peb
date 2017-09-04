@@ -66,8 +66,8 @@
 	    	</div>
 	    </div>
 
-		<span class="sidebar-toggle">
-	        <span class="glyphicon glyphicon-menu-right icon"></span>
+		<span class="sidebar-toggle" ng-click="showSideBar()">
+	        <span class="glyphicon icon" ng-class="{'glyphicon-menu-right': iconSideBar == 1, 'glyphicon-menu-left': iconSideBar == 0}"></span>
 	    </span>
 	</div>
 @endif
@@ -660,24 +660,10 @@
                     <h3 class="title-form text-medium semi-bold p-b-s p-t-el c-ic-blue upper" ng-if="pacienteMenorIdade">Responsável</h3>
 
                     <div class="form-group form-group-sm" ng-if="pacienteMenorIdade">
-                        <div>
-                            <label class="col-sm-2 control-label">Nome*</label>
-                            <div class="col-sm-3" ng-class="{'has-error': nomeVazioResponsavel}">
-                                <input type="text" class="form-control" ng-model="novoResponsavel.nome" ng-change="checkNomeResponsavel('add')" maxlength="254">
-
-                                <span class="help-block" ng-if="nomeVazioResponsavel">
-	                                <strong>O campo nome é obrigatório</strong>
-	                            </span>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="col-sm-1 control-label">CPF*</label>
-                            <div class="col-sm-2" ng-class="{'has-error': cpfVazioResponsavel || cpfExisteResponsavel}">
+                    	<div>
+                            <label class="col-sm-2 control-label">CPF*</label>
+                            <div class="col-sm-2" ng-class="{'has-error': cpfVazioResponsavel}">
                                 <input type="text" class="form-control" ng-model="novoResponsavel.cpf" numbers-only ng-change="checkCpfResponsavel()" ng-blur="checkCpfExistenciaResponsavel()" maxlength="254">
-
-                                <span class="help-block" ng-if="cpfExisteResponsavel">
-	                                <strong>O CPF já existe</strong>
-	                            </span>
 
                                 <span class="help-block" ng-if="cpfVazioResponsavel">
 	                                <strong>O campo CPF é obrigatório</strong>
@@ -685,9 +671,19 @@
                             </div>
                         </div>
                         <div>
+                            <label class="col-sm-1 control-label">Nome*</label>
+                            <div class="col-sm-3" ng-class="{'has-error': nomeVazioResponsavel}">
+                                <input type="text" class="form-control" ng-model="novoResponsavel.nome" ng-change="checkNomeResponsavel('add')" maxlength="254" ng-disabled="cpfExisteResponsavel">
+
+                                <span class="help-block" ng-if="nomeVazioResponsavel">
+	                                <strong>O campo nome é obrigatório</strong>
+	                            </span>
+                            </div>
+                        </div>
+                        <div>
                             <label class="col-sm-1 control-label">Identidade</label>
                             <div class="col-sm-1">
-                                <input type="text" class="form-control" ng-model="novoResponsavel.identidade" numbers-only maxlength="254">
+                                <input type="text" class="form-control" ng-model="novoResponsavel.identidade" numbers-only maxlength="254" ng-disabled="cpfExisteResponsavel">
                             </div>
                         </div>
                     </div>
@@ -696,19 +692,19 @@
                         <div>
                             <label class="col-sm-2 control-label">Email</label>
                             <div class="col-sm-2">
-                                <input type="text" class="form-control" ng-model="novoResponsavel.email" maxlength="254">
+                                <input type="text" class="form-control" ng-model="novoResponsavel.email" maxlength="254" ng-disabled="cpfExisteResponsavel">
                             </div>
                         </div>
                         <div>
                             <label class="col-sm-1 control-label">Ocupação</label>
                             <div class="col-sm-2">
-                                <input type="text" class="form-control" ng-model="novoResponsavel.ocupacao" maxlength="254">
+                                <input type="text" class="form-control" ng-model="novoResponsavel.ocupacao" maxlength="254" ng-disabled="cpfExisteResponsavel">
                             </div>
                         </div>
                         <div>
                             <label class="col-sm-1 control-label">Telefone</label>
                             <div class="col-sm-2">
-                                <input class="form-control" type="text" ng-model="novoResponsavel.telefone" numbers-only maxlength="254">
+                                <input class="form-control" type="text" ng-model="novoResponsavel.telefone" numbers-only maxlength="254" ng-disabled="cpfExisteResponsavel">
                             </div>
                         </div>
                     </div>
@@ -804,11 +800,11 @@
 
 				<div class="bg-white-light p-s text-right bd-t bd-gray clearfix submit-row">
 				    <div class="clearfix pull-right">
-				        <button type="button" class="btn btn-green upper pull-right btn-loading" id="form-submit-button" ng-click="addPaciente()" ng-disabled="dataVazioPaciente || nomeVazioPaciente || cpfExistePaciente || (pacienteMenorIdade && nomeVazioResponsavel) || (pacienteMenorIdade && cpfVazioResponsavel) || (pacienteMenorIdade && cpfExisteResponsavel)">
+				        <button type="button" class="btn btn-green upper pull-right btn-loading" ng-click="addPaciente()" ng-disabled="dataVazioPaciente || nomeVazioPaciente || cpfExistePaciente || (pacienteMenorIdade && nomeVazioResponsavel) || (pacienteMenorIdade && cpfVazioResponsavel)">
 				        	<span class="btn-loading-text">Salvar</span>			            	
 			            </button>
 
-			            <button type="button" class="btn btn-default upper m-r-es pull-left btn-loading" ng-click="addPaciente(true)" ng-disabled="dataVazioPaciente || nomeVazioPaciente || cpfExistePaciente || (pacienteMenorIdade && nomeVazioResponsavel) || (pacienteMenorIdade && cpfVazioResponsavel) || (pacienteMenorIdade && cpfExisteResponsavel)">
+			            <button type="button" class="btn btn-default upper m-r-es pull-left btn-loading" ng-click="addPaciente(true)" ng-disabled="dataVazioPaciente || nomeVazioPaciente || cpfExistePaciente || (pacienteMenorIdade && nomeVazioResponsavel) || (pacienteMenorIdade && cpfVazioResponsavel)">
 			            	<span class="btn-loading-text">Salvar e adicionar outro</span>
 			            </button>	
 				    </div>

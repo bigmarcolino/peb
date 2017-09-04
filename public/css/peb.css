@@ -39,6 +39,18 @@ body {
     .atendimentos-page {
         margin-left: 250px;
     }
+
+    .ic-sidebar, .ic-header .logo {
+        width: 250px;
+    }
+
+    .ic-sidebar {
+        left: 0px;
+    }
+
+    .sidebar-records {
+        opacity: 1;
+    }
 }
 
 .grey-background {
@@ -412,4 +424,15 @@ body {
 
 .fotos-atend {
     padding: 30px 15px 15px 15px;
+}
+
+@media (max-width: 1270px) {
+    .ic-sidebar, .ic-header .logo {
+        width: 300px;
+    }
+}
+
+.agenda-container {
+    min-height: calc(100vh - 95px);
+    margin-top: 20px;
 }

@@ -18,13 +18,8 @@ class Paciente extends Model
     ];
 
     protected $hidden = [
-        'created_at', 'updated_at'
+        'created_at', 'updated_at', 'responsavel_cpf'
     ];
-
-    public function responsavel()
-    {
-        return $this->hasOne('App\Responsavel');
-    }
 
     public function atendimento()
     {

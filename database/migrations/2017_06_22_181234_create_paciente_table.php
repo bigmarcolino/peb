@@ -29,6 +29,8 @@ class CreatePacienteTable extends Migration
             $table->string('indicacao')->nullable();
             $table->string('identidade')->nullable();
             $table->string('email')->nullable();
+            $table->string('responsavel_cpf')->nullable();
+            $table->foreign('responsavel_cpf')->references('cpf')->on('responsavel')->onDelete('cascade');
             $table->timestamps();
         });
     }

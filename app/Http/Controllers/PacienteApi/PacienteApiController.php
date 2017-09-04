@@ -15,7 +15,6 @@ class PacienteApiController extends Controller
     { 
         $dados = sizeof($_POST) > 0 ? $_POST : json_decode($request->getContent(), true);
 
-
         DB::transaction(function() use ($request, $dados)
         {
             $paciente = $dados["paciente"];
@@ -26,8 +25,15 @@ class PacienteApiController extends Controller
 
             if(isset($dados["responsavel"])) {
                 $responsavel = $dados["responsavel"];
-                $novoResponsavel = new Responsavel($responsavel);
-                $novoPaciente->responsavel()->save($novoResponsavel); 
+
+                if(Responsavel::where('cpf', $responsavel["cpf"])->exists()) {
+                    Responsavel::where('cpf', $responsavel["cpf"])->first()->paciente()->save($novoPaciente);
+                }
+                else {
+                    $novoResponsavel = new Responsavel($responsavel);
+                    $novoResponsavel->save();
+                    $novoResponsavel->paciente()->save($novoPaciente); 
+                }
             } 
         });
 
@@ -53,10 +59,11 @@ class PacienteApiController extends Controller
     public function getPacienteEdit($id)
     { 
         $paciente = Paciente::where('id', $id)->first();
-        $responsavel = $paciente->responsavel();
 
-        if($responsavel->count() == 1)
-            return ["paciente" => $paciente, "responsavel" => $responsavel->getResults()];
+        if($paciente->responsavel_cpf != null) {
+            $responsavel = Responsavel::where('cpf', $paciente->responsavel_cpf)->first();
+            return ["paciente" => $paciente, "responsavel" => $responsavel];
+        }
         else
             return ["paciente" => $paciente];
     }
@@ -83,7 +90,7 @@ class PacienteApiController extends Controller
 
             if(isset($dados["responsavel"])) {
                 $responsavel = $dados["responsavel"];
-                Paciente::where('id', $id)->first()->responsavel()->update($responsavel);
+                Responsavel::where('cpf', $pacienteAntigo->responsavel_cpf)->first()->update($responsavel);
             } 
         });
     }
@@ -99,7 +106,7 @@ class PacienteApiController extends Controller
 
     public function checkExistenciaCpfResponsavel($cpf) {
         if (Responsavel::where('cpf', $cpf)->exists()) {
-           return 1;
+           return Responsavel::where('cpf', $cpf)->first();
         }
         else {
             return 0;

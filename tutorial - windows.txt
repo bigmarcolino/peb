@@ -56,7 +56,7 @@ Sempre instalar a versão mais recente dos programas
 
 21- abra o prompt de comando
 
-22- copie e cole no prompt de comando: cd\ && cd xampp/htdocs && git clone https://mvinicius@gitlab.com/mvinicius/projeto-escoliose-brasil.git && cd projeto-escoliose-brasil && composer install && npm install && npm install -g bower && bower install && npm run dev && php artisan key:generate && php artisan migrate, tecle Enter e aguarde o processo terminar
+22- copie e cole no prompt de comando: cd\ && cd xampp/htdocs && git clone https://mvinicius@gitlab.com/mvinicius/projeto-escoliose-brasil.git && cd projeto-escoliose-brasil && composer install && npm install && npm install -g bower && bower install && npm run dev && php artisan key:generate && php artisan migrate && php artisan storage:link, tecle Enter e aguarde o processo terminar
 
 23- se seu email e senha do GitLab forem requisitados, basta digitá-los
 

@@ -20,8 +20,6 @@ class CreateResponsavelTable extends Migration
             $table->string('identidade')->nullable();
             $table->string('ocupacao')->nullable();
             $table->string('telefone')->nullable();
-            $table->integer('paciente_id')->unsigned()->nullable();
-            $table->foreign('paciente_id')->references('id')->on('paciente')->onDelete('cascade');
             $table->timestamps();
         });
     }

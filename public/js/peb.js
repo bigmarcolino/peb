@@ -7,9 +7,9 @@ var app = angular.module('peb', ['angularSpinner', '720kb.tooltips', 'ae-datetim
 
 app.config(['ngImageGalleryOptsProvider', function(ngImageGalleryOptsProvider){
     ngImageGalleryOptsProvider.setOpts({
-        thumbSize : 150
+        thumbSize: 150
     });
-}])
+}]);
 
 app.directive('numbersOnly', function () {
     return {
@@ -382,6 +382,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
             $scope.novoResponsavel = {};
             $scope.nomeVazioResponsavel = undefined;
             $scope.cpfVazioResponsavel = undefined;
+            $scope.cpfExisteResponsavel = false;
         }
         else if (pagina == 'editPaciente') {
             $scope.showUsuarios = false;
@@ -615,7 +616,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
             $scope.cpfVazioResponsavel = true;
         }
 
-        if($scope.pacienteMenorIdade && $scope.nomeVazioResponsavel == undefined) {
+        if($scope.pacienteMenorIdade && $scope.nomeVazioResponsavel == undefined && !$scope.cpfExisteResponsavel) {
             $scope.nomeVazioResponsavel = true;
         }
 
@@ -827,11 +828,12 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
     $scope.checkCpfExistenciaResponsavel = function() {
         if($scope.novoResponsavel.cpf != '' && $scope.novoResponsavel.cpf != undefined) {
             apiService.checkExistenciaCpfResponsavel($scope.novoResponsavel.cpf).then(function(response) {
-                if(response.data == 1){
-                    $scope.cpfExisteResponsavel = true;
+                if(response.data == 0){
+                    $scope.cpfExisteResponsavel = false;
                 }
                 else {
-                    $scope.cpfExisteResponsavel = false;
+                    $scope.cpfExisteResponsavel = true;
+                    $scope.novoResponsavel = angular.copy(response.data);
                 }
             })
         }
@@ -1514,4 +1516,55 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
             $scope.diag_prog.idade_aparecimento = response.data;
         })
     }
+
+    $scope.iconSideBar = 1;
+
+    $scope.showSideBar = function() {
+        var ic_sidebar = angular.element( document.querySelector( '.ic-sidebar' ) );
+        var sidebar_records = angular.element( document.querySelector( '.sidebar-records' ) );
+        var left = ic_sidebar.css('left');
+        var opacity = sidebar_records.css('opacity');
+
+        if(opacity == "0")
+            sidebar_records.css('opacity', '1');
+        else
+            sidebar_records.css('opacity', '0');
+
+        if(left == "-280px")
+            ic_sidebar.css('left', '0');
+        else
+            ic_sidebar.css('left', '-280px');
+        
+        $scope.iconSideBar = opacity;
+    }
+    /*
+    $scope.uiConfig = {
+        calendar: {
+            height: "parent",
+            header: {
+                left: 'basicWeek month',
+                center: 'title',
+                right: 'today prev,next'
+            },
+            timezone: 'America/Sao_Paulo',
+            monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+            monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+            defaultView: "basicWeek",
+            buttonText: {
+                today: 'Hoje',
+                month: 'Mês',
+                week: 'Semana',
+                day: 'Dia',
+                list: 'Lista'
+            },
+            views: {
+                basicWeek: {
+                    titleFormat: 'DD MMM YYYY'
+                },
+            },
+            timeFormat: "hh:mm",
+            columnFormat: 'ddd D/M'
+        }
+    }*/
 });
