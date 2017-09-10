@@ -33,7 +33,7 @@ class AtendimentoApiController extends Controller
         if(isset($dados['atendimento']['data_raio_x']))
             $dados['atendimento']['data_raio_x'] = explode("T", $dados['atendimento']['data_raio_x'])[0];
 
-        DB::transaction(function() use ($id, $request, $dados)
+        DB::transaction(function() use ($id, $dados)
         {
             $paciente = Paciente::where('id', $id)->first();
 
@@ -115,7 +115,7 @@ class AtendimentoApiController extends Controller
                 if(!empty($mobilidade_articular))
                     $novoMedidas->mobilidade_articular()->save($novoMobilidadeArticular);
             }
-            else if (!empty($medidas)){
+            else if (!empty($medidas)) {
                 $novoMedidas = new Medidas($medidas);
                 $novoAtendimento->medidas()->save($novoMedidas);
             }
@@ -189,14 +189,12 @@ class AtendimentoApiController extends Controller
             if($atendCount > $limit) {
                 $newOffset = $atendCount - $limit;
 
-                for ($i = 1; $i <= $limit; $i++) {
+                for ($i = 1; $i <= $limit; $i++)
                     array_push($atendimentosNums, $newOffset + $i);
-                }
             }
             else {
-                for ($i = 1; $i <= $atendCount; $i++) {
+                for ($i = 1; $i <= $atendCount; $i++)
                     array_push($atendimentosNums, $i);
-                } 
             }
 
             $atendimentos = $todosAtendimentos->offset($newOffset)->limit($limit)->getResults();
@@ -211,9 +209,8 @@ class AtendimentoApiController extends Controller
             else
                 $num = $atendCount - $newOffset;
             
-            for ($i = 1; $i <= $num; $i++) {
+            for ($i = 1; $i <= $num; $i++)
                 array_push($atendimentosNums, $newOffset + $i);
-            }
         }
 
         foreach ($atendimentos as $atendimento) {
@@ -299,12 +296,10 @@ class AtendimentoApiController extends Controller
             $lastAtend = Atendimento::where('paciente_id', $id)->orderBy('id', 'DESC')->first();
             $diag_prog = $lastAtend->diag_prog();
 
-            if($diag_prog->count() == 1 && $diag_prog->getResults()->idade_aparecimento != null) {
+            if($diag_prog->count() == 1 && $diag_prog->getResults()->idade_aparecimento != null)
                 return $diag_prog->getResults()->idade_aparecimento;
-            }
-            else {
+            else
                 return "";
-            }
         } 
     }
 
@@ -346,9 +341,8 @@ class AtendimentoApiController extends Controller
         $pathFotos = Storage::allFiles($pathPasta);
         $fotos = array();
         
-        foreach($pathFotos as $pathFoto) {
+        foreach($pathFotos as $pathFoto)
             array_push($fotos, "../storage/" . explode("/", $pathFoto, 2)[1]);
-        }
 
         $funcao = DB::table('usuario')->select('funcao')->where('cpf', $cpfUsuario)->first();
 
@@ -375,9 +369,8 @@ class AtendimentoApiController extends Controller
     {
         $fotos = sizeof($_POST) > 0 ? $_POST : json_decode($request->getContent(), true);
 
-        foreach($fotos as $foto) {
+        foreach($fotos as $foto)            
             Storage::delete('public/' . explode("/", $foto["url"], 3)[2]);
-        }
 
         $explode_nome_foto = explode("/", $foto["url"]);
         $nome_foto = end($explode_nome_foto);

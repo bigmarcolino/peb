@@ -3394,7 +3394,7 @@
 		      		@if (Auth::user()->funcao != "Analista")
 			      		<div class="row">
 			                <div class="col-xs-4 col-sm-4">
-			                    <input id="image_file" type="file" accept="image/*" ng-model="imageList" image="imageList" resize-max-height="1080" resize-max-width="1920" resize-quality="0.7" resize-type="image/jpg" multiple="multiple" ng-image-compress class="form-control pointer" ng-if="viewPaciente.cpf != undefined && viewPaciente.cpf != ''"/>
+			                    <input id="image_file" type="file" accept="image/*" ng-model="imageList" image="imageList" resize-max-height="1080" resize-max-width="1920" resize-quality="0.7" resize-type="image/jpg" multiple="multiple" ng-image-compress class="form-control pointer" ng-show="viewPaciente.cpf != undefined && viewPaciente.cpf != ''"/>
 
 			                    <span ng-if="viewPaciente.cpf == undefined || viewPaciente.cpf == ''">Insira um CPF no paciente para habilitar o envio de fotos</span>
 			                </div>
@@ -3403,13 +3403,13 @@
 			                    <button ng-click="uploadFotos(viewPaciente.nome, viewPaciente.cpf, atendimentosNums[tabAtendimento])" class="btn btn-primary" ng-disabled="imageList.length == 0">Enviar</button>
 			                </div>
 
-			                <div class="col-xs-3 col-sm-3" style="height: 36px; padding-top: 8px">
+			                <div class="col-xs-3 col-sm-3" style="height: 36px; padding-top: 8px" ng-if="qtdFotosAtend > 0">
 			                    <span>
 			                    	<strong>[[ qtdFotosAtend ]] foto<span ng-if="qtdFotosAtend != 1">s</span></strong>
 			                    </span>
 			                </div>
 
-			                <div class="col-xs-3 col-sm-3" ng-if="viewPaciente.cpf != undefined && viewPaciente.cpf != ''">
+			                <div class="col-xs-3 col-sm-3" ng-if="viewPaciente.cpf != undefined && viewPaciente.cpf != '' && qtdFotosAtend > 0">
 			                    <span data-toggle="modal" data-target="#modalExcluirTodasFotos" class="btn btn-red">
 	    							<span class="text-small glyphicon glyphicon-trash"></span>
 	    							<span>Apagar tudo</span>
@@ -3428,7 +3428,7 @@
 			      		<div class="container-fluid p-t-s p-b-s p-l-s p-r-s" ng-if="erroListarFotos">
 							<div class="alert alert-warning">
 								<p>
-									<span>Erro ao listar imagens.</span>
+									<span>Erro ao listar imagens</span>
 									<strong class="pointer" ng-click="listarFotos(viewPaciente.nome, viewPaciente.cpf, atendimentosNums[tabAtendimento])">Clique aqui para tentar novamente.</strong>
 								</p>
 							</div>

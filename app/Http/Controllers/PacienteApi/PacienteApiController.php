@@ -15,7 +15,7 @@ class PacienteApiController extends Controller
     { 
         $dados = sizeof($_POST) > 0 ? $_POST : json_decode($request->getContent(), true);
 
-        DB::transaction(function() use ($request, $dados)
+        DB::transaction(function() use ($dados)
         {
             $paciente = $dados["paciente"];
             $paciente["data_nasc"] = date('Y-m-d', strtotime($paciente["data_nasc"]));
@@ -26,9 +26,8 @@ class PacienteApiController extends Controller
             if(isset($dados["responsavel"])) {
                 $responsavel = $dados["responsavel"];
 
-                if(Responsavel::where('cpf', $responsavel["cpf"])->exists()) {
+                if(Responsavel::where('cpf', $responsavel["cpf"])->exists())
                     Responsavel::where('cpf', $responsavel["cpf"])->first()->paciente()->save($novoPaciente);
-                }
                 else {
                     $novoResponsavel = new Responsavel($responsavel);
                     $novoResponsavel->save();
@@ -49,7 +48,7 @@ class PacienteApiController extends Controller
             $paciente = Paciente::where('id', $id)->first();
             $res = Paciente::where('id', $id)->delete();
 
-            if($paciente->cpf != null)
+            if($paciente != null && $paciente->cpf != null)
                 Storage::deleteDirectory("public/foto_atendimento/" . $paciente->nome . " - " . $paciente->cpf);
         }
 
@@ -60,7 +59,9 @@ class PacienteApiController extends Controller
     { 
         $paciente = Paciente::where('id', $id)->first();
 
-        if($paciente->responsavel_cpf != null) {
+        if($paciente == null)
+            return ["paciente" => null];
+        else if($paciente->responsavel_cpf != null) {
             $responsavel = Responsavel::where('cpf', $paciente->responsavel_cpf)->first();
             return ["paciente" => $paciente, "responsavel" => $responsavel];
         }
@@ -72,44 +73,41 @@ class PacienteApiController extends Controller
     {
         $dados = sizeof($_POST) > 0 ? $_POST : json_decode($request->getContent(), true);
 
-        DB::transaction(function() use ($request, $dados)
+        if(Paciente::where('id', $dados["paciente"]["id"])->first() == null)
+            return ["paciente" => null];
+
+        DB::transaction(function() use ($dados)
         {
             $paciente = $dados["paciente"];
             $id = $paciente['id'];
-            $paciente["data_nasc"] = explode("T", $paciente["data_nasc"])[0];
+
+            if(isset($paciente["data_nasc"]))
+                $paciente["data_nasc"] = explode("T", $paciente["data_nasc"])[0];
 
             $pacienteAntigo = Paciente::where('id', $id)->first();
-            $pasta_antiga = "public/foto_atendimento/" . $pacienteAntigo->nome . " - " . $pacienteAntigo->cpf;
-            $pasta_nova = "public/foto_atendimento/" . $paciente["nome"] . " - " . $paciente["cpf"];
 
+            if(isset($paciente["nome"]) && $pacienteAntigo->cpf != null) {
+                $pasta_antiga = "public/foto_atendimento/" . $pacienteAntigo->nome . " - " . $pacienteAntigo->cpf;
+                $pasta_nova = "public/foto_atendimento/" . $paciente["nome"] . " - " . $pacienteAntigo->cpf;
+            }
+            
             Paciente::where('id', $id)->update($paciente);
 
-            if($pacienteAntigo->cpf == $paciente["cpf"] && $pacienteAntigo->nome != $paciente["nome"] && Storage::disk('public')->exists("foto_atendimento/" . $pacienteAntigo->nome . " - " . $pacienteAntigo->cpf)) {
+            if(isset($paciente["nome"]) && $pacienteAntigo->cpf != null && Storage::disk('public')->exists("foto_atendimento/" . $pacienteAntigo->nome . " - " . $pacienteAntigo->cpf))
                 Storage::move($pasta_antiga, $pasta_nova);
-            }
 
-            if(isset($dados["responsavel"])) {
+            if(isset($dados["responsavel"]) && $pacienteAntigo->responsavel_cpf != null) {
                 $responsavel = $dados["responsavel"];
                 Responsavel::where('cpf', $pacienteAntigo->responsavel_cpf)->first()->update($responsavel);
             } 
         });
-    }
+}
 
     public function checkExistenciaCpfPaciente($cpf) {
-        if (Paciente::where('cpf', $cpf)->exists()) {
-           return 1;
-        }
-        else {
-            return 0;
-        }
+        return Paciente::where('cpf', $cpf)->exists() ? 1 : 0;
     }
 
     public function checkExistenciaCpfResponsavel($cpf) {
-        if (Responsavel::where('cpf', $cpf)->exists()) {
-           return Responsavel::where('cpf', $cpf)->first();
-        }
-        else {
-            return 0;
-        }
+        return Responsavel::where('cpf', $cpf)->exists() ? Responsavel::where('cpf', $cpf)->first() : 0;
     }
 }

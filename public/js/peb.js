@@ -383,6 +383,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
             $scope.nomeVazioResponsavel = undefined;
             $scope.cpfVazioResponsavel = undefined;
             $scope.cpfExisteResponsavel = false;
+            $scope.cpfExistePaciente = false;
         }
         else if (pagina == 'editPaciente') {
             $scope.showUsuarios = false;
@@ -397,6 +398,8 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
             $scope.pacienteMenorIdade = false;
             $scope.nomeVazioResponsavel = undefined;
             $scope.cpfVazioResponsavel = undefined;
+            $scope.cpfExisteResponsavel = false;
+            $scope.cpfExistePaciente = false;
         }
         else if (pagina == 'viewPaciente') {
             $scope.showUsuarios = false;
@@ -506,6 +509,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
 
     $scope.setUsuarioEdit = function(usuario) {
         $scope.usuarioEdit = angular.copy(usuario);
+        $scope.usuarioEditCopy = angular.copy(usuario);
     }
 
     $scope.salvarEdicaoUsuario = function () {
@@ -514,26 +518,41 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
 
         $scope.usuarioEdit.data_nasc = $scope.usuarioEdit.data_nasc.format("YYYY-MM-DD").toString();
 
+        var diffUsuario = _.omitBy($scope.usuarioEdit, function(v, k) {
+            return $scope.usuarioEditCopy[k] === v;
+        });
+
+        diffUsuario.cpf = $scope.usuarioEdit.cpf;
+
         if($scope.cpfLogged() == $scope.usuarioEdit.cpf) {
-            $scope.usuarioLogado = $scope.usuarioEdit.name;
+            $scope.usuarioLogado = $scope.usuarioEdit.name.split(" ")[0];
         }
 
-        apiService.editarUsuario($scope.usuarioEdit).then(function(res) {
+        apiService.editarUsuario(diffUsuario).then(function(res) {
             $timeout( function() {
-                $('#modalErroEditarUsuario').modal('hide');
+                if(res.data.usuario != undefined && res.data.usuario == null) {
+                    $('#modalErroEditarUsuario').modal('hide');
 
-                var index = _.findIndex($scope.usuariosFiltrados, function(o) { return o.cpf == $scope.usuarioEdit.cpf; });           
+                    $scope.usuariosFiltrados = _.remove($scope.usuariosFiltrados, function(u) {
+                        return u.cpf != $scope.usuarioEdit.cpf;
+                    });
+                }
+                else {
+                    $('#modalErroEditarUsuario').modal('hide');
 
-                $scope.usuariosFiltrados[index].name = $scope.usuarioEdit.name;
-                $scope.usuariosFiltrados[index].email = $scope.usuarioEdit.email;
-                $scope.usuariosFiltrados[index].data_nasc = $scope.usuarioEdit.data_nasc.format("YYYY-MM-DD").toString();
-                $scope.usuariosFiltrados[index].funcao = $scope.usuarioEdit.funcao;
-                $scope.usuariosFiltrados[index].sexo = $scope.usuarioEdit.sexo;
+                    var index = _.findIndex($scope.usuariosFiltrados, function(o) { return o.cpf == $scope.usuarioEdit.cpf; });           
 
-                $scope.qtdUsuariosInativos();
-                $scope.filtrarUsuarios();
-                $scope.sortReverseUser = !$scope.sortReverseUser;
-                $scope.ordenarUsuarios($scope.sortTypeUser);
+                    $scope.usuariosFiltrados[index].name = $scope.usuarioEdit.name;
+                    $scope.usuariosFiltrados[index].email = $scope.usuarioEdit.email;
+                    $scope.usuariosFiltrados[index].data_nasc = $scope.usuarioEdit.data_nasc.format("YYYY-MM-DD").toString();
+                    $scope.usuariosFiltrados[index].funcao = $scope.usuarioEdit.funcao;
+                    $scope.usuariosFiltrados[index].sexo = $scope.usuarioEdit.sexo;
+
+                    $scope.qtdUsuariosInativos();
+                    $scope.filtrarUsuarios();
+                    $scope.sortReverseUser = !$scope.sortReverseUser;
+                    $scope.ordenarUsuarios($scope.sortTypeUser);
+                }
             }, 500 );
         })
         .catch(function(res) {
@@ -892,18 +911,32 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
 
         $timeout( function() {
             apiService.getPacienteEdit(paciente.id).then(function(response) {
-                $scope.pacienteEdit = angular.copy(response.data.paciente);
-                $scope.showSpinnerLoadPacienteEdit = false;
-                $scope.successLoadPacienteEdit = true;
+                if(response.data.paciente == null) {
+                    $scope.showSpinnerLoadPacienteEdit = false;
+                    $scope.successLoadPacienteEdit = true;
+                    $scope.togglePaginas('pacientes');
 
-                if(response.data.hasOwnProperty('responsavel')){
-                    $scope.responsavelEdit = angular.copy(response.data.responsavel);
-                    $scope.pacienteMenorIdade = true;
+                    $scope.pacientesFiltrados = _.remove($scope.pacientesFiltrados, function(p) {
+                        return p.id != paciente.id;
+                    });
                 }
                 else {
-                    $scope.responsavelEdit = {};
-                    $scope.pacienteMenorIdade = false;
-                }               
+                    $scope.pacienteEdit = angular.copy(response.data.paciente);
+                    $scope.pacienteEditCopy = angular.copy(response.data.paciente);
+                    $scope.showSpinnerLoadPacienteEdit = false;
+                    $scope.successLoadPacienteEdit = true;
+
+                    if(response.data.hasOwnProperty('responsavel')){
+                        $scope.responsavelEdit = angular.copy(response.data.responsavel);
+                        $scope.responsavelEditCopy = angular.copy(response.data.responsavel);
+                        $scope.pacienteMenorIdade = true;
+                    }
+                    else {
+                        $scope.responsavelEdit = {};
+                        $scope.responsavelEditCopy = {};
+                        $scope.pacienteMenorIdade = false;
+                    }   
+                }            
             })
             .catch(function(response) {
                 $scope.showSpinnerLoadPacienteEdit = false;
@@ -918,26 +951,50 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
 
         $scope.pacienteEdit.data_nasc = $scope.pacienteEdit.data_nasc.format("YYYY-MM-DD").toString();
 
+        var diffPaciente = _.omitBy($scope.pacienteEdit, function(v, k) {
+            return $scope.pacienteEditCopy[k] === v;
+        });
+
+        var diffResponsavel = _.omitBy($scope.responsavelEdit, function(v, k) {
+            return $scope.responsavelEditCopy[k] === v;
+        });
+
+        diffPaciente.id = $scope.pacienteEdit.id;
+
         var obj = {};
-        obj.paciente = $scope.pacienteEdit;
-        obj.responsavel = $scope.responsavelEdit;
+        obj.paciente = diffPaciente;
+        obj.responsavel = diffResponsavel;
 
         $timeout( function() {
             apiService.editarPaciente(obj).then(function(response) {
-                $('#modalEditPaciente').modal('hide');
-
-                var index = _.findIndex($scope.pacientesFiltrados, function(o) { return o.id == $scope.pacienteEdit.id; });
-                
-                $scope.pacientesFiltrados[index].nome = $scope.pacienteEdit.nome;
-                $scope.pacientesFiltrados[index].cpf = $scope.pacienteEdit.cpf;
-                $scope.pacientesFiltrados[index].email = $scope.pacienteEdit.email;
-                $scope.pacientesFiltrados[index].data_nasc = $scope.pacienteEdit.data_nasc.format("YYYY-MM-DD").toString();
-
-                if(!option) {
+                if(response.data.paciente != undefined && response.data.paciente == null) {
+                    $('#modalEditPaciente').modal('hide');
                     $scope.togglePaginas('pacientes');
-                    $scope.filtrarPacientes();
-                    $scope.sortReversePaciente = !$scope.sortReversePaciente;
-                    $scope.ordenarPacientes($scope.sortTypePaciente);
+
+                    $scope.pacientesFiltrados = _.remove($scope.pacientesFiltrados, function(p) {
+                        return p.id != obj.paciente.id;
+                    });
+                }
+                else {
+                    $('#modalEditPaciente').modal('hide');
+
+                    var index = _.findIndex($scope.pacientesFiltrados, function(o) { return o.id == $scope.pacienteEdit.id; });
+                    
+                    $scope.pacientesFiltrados[index].nome = $scope.pacienteEdit.nome;
+                    $scope.pacientesFiltrados[index].cpf = $scope.pacienteEdit.cpf;
+                    $scope.pacientesFiltrados[index].email = $scope.pacienteEdit.email;
+                    $scope.pacientesFiltrados[index].data_nasc = $scope.pacienteEdit.data_nasc.format("YYYY-MM-DD").toString();
+
+                    if(!option) {
+                        $scope.togglePaginas('pacientes');
+                        $scope.filtrarPacientes();
+                        $scope.sortReversePaciente = !$scope.sortReversePaciente;
+                        $scope.ordenarPacientes($scope.sortTypePaciente);
+                    }
+                    else {
+                        $scope.pacienteEditCopy = angular.copy($scope.pacienteEdit);
+                        $scope.responsavelEditCopy = angular.copy($scope.responsavelEdit);
+                    }
                 }
             })
             .catch(function(response) {
@@ -1400,23 +1457,19 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
 
                 if(response.data.funcao != "Analista") {
                     for(var i = 0; i < response.data.fotos.length; i++) {
-                        $scope.imagesAtend.push(
-                            {
-                                id: i,
-                                url: response.data.fotos[i],
-                                deletable: true
-                            }
-                        );
+                        $scope.imagesAtend.push({
+                            id: i,
+                            url: response.data.fotos[i],
+                            deletable: true
+                        });
                     }
                 }
                 else {
                     for(var i = 0; i < response.data.fotos.length; i++) {
-                        $scope.imagesAtend.push(
-                            {
-                                id: i,
-                                url: response.data.fotos[i]
-                            }
-                        );
+                        $scope.imagesAtend.push({
+                            id: i,
+                            url: response.data.fotos[i]
+                        });
                     }
                 }
             })
@@ -1537,34 +1590,4 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
         
         $scope.iconSideBar = opacity;
     }
-    /*
-    $scope.uiConfig = {
-        calendar: {
-            height: "parent",
-            header: {
-                left: 'basicWeek month',
-                center: 'title',
-                right: 'today prev,next'
-            },
-            timezone: 'America/Sao_Paulo',
-            monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-            monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-            dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
-            defaultView: "basicWeek",
-            buttonText: {
-                today: 'Hoje',
-                month: 'Mês',
-                week: 'Semana',
-                day: 'Dia',
-                list: 'Lista'
-            },
-            views: {
-                basicWeek: {
-                    titleFormat: 'DD MMM YYYY'
-                },
-            },
-            timeFormat: "hh:mm",
-            columnFormat: 'ddd D/M'
-        }
-    }*/
 });

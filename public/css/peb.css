@@ -431,8 +431,3 @@ body {
         width: 300px;
     }
 }
-
-.agenda-container {
-    min-height: calc(100vh - 95px);
-    margin-top: 20px;
-}
