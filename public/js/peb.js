@@ -72,13 +72,11 @@ app.directive("floatingNumberOnly", function() {
                 } else {              
                     dotCount = newInput.split(".").length - 1;
                   
-                    if (newInputLength > 0 && dotCount > 1) {
+                    if (newInputLength > 0 && dotCount > 1)
                         newInput = newInput.slice(0, newInputLength - 1);
-                    }
 
-                    if ((newInput.slice(newInput.indexOf(".") + 1).length) > 4) {
+                    if ((newInput.slice(newInput.indexOf(".") + 1).length) > 4)
                         newInput = newInput.slice(0, newInputLength - 1);
-                    }
                     
                     ctrl.$setViewValue(newInput);
                     ctrl.$render();
@@ -92,20 +90,17 @@ app.directive("floatingNumberOnly", function() {
 
 app.filter('tracos', function() {
     return function(input) {
-        if(input == "" || input == undefined || input == null) {
+        if(input == "" || input == undefined || input == null)
             return "---";
-        }
-        else {
+        else
             return input;
-        }
     }
 });
 
 app.filter('dateBr', function() {
     return function(input) {
-        if(input != undefined && input != null) {
+        if(input != undefined && input != null)
             return input.toString().split('-')[2] + '-' + input.toString().split('-')[1] + '-' + input.toString().split('-')[0];
-        }
     }
 });
 
@@ -171,12 +166,10 @@ app.filter("filterIgnoringAccents", function() {
     return function(array, input) {
         var arrayFiltrado = [];
 
-        if (input == undefined) {
+        if (input == undefined)
             return array;
-        }
-        else if (input.toString() == "") {
+        else if (input.toString() == "")
             return array;
-        }
         else {
             for(var i = 0; i < array.length; i++) {
                 _.forOwn(array[i], function(value, key) {
@@ -184,9 +177,8 @@ app.filter("filterIgnoringAccents", function() {
                         var clearedValue = resolverAcentuacao(value.toString().toLowerCase());
                         var clearedInput = resolverAcentuacao(input.toLowerCase());
 
-                        if(clearedValue.indexOf(clearedInput) != -1){
+                        if(clearedValue.indexOf(clearedInput) != -1)
                             arrayFiltrado.push(array[i]);
-                        }
                     }
                 });
             }
@@ -314,14 +306,13 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
         var cpfs = [];
 
         for(var i = 0; i < $scope.usuariosFiltrados.length; i++) {
-            if($scope.usuariosFiltrados[i].checked) { 
+            if($scope.usuariosFiltrados[i].checked)
                 cpfs.push($scope.usuariosFiltrados[i].cpf);
-            }
         }
 
         var objCpfs = cpfs.reduce(function(acc, cur, i) {
-          acc[i] = cur;
-          return acc;
+            acc[i] = cur;
+            return acc;
         }, {});
 
         $timeout( function(){
@@ -427,15 +418,13 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
 
         if($scope.checkboxSelecionarUsuarios) {
             for(var i = 0; i < $scope.usuariosFiltrados.length; i++) {
-                if($scope.usuariosFiltrados[i].cpf != $scope.cpfLogged()) {
+                if($scope.usuariosFiltrados[i].cpf != $scope.cpfLogged())
                     $scope.usuariosFiltrados[i].checked = true;
-                }
             }
         }
         else {
-            for(var i = 0; i < $scope.usuariosFiltrados.length; i++) {
+            for(var i = 0; i < $scope.usuariosFiltrados.length; i++)
                 $scope.usuariosFiltrados[i].checked = false;
-            }
         }
     }
 
@@ -491,9 +480,8 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
         
         $scope.pagerObjectUsuarios = $scope.pager($scope.usuariosFiltrados, page, $scope.pageSizeUsuarios);
 
-        if ($scope.pagerObjectUsuarios.currentPage == $scope.pagerObjectUsuarios.totalPages) {
+        if ($scope.pagerObjectUsuarios.currentPage == $scope.pagerObjectUsuarios.totalPages)
             $scope.pageSizeUsuarios = $scope.usuariosFiltrados.length - $scope.pageSizeUsuarios*($scope.pagerObjectUsuarios.totalPages-1);
-        }
     }
 
     $scope.filtrarUsuarios = function() {
@@ -524,9 +512,8 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
 
         diffUsuario.cpf = $scope.usuarioEdit.cpf;
 
-        if($scope.cpfLogged() == $scope.usuarioEdit.cpf) {
+        if($scope.cpfLogged() == $scope.usuarioEdit.cpf)
             $scope.usuarioLogado = $scope.usuarioEdit.name.split(" ")[0];
-        }
 
         apiService.editarUsuario(diffUsuario).then(function(res) {
             $timeout( function() {
@@ -586,32 +573,26 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
     }
 
     $scope.checkEmailEditarUsuario = function() {
-        if($scope.usuarioEdit.email == '') {
+        if($scope.usuarioEdit.email == '')
             $scope.emailVazioEditarUsuario = true;
-        }
-        else {
+        else
             $scope.emailVazioEditarUsuario = false;
-        }
     }
 
     $scope.checkNomeEditarUsuario = function() {
-        if($scope.usuarioEdit.name == '') {
+        if($scope.usuarioEdit.name == '')
             $scope.nomeVazioEditarUsuario = true;
-        }
-        else {
+        else
             $scope.nomeVazioEditarUsuario = false;
-        }
     }
 
     $scope.checkEmailExistenciaEditarUsuario = function() {
         var index = _.findIndex($scope.usuariosFiltrados, function(o) { return o.email == $scope.usuarioEdit.email; });
 
-        if(index == -1) {
+        if(index == -1)
             $scope.emailExisteEditarUsuario = false;
-        }
-        else {
+        else
             $scope.emailExisteEditarUsuario = true;
-        }
     }
 
     $scope.dpNovoPacienteOptions = {
@@ -623,21 +604,17 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
     }
 
     $scope.addPaciente = function(option) {
-        if($scope.dataVazioPaciente == undefined) {
+        if($scope.dataVazioPaciente == undefined)
             $scope.dataVazioPaciente = true;
-        }
 
-        if($scope.nomeVazioPaciente == undefined) {
+        if($scope.nomeVazioPaciente == undefined)
             $scope.nomeVazioPaciente = true;
-        }
 
-        if($scope.pacienteMenorIdade && $scope.cpfVazioResponsavel == undefined) {
+        if($scope.pacienteMenorIdade && $scope.cpfVazioResponsavel == undefined)
             $scope.cpfVazioResponsavel = true;
-        }
 
-        if($scope.pacienteMenorIdade && $scope.nomeVazioResponsavel == undefined && !$scope.cpfExisteResponsavel) {
+        if($scope.pacienteMenorIdade && $scope.nomeVazioResponsavel == undefined && !$scope.cpfExisteResponsavel)
             $scope.nomeVazioResponsavel = true;
-        }
 
         if(!$scope.dataVazioPaciente && !$scope.nomeVazioPaciente && !$scope.nomeVazioResponsavel && !$scope.cpfVazioResponsavel) {
             $scope.showSpinnerAddPaciente = true;
@@ -668,12 +645,10 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
                     $scope.sortReversePaciente = !$scope.sortReversePaciente;
                     $scope.ordenarPacientes($scope.sortTypePaciente);
 
-                    if(option) {
+                    if(option)
                         $scope.novoPaciente = {};
-                    }
-                    else {
+                    else
                         $scope.togglePaginas('pacientes');
-                    }
                 })
                 .catch(function(response) {
                     $scope.showSpinnerAddPaciente = false;
@@ -691,9 +666,8 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
         
         $scope.pagerObjectPacientes = $scope.pager($scope.pacientesFiltrados, page, $scope.pageSizePacientes);
 
-        if ($scope.pagerObjectPacientes.currentPage == $scope.pagerObjectPacientes.totalPages) {
+        if ($scope.pagerObjectPacientes.currentPage == $scope.pagerObjectPacientes.totalPages)
             $scope.pageSizePacientes = $scope.pacientesFiltrados.length - $scope.pageSizePacientes*($scope.pagerObjectPacientes.totalPages-1);
-        }
     }
 
     $scope.filtrarPacientes = function() {
@@ -714,14 +688,13 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
         var ids = [];
 
         for(var i = 0; i < $scope.pacientesFiltrados.length; i++) {
-            if($scope.pacientesFiltrados[i].checked) { 
+            if($scope.pacientesFiltrados[i].checked)
                 ids.push($scope.pacientesFiltrados[i].id);
-            }
         }
 
         var objIds = ids.reduce(function(acc, cur, i) {
-          acc[i] = cur;
-          return acc;
+            acc[i] = cur;
+            return acc;
         }, {});
 
         $timeout( function() {
@@ -751,33 +724,27 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
         $scope.checkboxSelecionarPacientes = !$scope.checkboxSelecionarPacientes;
 
         if($scope.checkboxSelecionarPacientes) {
-            for(var i = 0; i < $scope.pacientesFiltrados.length; i++) {
+            for(var i = 0; i < $scope.pacientesFiltrados.length; i++)
                 $scope.pacientesFiltrados[i].checked = true;
-            }
         }
         else {
-            for(var i = 0; i < $scope.pacientesFiltrados.length; i++) {
+            for(var i = 0; i < $scope.pacientesFiltrados.length; i++)
                 $scope.pacientesFiltrados[i].checked = false;
-            }
         }
     }
 
     $scope.checkMaioridadePaciente = function(option) {
         if(option == 'add') {
-            if(moment().diff(moment($scope.novoPaciente.data_nasc), 'years') < 18) {
+            if(moment().diff(moment($scope.novoPaciente.data_nasc), 'years') < 18)
                 $scope.pacienteMenorIdade = true;
-            }
-            else {
+            else
                 $scope.pacienteMenorIdade = false;
-            }
         }
         else if (option == 'edit') {
-            if(moment().diff(moment($scope.pacienteEdit.data_nasc), 'years') < 18) {
+            if(moment().diff(moment($scope.pacienteEdit.data_nasc), 'years') < 18)
                 $scope.pacienteMenorIdade = true;
-            }
-            else {
+            else
                 $scope.pacienteMenorIdade = false;
-            }
         }
 
         $scope.novoResponsavel = {};
@@ -788,49 +755,39 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
 
     $scope.checkDataPaciente = function(option) {
         if(option == 'add') {
-            if($scope.novoPaciente.data_nasc == '') {
+            if($scope.novoPaciente.data_nasc == '')
                 $scope.dataVazioPaciente = true;
-            }
-            else {
+            else
                 $scope.dataVazioPaciente = false;
-            }
         }
         else if (option == 'edit') {
-            if($scope.pacienteEdit.data_nasc == '') {
+            if($scope.pacienteEdit.data_nasc == '')
                 $scope.dataVazioPaciente = true;
-            }
-            else {
+            else
                 $scope.dataVazioPaciente = false;
-            }
         }
     }
 
     $scope.checkNomeResponsavel = function(option) {
         if(option == 'add') {
             if($scope.pacienteMenorIdade) {
-                if($scope.novoResponsavel.nome == '') {
+                if($scope.novoResponsavel.nome == '')
                     $scope.nomeVazioResponsavel = true;
-                }
-                else {
+                else
                     $scope.nomeVazioResponsavel = false;
-                }
             }
-            else {
+            else
                 $scope.nomeVazioResponsavel = false;
-            }
         }
         else if (option == 'edit') {
             if($scope.pacienteMenorIdade) {
-                if($scope.responsavelEdit.nome == '') {
+                if($scope.responsavelEdit.nome == '')
                     $scope.nomeVazioResponsavel = true;
-                }
-                else {
+                else
                     $scope.nomeVazioResponsavel = false;
-                }
             }
-            else {
+            else
                 $scope.nomeVazioResponsavel = false;
-            }
         }
     }
 
@@ -839,17 +796,15 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
             $scope.cpfVazioResponsavel = true;
             $scope.cpfExisteResponsavel = false;
         }
-        else {
+        else
             $scope.cpfVazioResponsavel = false;
-        }
     }
 
     $scope.checkCpfExistenciaResponsavel = function() {
         if($scope.novoResponsavel.cpf != '' && $scope.novoResponsavel.cpf != undefined) {
             apiService.checkExistenciaCpfResponsavel($scope.novoResponsavel.cpf).then(function(response) {
-                if(response.data == 0){
+                if(response.data == 0)
                     $scope.cpfExisteResponsavel = false;
-                }
                 else {
                     $scope.cpfExisteResponsavel = true;
                     $scope.novoResponsavel = angular.copy(response.data);
@@ -860,20 +815,16 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
 
     $scope.checkNomePaciente = function(option) {
         if(option == 'add') {
-            if($scope.novoPaciente.nome == '') {
+            if($scope.novoPaciente.nome == '')
                 $scope.nomeVazioPaciente = true;
-            }
-            else {
+            else
                 $scope.nomeVazioPaciente = false;
-            }
         }
         else if(option == 'edit') {
-            if($scope.pacienteEdit.nome == '') {
+            if($scope.pacienteEdit.nome == '')
                 $scope.nomeVazioPaciente = true;
-            }
-            else {
+            else
                 $scope.nomeVazioPaciente = false;
-            }
         } 
     }
 
@@ -881,24 +832,20 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
         if(option == 'add') {
             if($scope.novoPaciente.cpf != '' && $scope.novoPaciente.cpf != undefined) {
                 apiService.checkExistenciaCpfPaciente($scope.novoPaciente.cpf).then(function(response) {
-                    if(response.data == 1){
+                    if(response.data == 1)
                         $scope.cpfExistePaciente = true;
-                    }
-                    else {
+                    else
                         $scope.cpfExistePaciente = false;
-                    }
                 })
             }
         }
         else if(option == 'edit') {
             if($scope.pacienteEdit.cpf != '' && $scope.pacienteEdit.cpf != undefined) {
                 apiService.checkExistenciaCpfPaciente($scope.pacienteEdit.cpf).then(function(response) {
-                    if(response.data == 1){
+                    if(response.data == 1)
                         $scope.cpfExistePaciente = true;
-                    }
-                    else {
+                    else
                         $scope.cpfExistePaciente = false;
-                    }
                 })
             }
         }
@@ -926,7 +873,7 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
                     $scope.showSpinnerLoadPacienteEdit = false;
                     $scope.successLoadPacienteEdit = true;
 
-                    if(response.data.hasOwnProperty('responsavel')){
+                    if(response.data.hasOwnProperty('responsavel')) {
                         $scope.responsavelEdit = angular.copy(response.data.responsavel);
                         $scope.responsavelEditCopy = angular.copy(response.data.responsavel);
                         $scope.pacienteMenorIdade = true;
@@ -1067,9 +1014,8 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
     }
 
     $scope.toggleButtonAtendimento = function() {
-        if($scope.showFinalizarAtendimento) {
+        if($scope.showFinalizarAtendimento)
             $scope.toggleAtendimento('resumo');
-        }
 
         $scope.showIniciarAtendimento = !$scope.showIniciarAtendimento;
         $scope.showFinalizarAtendimento = !$scope.showFinalizarAtendimento;
@@ -1088,9 +1034,8 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
         var result = true
 
         _.forOwn(obj, function(value, key) {
-            if(!_.isEmpty(value)) {
+            if(!_.isEmpty(value))
                 result = false;
-            }
         });
 
         return result;
@@ -1122,17 +1067,14 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
 
         var dados = {};
 
-        if($scope.atendimento.menarca != undefined) {
+        if($scope.atendimento.menarca != undefined)
             $scope.atendimento.menarca = $scope.atendimento.menarca.format("YYYY-MM-DD").toString();
-        }
 
-        if($scope.atendimento.data_atendimento != undefined) {
+        if($scope.atendimento.data_atendimento != undefined)
             $scope.atendimento.data_atendimento = $scope.atendimento.data_atendimento.format("YYYY-MM-DD").toString();
-        }
         
-        if($scope.atendimento.data_raio_x != undefined) {
+        if($scope.atendimento.data_raio_x != undefined)
             $scope.atendimento.data_raio_x = $scope.atendimento.data_raio_x.format("YYYY-MM-DD").toString();
-        }
         
         dados.atendimento = $scope.atendimento;
         dados.medidas = $scope.medidas;
@@ -1293,9 +1235,8 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
                 })
             }, 500 );
         }
-        else {
+        else
             this.atendOffset = $scope.atendimentosNums[0];
-        }
     }
 
     $scope.showAtendKey = function(nomeTabela) {
@@ -1306,9 +1247,8 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
                 _.forOwn($scope.atendimentos[i], function(value1, prop1) {
                     if(prop1 == nomeTabela){
                         _.forOwn(value1, function(value2, prop2) {
-                            if(key[0] == prop2 && value2 != null){
+                            if(key[0] == prop2 && value2 != null)
                                 res = true;
-                            }
                         });
                     }
                 });
@@ -1328,9 +1268,8 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
                 _.forOwn($scope.atendimentos[i], function(value1, prop1) {
                     if(prop1 == nomeTabela){
                         _.forOwn(value1, function(value2, prop2) {
-                            if(array[j][0] == prop2 && value2 != null){
+                            if(array[j][0] == prop2 && value2 != null)
                                 find = true;
-                            }
                         });
                     }
                 });
@@ -1400,9 +1339,8 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
     function dataURLtoFile(dataurl, filename) {
         var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
         
-        while(n--) {
+        while(n--)
             u8arr[n] = bstr.charCodeAt(n);
-        }
         
         return new File([u8arr], filename, {type:mime});
     }
@@ -1505,28 +1443,22 @@ app.controller('pebController', function($scope, apiService, $filter, $timeout, 
 
     $scope.showTamanhoCalco = function(option) {
         if(option == "frontal") {
-            if($scope.plano_frontal.calco_utilizado != undefined && $scope.plano_frontal.calco_utilizado == "Sim") {
+            if($scope.plano_frontal.calco_utilizado != undefined && $scope.plano_frontal.calco_utilizado == "Sim")
                 return true;
-            }
-            else {
+            else
                 return false;
-            }
         }
         else if(option == "diag_prog_direito") {
-            if($scope.diag_prog.calco_utilizado_direito != undefined && $scope.diag_prog.calco_utilizado_direito == "Sim") {
+            if($scope.diag_prog.calco_utilizado_direito != undefined && $scope.diag_prog.calco_utilizado_direito == "Sim")
                 return true;
-            }
-            else {
+            else
                 return false;
-            }
         }
         else if(option == "diag_prog_esquerdo") {
-            if($scope.diag_prog.calco_utilizado_esquerdo != undefined && $scope.diag_prog.calco_utilizado_esquerdo == "Sim") {
+            if($scope.diag_prog.calco_utilizado_esquerdo != undefined && $scope.diag_prog.calco_utilizado_esquerdo == "Sim")
                 return true;
-            }
-            else {
+            else
                 return false;
-            }
         }
     }
 

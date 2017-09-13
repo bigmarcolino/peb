@@ -164,7 +164,7 @@ class AtendimentoApiController extends Controller
                 if(!empty($vertebra_limite))
                     $novoDiagProg->vertebra_limite()->save($novoVertebraLimite);
             }
-            else if (!empty($diag_prog)){
+            else if (!empty($diag_prog)) {
                 $novoDiagProg = new DiagnosticoPrognostico($diag_prog);
                 $novoAtendimento->diag_prog()->save($novoDiagProg);
             }
@@ -201,7 +201,6 @@ class AtendimentoApiController extends Controller
         }
         else {
             $newOffset = $offset - 1;
-
             $atendimentos = $todosAtendimentos->offset($newOffset)->limit($limit)->getResults();
 
             if($atendCount - $newOffset > $limit)
@@ -215,7 +214,6 @@ class AtendimentoApiController extends Controller
 
         foreach ($atendimentos as $atendimento) {
             $var = new StdClass();
-
             $var->atendimento = $atendimento;
 
             if(isset($var->atendimento->menarca)) {

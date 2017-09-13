@@ -41,10 +41,12 @@ class UsuarioApiController extends Controller
 
         Usuario::where('cpf', $cpf)->update($usuario);
 
-        if(isset($usuario['funcao']) && $usuario['funcao'] != "")
-            Usuario::where('cpf', $cpf)->update(['ativo' => 1]);
-        else if(isset($usuario['funcao']) && $usuario['funcao'] == "")
-            Usuario::where('cpf', $cpf)->update(['ativo' => 0]);
+        if(isset($usuario['funcao']) {
+            if($usuario['funcao'] != "")
+                Usuario::where('cpf', $cpf)->update(['ativo' => 1]);
+            else if($usuario['funcao'] == "")
+                Usuario::where('cpf', $cpf)->update(['ativo' => 0]);
+        }
     }
 
     public function usuarioLogado($cpf)
