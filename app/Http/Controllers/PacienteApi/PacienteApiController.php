@@ -101,7 +101,7 @@ class PacienteApiController extends Controller
                 Responsavel::where('cpf', $pacienteAntigo->responsavel_cpf)->first()->update($responsavel);
             } 
         });
-}
+    }
 
     public function checkExistenciaCpfPaciente($cpf) {
         return Paciente::where('cpf', $cpf)->exists() ? 1 : 0;
