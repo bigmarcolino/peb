@@ -1,6 +1,8 @@
-Sempre instalar a vers„o mais recente dos programas
+Tutorial para o Windows
 
-01- instale o XAMPP (n„o altere o diretÛrio padr„o de instalaÁ„o) -> https://www.apachefriends.org/download.html
+Sempre instale a vers√£o mais recente dos programas
+
+01- instale o XAMPP (n√£o altere o diret√≥rio padr√£o de instala√ß√£o) -> https://www.apachefriends.org/download.html
 
 02- instale o Sublime Text -> https://www.sublimetext.com/3
 
@@ -12,13 +14,9 @@ Sempre instalar a vers„o mais recente dos programas
 
 06- instale o Windows Credentials Manager (arquivo .exe) -> https://github.com/Microsoft/Git-Credential-Manager-for-Windows/releases/latest
 
-07- crie uma conta no GitLab -> https://gitlab.com/users/sign_in
-	
-08- passe para mim (Marcus) o email da conta criada no GitLab, para que eu possa autorizar o download do projeto
+07- com o Sublime Text, abra o arquivo httpd-vhosts.conf, que est√° na pasta C:\xampp\apache\conf\extra
 
-09- com o Sublime Text, abra o arquivo httpd-vhosts.conf, que est· na pasta C:\xampp\apache\conf\extra
-
-10- no final do arquivo, adicione o cÛdigo a seguir:
+08- no final do arquivo, adicione o c√≥digo a seguir:
 
 	# VirtualHost for LARAVEL.DEV
 
@@ -32,40 +30,46 @@ Sempre instalar a vers„o mais recente dos programas
   		</Directory>
 	</VirtualHost>
 		
-11- copie o arquivo hosts, que est· na pasta C:\Windows\System32\drivers\etc, e cole na ·rea de trabalho
+09- copie o arquivo hosts, que est√° na pasta C:\Windows\System32\drivers\etc, e cole na √°rea de trabalho
 
-12- com o Sublime Text, abra o arquivo hosts da ·rea de trabalho
+10- com o Sublime Text, abra o arquivo hosts da √°rea de trabalho
 
-13- no final do arquivo, adicione o cÛdigo a seguir:
+11- no final do arquivo, adicione o c√≥digo a seguir:
 
 	127.0.0.1	laravel.dev
 
-14- copie arquivo hosts da ·rea de trabalho para a pasta C:\Windows\System32\drivers\etc e confirme a substituiÁ„o do arquivo
+12- copie arquivo hosts da √°rea de trabalho para a pasta C:\Windows\System32\drivers\etc e confirme a substitui√ß√£o do arquivo
 
-15- abra o XAMPP Control Panel, clique no bot„o config com um Ìcone de uma ferramenta, marque Apache e MySQL e clique em Save
+13- abra o XAMPP Control Panel, clique no bot√£o config com um √≠cone de uma ferramenta, marque Apache e MySQL e clique em Save
 
-16- na linha do Apache e na linha do MySQL, clique em Start
+14- na linha do Apache e na linha do MySQL, clique em Start
 
-17- clique em Admin, na linha do MySQL. O navegador ser· aberto
+15- clique em Admin, na linha do MySQL. O navegador ser√° aberto
 
-18- no navegador, do lado esquerdo, clique em New
+16- no navegador, do lado esquerdo, clique em New
 
-19- no campo Create database, digite projeto-escoliose-brasil. No campo Collation, escolha utf8mb4_unicode_ci (È a pen˙ltima opÁ„o) e clique em Create
+17- no campo Create database, digite projeto-escoliose-brasil. No campo Collation, escolha utf8mb4_unicode_ci (√© a pen√∫ltima op√ß√£o) e clique em Create
 
-20- feche o navegador
+18- feche o navegador
 
-21- abra o prompt de comando
+19- abra o prompt de comando
 
-22- copie e cole no prompt de comando: cd\ && cd xampp/htdocs && git clone https://mvinicius@gitlab.com/mvinicius/projeto-escoliose-brasil.git && cd projeto-escoliose-brasil && composer install && npm install && npm install -g bower && bower install && npm run dev && php artisan key:generate && php artisan migrate && php artisan storage:link, tecle Enter e aguarde o processo terminar
+20- copie e cole no prompt de comando: cd\ && cd xampp/htdocs && git clone https://github.com/bigmarcolino/peb.git && cd peb && composer install && npm install && npm install -g bower && bower install && npm run dev && php artisan key:generate && php artisan migrate && php artisan storage:link, tecle Enter e aguarde o processo terminar
 
-23- se seu email e senha do GitLab forem requisitados, basta digit·-los
+21- se seu email e senha do GitHub forem requisitados, basta digit√°-los
 
-24- feche o prompt de comando
+22- feche o prompt de comando
 
-25- abra http://laravel.dev no navegador para visualizar o sistema
+23- abra http://laravel.dev no navegador para visualizar o sistema
+
+24- cadastre um usu√°rio
+
+25- no banco de dados, edite o usu√°rio cadastrado, alterando o campo "funcao" para "Admin" e o campo "ativo" para "1"
+
+26- fa√ßa o login no sistema
 
 
 Toda vez que precisar testar o sistema, abra o prompt de comando,
-digite cd\ && cd xampp/htdocs/projeto-escoliose-brasil e tecle Enter, 
-digite git pull e tecle Enter (este comando atualizar· o sistema para a vers„o mais atual).
+digite cd\ && cd xampp/htdocs/peb e tecle Enter, 
+digite git pull e tecle Enter (este comando atualizar√° o sistema para a vers√£o mais atual).
 Abra o XAMPP Control Panel, depois abra o navegador e digite http://laravel.dev
