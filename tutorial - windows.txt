@@ -4,72 +4,45 @@ Sempre instale a versão mais recente dos programas
 
 01- instale o XAMPP (não altere o diretório padrão de instalação) -> https://www.apachefriends.org/download.html
 
-02- instale o Sublime Text -> https://www.sublimetext.com/3
+02- instale o Composer -> https://getcomposer.org/Composer-Setup.exe
 
-03- instale o Composer -> https://getcomposer.org/Composer-Setup.exe
+03- instale o Git -> https://git-scm.com/downloads
 
-04- instale o Git -> https://git-scm.com/downloads
+04- instale o Node -> https://nodejs.org/en/
 
-05- instale o Node -> https://nodejs.org/en/
+05- instale o Windows Credentials Manager (arquivo .exe) -> https://github.com/Microsoft/Git-Credential-Manager-for-Windows/releases/latest
 
-06- instale o Windows Credentials Manager (arquivo .exe) -> https://github.com/Microsoft/Git-Credential-Manager-for-Windows/releases/latest
+06- abra o XAMPP Control Panel, clique no botão config com um ícone de uma ferramenta, marque Apache e MySQL e clique em Save
 
-07- com o Sublime Text, abra o arquivo httpd-vhosts.conf, que está na pasta C:\xampp\apache\conf\extra
+07- na linha do Apache e na linha do MySQL, clique em Start
 
-08- no final do arquivo, adicione o código a seguir:
+08- clique em Admin, na linha do MySQL. O navegador será aberto
 
-	# VirtualHost for LARAVEL.DEV
+09- no navegador, do lado esquerdo, clique em New
 
-	<VirtualHost laravel.dev:80>
-		DocumentRoot "C:\xampp\htdocs\peb\public"
-  		ServerAdmin laravel.dev
-  		<Directory "C:\xampp\htdocs\peb">
-    		Options Indexes FollowSymLinks
-    		AllowOverride All
-    		Require all granted
-  		</Directory>
-	</VirtualHost>
-		
-09- copie o arquivo hosts, que está na pasta C:\Windows\System32\drivers\etc, e cole na área de trabalho
+10- no campo Create database, digite peb. No campo Collation, escolha utf8mb4_unicode_ci (é a penúltima opção) e clique em Create
 
-10- com o Sublime Text, abra o arquivo hosts da área de trabalho
+11- feche o navegador
 
-11- no final do arquivo, adicione o código a seguir:
+12- abra o prompt de comando
 
-	127.0.0.1	laravel.dev
+13- copie e cole no prompt de comando: cd\ && cd xampp/htdocs && git clone https://github.com/bigmarcolino/peb.git && cd peb && composer install && npm install && npm install -g bower && bower install && npm run dev && php artisan key:generate && php artisan migrate && php artisan storage:link, tecle Enter e aguarde o processo terminar
 
-12- copie arquivo hosts da área de trabalho para a pasta C:\Windows\System32\drivers\etc e confirme a substituição do arquivo
+14- se seu email e senha do GitHub forem requisitados, basta digitá-los
 
-13- abra o XAMPP Control Panel, clique no botão config com um ícone de uma ferramenta, marque Apache e MySQL e clique em Save
+15- ainda no prompt, execute: php artisan serve
 
-14- na linha do Apache e na linha do MySQL, clique em Start
+16- abra http://localhost:8000 no navegador para visualizar o sistema
 
-15- clique em Admin, na linha do MySQL. O navegador será aberto
+17- cadastre um usuário
 
-16- no navegador, do lado esquerdo, clique em New
+18- no banco de dados, edite o usuário cadastrado, alterando o campo "funcao" para "Admin" e o campo "ativo" para "1"
 
-17- no campo Create database, digite projeto-escoliose-brasil. No campo Collation, escolha utf8mb4_unicode_ci (é a penúltima opção) e clique em Create
-
-18- feche o navegador
-
-19- abra o prompt de comando
-
-20- copie e cole no prompt de comando: cd\ && cd xampp/htdocs && git clone https://github.com/bigmarcolino/peb.git && cd peb && composer install && npm install && npm install -g bower && bower install && npm run dev && php artisan key:generate && php artisan migrate && php artisan storage:link, tecle Enter e aguarde o processo terminar
-
-21- se seu email e senha do GitHub forem requisitados, basta digitá-los
-
-22- feche o prompt de comando
-
-23- abra http://laravel.dev no navegador para visualizar o sistema
-
-24- cadastre um usuário
-
-25- no banco de dados, edite o usuário cadastrado, alterando o campo "funcao" para "Admin" e o campo "ativo" para "1"
-
-26- faça o login no sistema
+19- faça o login no sistema
 
 
 Toda vez que precisar testar o sistema, abra o prompt de comando,
 digite cd\ && cd xampp/htdocs/peb e tecle Enter, 
-digite git pull e tecle Enter (este comando atualizará o sistema para a versão mais atual).
-Abra o XAMPP Control Panel, depois abra o navegador e digite http://laravel.dev
+digite git pull e tecle Enter (este comando atualizará o sistema para a versão mais atual)
+e por último digite php artisan serve e tecle Enter.
+Abra o XAMPP Control Panel, depois abra o navegador e digite http://localhost:8000

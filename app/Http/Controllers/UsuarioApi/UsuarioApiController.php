@@ -41,7 +41,7 @@ class UsuarioApiController extends Controller
 
         Usuario::where('cpf', $cpf)->update($usuario);
 
-        if(isset($usuario['funcao']) {
+        if(isset($usuario['funcao'])) {
             if($usuario['funcao'] != "")
                 Usuario::where('cpf', $cpf)->update(['ativo' => 1]);
             else if($usuario['funcao'] == "")
