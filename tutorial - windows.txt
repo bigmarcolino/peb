@@ -21,9 +21,9 @@ Sempre instale a versão mais recente dos programas
 	# VirtualHost for LARAVEL.DEV
 
 	<VirtualHost laravel.dev:80>
-		DocumentRoot "C:\xampp\htdocs\projeto-escoliose-brasil\public"
+		DocumentRoot "C:\xampp\htdocs\peb\public"
   		ServerAdmin laravel.dev
-  		<Directory "C:\xampp\htdocs\projeto-escoliose-brasil">
+  		<Directory "C:\xampp\htdocs\peb">
     		Options Indexes FollowSymLinks
     		AllowOverride All
     		Require all granted
